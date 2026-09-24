@@ -1,0 +1,66 @@
+# Project State
+
+## Project Reference
+
+See: .planning/PROJECT.md (updated 2026-09-24)
+
+**Core value:** Log a workout fully offline with exactly the same numbers as openGym.
+**Current focus:** Phase 1: Foundation & Models
+
+## Current Position
+
+Phase: 1 of 8 (Foundation & Models)
+Plan: 0 of TBD in current phase
+Status: Ready to plan
+Last activity: 2026-09-24 — Project initialized (PROJECT, REQUIREMENTS, ROADMAP)
+
+Progress: [░░░░░░░░░░] 0%
+
+## Performance Metrics
+
+**Velocity:**
+- Total plans completed: 0
+- Average duration: -
+- Total execution time: 0.0 hours
+
+**By Phase:**
+
+| Phase | Plans | Total | Avg/Plan |
+|-------|-------|-------|----------|
+| - | - | - | - |
+
+*Updated after each plan completion*
+
+## Accumulated Context
+
+### Decisions
+
+Decisions are logged in PROJECT.md Key Decisions table.
+Recent decisions affecting current work:
+
+- [Init]: Run openGym lib JS in QuickJS, bundled with esbuild (no ESM in flutter_js)
+- [Init]: Auth = native passkey + pairing-code fallback
+- [Init]: Local-first with server sync; full scope in v1
+- [Init]: User approves each phase before the next one starts
+
+### Pending Todos
+
+None yet.
+
+### Blockers/Concerns
+
+- flutter_passkey_service: confirm the package exists, is maintained, and works with the server's RP_ID (research in Phase 5)
+- Native passkeys need assetlinks.json / AASA on the user's server domain
+- flutter_js ships QuickJS on Android but JavaScriptCore on iOS, so parity tests must run on both engines
+
+## Deferred Items
+
+| Category | Item | Status | Deferred At |
+|----------|------|--------|-------------|
+| *(none)* | | | |
+
+## Session Continuity
+
+Last session: 2026-09-24
+Stopped at: Roadmap drafted, awaiting approval
+Resume file: None

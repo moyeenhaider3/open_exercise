@@ -1,0 +1,121 @@
+# Roadmap: open_exercise (openGym → Flutter)
+
+## Overview
+
+Port openGym to native Flutter in horizontal layers. Build the data foundation first, then the original JS logic running in QuickJS, then the UI on top of both. Muscle map, timers/auth, sync and the extended features (Coach, Admin, Import/Share, i18n) follow. Each phase waits for user approval before the next one starts.
+
+## Phases
+
+- [ ] **Phase 1: Foundation & Models** - Folder structure, OpenAPI models + Dio clients, state models, sqflite schema
+- [ ] **Phase 2: Core Logic via QuickJS** - Bundle openGym lib JS, JsEngineService, parity tests
+- [ ] **Phase 3: BLoC & UI Translation** - Library, workout tracker, plan, history, stats, settings in Material 3
+- [ ] **Phase 4: Muscle Map Rendering** - SVG paths → CustomPainter with fatigue/volume shading
+- [ ] **Phase 5: Timers & Passkeys** - Background rest alerts, reminders, passkey + pairing sign-in
+- [ ] **Phase 6: Server Sync** - Local-first sync with rev polling and sync-merge.js
+- [ ] **Phase 7: Coach & Admin** - AI Coach flows and admin panel
+- [ ] **Phase 8: Import, Share & i18n** - Hevy/CSV import, QR/barcode, backup, 14 locales
+
+## Phase Details
+
+### Phase 1: Foundation & Models
+**Goal**: A typed, persisted data layer that can hold a real openGym state file and talk to every API route
+**Depends on**: Nothing (first phase)
+**Requirements**: FND-01, FND-02, FND-03, FND-04, FND-05
+**Success Criteria** (what must be TRUE):
+  1. `lib/core/` and `lib/features/` exist, and the app boots to an empty themed shell
+  2. Generated Dart models + Dio clients compile and cover every path in `openapi.yaml`
+  3. A real `state-<uid>.json` imports into sqflite and exports back to equivalent JSON (automated test)
+  4. `flutter analyze` and `flutter test` pass
+**Plans**: TBD
+
+### Phase 2: Core Logic via QuickJS
+**Goal**: openGym's domain math runs unchanged inside the app and gives identical results
+**Depends on**: Phase 1
+**Requirements**: JS-01, JS-02, JS-03, JS-04
+**Success Criteria** (what must be TRUE):
+  1. One script rebuilds the JS bundle asset from `../openGym/frontend/src/lib/`
+  2. `JsEngineService` returns 1RM, progression, plate and recovery results as Dart models
+  3. Parity tests match openGym's vitest fixtures exactly
+**Plans**: TBD
+
+### Phase 3: BLoC & UI Translation
+**Goal**: A user can browse exercises and run a full workout offline, with screens that match openGym
+**Depends on**: Phase 2
+**Requirements**: UI-01, UI-02, UI-03, UI-04, UI-05, UI-06, UI-07, UI-08
+**Success Criteria** (what must be TRUE):
+  1. User can find an exercise, start a workout, log straight/warm-up/drop/rest-pause sets and finish it, all offline
+  2. Progression suggestions shown in the UI match openGym for the same history
+  3. Plan, History, Stats and Settings screens work, and data persists across restarts
+  4. Every Zustand action maps to a Bloc event (checklist in the phase summary)
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 4: Muscle Map Rendering
+**Goal**: The body map is drawn natively with the same fatigue and volume shading as openGym
+**Depends on**: Phase 3
+**Requirements**: MAP-01, MAP-02, MAP-03
+**Success Criteria** (what must be TRUE):
+  1. Front/back and male/female body maps render from `body-paths.js`
+  2. Shading matches openGym's for the same workout history
+  3. Tapping a muscle opens the muscle view
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 5: Timers & Passkeys
+**Goal**: Rest alerts fire even when the app is backgrounded, and the user can sign in to their server
+**Depends on**: Phase 4
+**Requirements**: TMR-01, TMR-02, TMR-03, AUTH-01, AUTH-02, AUTH-03, AUTH-04, AUTH-05
+**Success Criteria** (what must be TRUE):
+  1. Backgrounding during rest gives an exact notification at the end of rest (Android + iOS)
+  2. The daily reminder fires at the configured time
+  3. User can sign in with a passkey (on a correctly associated domain) or a pairing code, and log out
+  4. Guest mode works with no server
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 6: Server Sync
+**Goal**: Local data and server data stay in sync, with conflicts merged the same way openGym merges them
+**Depends on**: Phase 5
+**Requirements**: SYNC-01, SYNC-02, SYNC-03
+**Success Criteria** (what must be TRUE):
+  1. A workout logged offline appears on the server after reconnecting
+  2. Changes made in the web app appear in the Flutter app within 30 s or on resume
+  3. Concurrent edits merge through `sync-merge.js` without data loss
+**Plans**: TBD
+
+### Phase 7: Coach & Admin
+**Goal**: The AI Coach and the admin panel work the same way as in openGym
+**Depends on**: Phase 6
+**Requirements**: COACH-01, COACH-02, COACH-03, ADM-01, ADM-02, ADM-03
+**Success Criteria** (what must be TRUE):
+  1. User can finish coach setup/intake and chat, with replies that use their training data
+  2. Admin can manage users, invites and the audit log
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 8: Import, Share & i18n
+**Goal**: The user can bring data in or out of the app and use it in their own language
+**Depends on**: Phase 7
+**Requirements**: IMP-01, IMP-02, IMP-03, IMP-04, I18N-01, I18N-02
+**Success Criteria** (what must be TRUE):
+  1. A Hevy/CSV export imports with correct exercise matching
+  2. A plan shared as a QR code imports on another device; gym card barcodes scan
+  3. Backup and restore work
+  4. Switching to any of the 14 locales translates the UI and exercise names
+**Plans**: TBD
+**UI hint**: yes
+
+## Progress
+
+**Execution Order:** 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 (user approval between phases)
+
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 1. Foundation & Models | 0/TBD | Not started | - |
+| 2. Core Logic via QuickJS | 0/TBD | Not started | - |
+| 3. BLoC & UI Translation | 0/TBD | Not started | - |
+| 4. Muscle Map Rendering | 0/TBD | Not started | - |
+| 5. Timers & Passkeys | 0/TBD | Not started | - |
+| 6. Server Sync | 0/TBD | Not started | - |
+| 7. Coach & Admin | 0/TBD | Not started | - |
+| 8. Import, Share & i18n | 0/TBD | Not started | - |
