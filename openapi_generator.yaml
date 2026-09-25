@@ -1,0 +1,4 @@
+openapi_generator:
+  schema_path: third_party/opengym/openapi.yaml
+  output_directory: lib/core/api/generated
+  json_serializer: json_serializable
