@@ -38,9 +38,10 @@ class ApiClientFactory {
 
   /// Creates an [OpenGymApiClient] talking to [baseUrl].
   ///
-  /// Pass [dio] to reuse/reconfigure an existing [Dio] instance (its
-  /// `baseUrl`/timeouts are left as-is); otherwise a new one is built with
-  /// sane defaults. Pass [adapter] to swap the transport (e.g. in a recording
+  /// Pass [dio] to reuse/reconfigure an existing [Dio] instance: its
+  /// `baseUrl` is set to [baseUrl] (so a shared instance can never keep
+  /// talking to a previously configured server) and its timeouts are left
+  /// as-is; otherwise a new one is built with sane defaults. Pass [adapter] to swap the transport (e.g. in a recording
   /// adapter) on whichever [Dio] instance is used.
   OpenGymApiClient create({
     required String baseUrl,
@@ -57,6 +58,7 @@ class ApiClientFactory {
             contentType: Headers.jsonContentType,
           ),
         );
+    resolvedDio.options.baseUrl = baseUrl;
     if (adapter != null) {
       resolvedDio.httpClientAdapter = adapter;
     }
