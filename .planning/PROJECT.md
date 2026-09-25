@@ -27,13 +27,12 @@ Log a workout fully offline with **exactly** the same numbers as openGym. The sa
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Feature-first structure (`lib/core/`, `lib/features/`) using flutter_bloc + equatable (sealed states, explicit events, logic only inside Blocs) — Validated in Phase 1: Foundation & Models
+- [x] Dart models + Dio clients generated from `openapi.yaml` — Validated in Phase 1: Foundation & Models
+- [x] sqflite schema that mirrors the `state-<uid>.json` structure and round-trips it without loss — Validated in Phase 1: Foundation & Models
 
 ### Active
 
-- [ ] Feature-first structure (`lib/core/`, `lib/features/`) using flutter_bloc + equatable (sealed states, explicit events, logic only inside Blocs)
-- [ ] Dart models + Dio clients generated from `openapi.yaml`
-- [ ] sqflite schema that mirrors the `state-<uid>.json` structure and round-trips it without loss
 - [ ] openGym `lib/*.js` bundled as a Flutter asset and run through flutter_js (QuickJS) by a `JsEngineService`. No hand translation of 1RM, progression or plate math.
 - [ ] Parity script (not tests): JS engine output matches openGym's vitest fixtures
 - [ ] Exercise library, workout tracker, routines/plan, history, stats, settings translated to Material 3, with `ListView.builder` lists and memory-cached WebP/GIF media
@@ -93,4 +92,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-24 after initialization*
+*Last updated: 2026-09-25 after Phase 1 completion*

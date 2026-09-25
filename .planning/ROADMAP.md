@@ -158,7 +158,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Models | 7/7 | Complete   | 2026-09-25 |
+| 1. Foundation & Models | 7/7 | Complete    | 2026-09-25 |
 | 2. Core Logic via QuickJS | 0/TBD | Not started | - |
 | 3. BLoC & UI Translation | 0/TBD | Not started | - |
 | 4. Muscle Map Rendering | 0/TBD | Not started | - |
