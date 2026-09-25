@@ -25,8 +25,7 @@ including the MuscleMap body-diagram geometry, exercise metadata/instructions so
 is unresolved and are not redistributed by openGym — continue to apply unchanged. See openGym's
 own `NOTICE.md` (`../openGym/NOTICE.md`) for the full text of those third-party notices.
 
-Vendored openGym files (for example the `openapi.yaml` snapshot added in Plan 01-05) keep their
-original notices as shipped by openGym.
+Vendored openGym files (for example the `openapi.yaml` snapshot added in Plan 01-05, the `third_party/opengym/lib/` modules, and `assets/js/opengym-lib.bundle.js` which is an esbuild-bundled, down-levelled but otherwise unmodified copy of openGym's code, AGPL-3.0-or-later) keep their original notices as shipped by openGym.
 
 ## This project's own dependencies
 

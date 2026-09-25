@@ -1,0 +1,600 @@
+{
+  "schema": 1,
+  "module": "workout-model",
+  "openGymVersion": "1.3.8",
+  "sourceSha256": "2190ad561541aa09fc6745b92f1e0ff78063a58ad544c3d3c5eb0c36acc21dad",
+  "generatedBy": "tool/gen_js_fixtures.sh",
+  "cases": [
+    {
+      "id": "wm-001",
+      "fn": "workoutModel.isWarmupRow",
+      "args": [
+        {
+          "phase": "warmup"
+        }
+      ],
+      "expected": true,
+      "from": "workout-model.test.js > phaseForSet / isWarmupRow > reads both the explicit phase and the legacy boolean",
+      "vitest": true
+    },
+    {
+      "id": "wm-002",
+      "fn": "workoutModel.isWarmupRow",
+      "args": [
+        {
+          "warmup": true
+        }
+      ],
+      "expected": true,
+      "from": "workout-model.test.js > phaseForSet / isWarmupRow > reads both the explicit phase and the legacy boolean",
+      "vitest": true
+    },
+    {
+      "id": "wm-003",
+      "fn": "workoutModel.isWarmupRow",
+      "args": [
+        {
+          "phase": "work"
+        }
+      ],
+      "expected": false,
+      "from": "workout-model.test.js > phaseForSet / isWarmupRow > reads both the explicit phase and the legacy boolean",
+      "vitest": false
+    },
+    {
+      "id": "wm-004",
+      "fn": "workoutModel.isWarmupRow",
+      "args": [
+        {}
+      ],
+      "expected": false,
+      "from": "workout-model.test.js > phaseForSet / isWarmupRow > reads both the explicit phase and the legacy boolean",
+      "vitest": false
+    },
+    {
+      "id": "wm-005",
+      "fn": "workoutModel.phaseForSet",
+      "args": [
+        {
+          "phase": "Warm-up"
+        }
+      ],
+      "expected": "warmup",
+      "from": "workout-model.js > phaseForSet > case-insensitive hyphenated warmup phase",
+      "vitest": "warmup"
+    },
+    {
+      "id": "wm-006",
+      "fn": "workoutModel.phaseForSet",
+      "args": [
+        {
+          "phase": " warmup "
+        }
+      ],
+      "expected": "warmup",
+      "from": "workout-model.js > phaseForSet > whitespace-padded warmup phase",
+      "vitest": "warmup"
+    },
+    {
+      "id": "wm-007",
+      "fn": "workoutModel.phaseForSet",
+      "args": [
+        {
+          "phase": "WARM_UP"
+        }
+      ],
+      "expected": "warmup",
+      "from": "workout-model.js > phaseForSet > uppercase underscore warmup phase",
+      "vitest": "warmup"
+    },
+    {
+      "id": "wm-008",
+      "fn": "workoutModel.phaseForSet",
+      "args": [
+        {
+          "phase": "cooldown",
+          "warmup": true
+        }
+      ],
+      "expected": "work",
+      "from": "workout-model.js > phaseForSet > unrecognized phase with warmup:true",
+      "vitest": "work"
+    },
+    {
+      "id": "wm-009",
+      "fn": "workoutModel.phaseForSet",
+      "args": [
+        {
+          "phase": 1
+        }
+      ],
+      "expected": "work",
+      "from": "workout-model.js > phaseForSet > numeric phase falls back to work",
+      "vitest": "work"
+    },
+    {
+      "id": "wm-010",
+      "fn": "workoutModel.phaseForSet",
+      "args": [
+        {
+          "phase": ""
+        }
+      ],
+      "expected": "work",
+      "from": "workout-model.js > phaseForSet > empty string phase falls back to work",
+      "vitest": "work"
+    },
+    {
+      "id": "wm-011",
+      "fn": "workoutModel.phaseForSet",
+      "args": [
+        {},
+        "warmup"
+      ],
+      "expected": "warmup",
+      "from": "workout-model.js > phaseForSet > custom fallback applies when phase and warmup missing",
+      "vitest": "warmup"
+    },
+    {
+      "id": "wm-012",
+      "fn": "workoutModel.setType",
+      "args": [
+        {}
+      ],
+      "expected": "straight",
+      "from": "workout-model.test.js > setType / isDropSet / isRestPauseSet > defaults to straight for anything without a recognised type",
+      "vitest": "straight"
+    },
+    {
+      "id": "wm-013",
+      "fn": "workoutModel.setType",
+      "args": [
+        {
+          "type": "dropset"
+        }
+      ],
+      "expected": "dropset",
+      "from": "workout-model.test.js > setType / isDropSet / isRestPauseSet > recognises drop-set and rest-pause rows",
+      "vitest": "dropset"
+    },
+    {
+      "id": "wm-014",
+      "fn": "workoutModel.isDropSet",
+      "args": [
+        {
+          "type": "dropset"
+        }
+      ],
+      "expected": true,
+      "from": "workout-model.test.js > setType / isDropSet / isRestPauseSet > recognises drop-set and rest-pause rows",
+      "vitest": true
+    },
+    {
+      "id": "wm-015",
+      "fn": "workoutModel.setType",
+      "args": [
+        {
+          "type": "restpause"
+        }
+      ],
+      "expected": "restpause",
+      "from": "workout-model.test.js > setType / isDropSet / isRestPauseSet > recognises drop-set and rest-pause rows",
+      "vitest": "restpause"
+    },
+    {
+      "id": "wm-016",
+      "fn": "workoutModel.isRestPauseSet",
+      "args": [
+        {
+          "type": "restpause"
+        }
+      ],
+      "expected": true,
+      "from": "workout-model.test.js > setType / isDropSet / isRestPauseSet > recognises drop-set and rest-pause rows",
+      "vitest": true
+    },
+    {
+      "id": "wm-017",
+      "fn": "workoutModel.isDropSet",
+      "args": [
+        {}
+      ],
+      "expected": false,
+      "from": "workout-model.test.js > setType / isDropSet / isRestPauseSet > defaults to straight for anything without a recognised type",
+      "vitest": false
+    },
+    {
+      "id": "wm-018",
+      "fn": "workoutModel.dropsOf",
+      "args": [
+        {
+          "type": "dropset",
+          "drops": [
+            {
+              "w": 80,
+              "r": 5
+            }
+          ]
+        }
+      ],
+      "expected": [
+        {
+          "w": 80,
+          "r": 5
+        }
+      ],
+      "from": "workout-model.test.js > dropsOf / clustersOf > only return rows for their own type",
+      "vitest": [
+        {
+          "w": 80,
+          "r": 5
+        }
+      ]
+    },
+    {
+      "id": "wm-019",
+      "fn": "workoutModel.clustersOf",
+      "args": [
+        {
+          "type": "restpause",
+          "clusters": [
+            {
+              "r": 4,
+              "restSec": 15
+            }
+          ]
+        }
+      ],
+      "expected": [
+        {
+          "r": 4,
+          "restSec": 15
+        }
+      ],
+      "from": "workout-model.test.js > dropsOf / clustersOf > only return rows for their own type",
+      "vitest": [
+        {
+          "r": 4,
+          "restSec": 15
+        }
+      ]
+    },
+    {
+      "id": "wm-020",
+      "fn": "workoutModel.dropsOf",
+      "args": [
+        null
+      ],
+      "expected": [],
+      "from": "workout-model.test.js > dropsOf / clustersOf > is defensive about missing/malformed arrays",
+      "vitest": []
+    },
+    {
+      "id": "wm-021",
+      "fn": "workoutModel.extraVolumeOf",
+      "args": [
+        {
+          "type": "dropset",
+          "w": 100,
+          "r": 5,
+          "drops": [
+            {
+              "w": 80,
+              "r": 5
+            },
+            {
+              "w": 60,
+              "r": 6
+            }
+          ]
+        }
+      ],
+      "expected": 760,
+      "from": "workout-model.test.js > extraVolumeOf > sums weight x reps across a drop-set own drops",
+      "vitest": 760
+    },
+    {
+      "id": "wm-022",
+      "fn": "workoutModel.extraVolumeOf",
+      "args": [
+        {
+          "type": "restpause",
+          "w": 60,
+          "r": 20,
+          "clusters": [
+            {
+              "r": 10,
+              "restSec": 15
+            }
+          ]
+        }
+      ],
+      "expected": 0,
+      "from": "workout-model.test.js > extraVolumeOf > is zero for rest-pause",
+      "vitest": 0
+    },
+    {
+      "id": "wm-023",
+      "fn": "workoutModel.extraVolumeOf",
+      "args": [
+        {
+          "w": 100,
+          "r": 5
+        }
+      ],
+      "expected": 0,
+      "from": "workout-model.test.js > extraVolumeOf > is zero for a straight or warm-up set",
+      "vitest": 0
+    },
+    {
+      "id": "wm-024",
+      "fn": "workoutModel.addDrop",
+      "args": [
+        {
+          "w": 100,
+          "r": 5,
+          "done": true
+        },
+        {
+          "w": 80,
+          "r": 5
+        }
+      ],
+      "expected": {
+        "w": 100,
+        "r": 5,
+        "done": true,
+        "type": "dropset",
+        "drops": [
+          {
+            "w": 80,
+            "r": 5
+          }
+        ]
+      },
+      "from": "workout-model.test.js > addDrop / addCluster > appends a drop and stamps the row as a drop-set",
+      "vitest": {
+        "w": 100,
+        "r": 5,
+        "done": true,
+        "type": "dropset",
+        "drops": [
+          {
+            "w": 80,
+            "r": 5
+          }
+        ]
+      }
+    },
+    {
+      "id": "wm-025",
+      "fn": "workoutModel.addCluster",
+      "args": [
+        {
+          "w": 60,
+          "r": 8,
+          "done": true
+        },
+        {
+          "r": 4,
+          "restSec": 15
+        }
+      ],
+      "expected": {
+        "w": 60,
+        "r": 8,
+        "done": true,
+        "type": "restpause",
+        "clusters": [
+          {
+            "r": 4,
+            "restSec": 15
+          }
+        ]
+      },
+      "from": "workout-model.test.js > addDrop / addCluster > appends a burst and stamps the row as a rest-pause set",
+      "vitest": {
+        "w": 60,
+        "r": 8,
+        "done": true,
+        "type": "restpause",
+        "clusters": [
+          {
+            "r": 4,
+            "restSec": 15
+          }
+        ]
+      }
+    },
+    {
+      "id": "wm-026",
+      "fn": "workoutModel.nextDropWeight",
+      "args": [
+        100,
+        20
+      ],
+      "expected": 80,
+      "from": "workout-model.js > nextDropWeight > 20 percent drop on 100 is 80",
+      "vitest": 80
+    },
+    {
+      "id": "wm-027",
+      "fn": "workoutModel.nextBurstReps",
+      "args": [
+        8
+      ],
+      "expected": 4,
+      "from": "workout-model.js > nextBurstReps > 8 reps seeds a burst of 4",
+      "vitest": 4
+    },
+    {
+      "id": "wm-028",
+      "fn": "workoutModel.splitBurstReps",
+      "args": [
+        0
+      ],
+      "expected": [],
+      "from": "workout-model.test.js > splitBurstReps > is empty for zero or invalid input",
+      "vitest": []
+    },
+    {
+      "id": "wm-029",
+      "fn": "workoutModel.isSideSet",
+      "args": [
+        {
+          "sides": {
+            "L": {
+              "w": 10,
+              "r": 8
+            },
+            "R": {
+              "w": 10,
+              "r": 8
+            }
+          }
+        }
+      ],
+      "expected": true,
+      "from": "workout-model.test.js > isSideSet > is true only for a row carrying both L and R sides",
+      "vitest": true
+    },
+    {
+      "id": "wm-030",
+      "fn": "workoutModel.isSideSet",
+      "args": [
+        {
+          "w": 10,
+          "r": 8
+        }
+      ],
+      "expected": false,
+      "from": "workout-model.test.js > isSideSet > is true only for a row carrying both L and R sides",
+      "vitest": false
+    },
+    {
+      "id": "wm-031",
+      "fn": "workoutModel.makeSideSet",
+      "args": [
+        {
+          "w": 15,
+          "r": 16,
+          "done": false
+        }
+      ],
+      "expected": {
+        "w": 15,
+        "r": 16,
+        "done": false,
+        "sides": {
+          "L": {
+            "w": 15,
+            "r": 8,
+            "done": false
+          },
+          "R": {
+            "w": 15,
+            "r": 8,
+            "done": false
+          }
+        }
+      },
+      "from": "workout-model.test.js > makeSideSet > splits the row total evenly across two sides at the same weight, nothing done",
+      "vitest": {
+        "w": 15,
+        "r": 16,
+        "done": false,
+        "sides": {
+          "L": {
+            "w": 15,
+            "r": 8,
+            "done": false
+          },
+          "R": {
+            "w": 15,
+            "r": 8,
+            "done": false
+          }
+        }
+      }
+    },
+    {
+      "id": "wm-032",
+      "fn": "workoutModel.syncSideAggregate",
+      "args": [
+        {
+          "sides": {
+            "L": {
+              "w": 15,
+              "r": 8,
+              "done": true
+            },
+            "R": {
+              "w": 17.5,
+              "r": 6,
+              "done": false
+            }
+          }
+        }
+      ],
+      "expected": {
+        "sides": {
+          "L": {
+            "w": 15,
+            "r": 8,
+            "done": true
+          },
+          "R": {
+            "w": 17.5,
+            "r": 6,
+            "done": false
+          }
+        },
+        "r": 14,
+        "w": 17.5,
+        "done": false
+      },
+      "from": "workout-model.test.js > syncSideAggregate > recomputes r as the sum, w as the heavier side, done only when both sides are",
+      "vitest": {
+        "w": 17.5,
+        "r": 14,
+        "done": false,
+        "sides": {
+          "L": {
+            "w": 15,
+            "r": 8,
+            "done": true
+          },
+          "R": {
+            "w": 17.5,
+            "r": 6,
+            "done": false
+          }
+        }
+      }
+    },
+    {
+      "id": "wm-033",
+      "fn": "workoutModel.modeForSet",
+      "args": [
+        {
+          "type": "dropset",
+          "w": 100,
+          "r": 5
+        }
+      ],
+      "expected": "reps",
+      "from": "workout-model.test.js > modeForSet / modeForEntry stay reps-mode for drop-sets and rest-pause sets > infers reps mode from the row own r field regardless of type",
+      "vitest": "reps"
+    },
+    {
+      "id": "wm-034",
+      "fn": "workoutModel.normalizeMode",
+      "args": [
+        "reps"
+      ],
+      "expected": "reps",
+      "from": "workout-model.js > normalizeMode > standard reps mode",
+      "vitest": "reps"
+    }
+  ]
+}

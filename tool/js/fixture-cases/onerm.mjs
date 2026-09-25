@@ -1,0 +1,182 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+import { UNDEF } from './helpers.mjs';
+
+const S = {
+  workouts: [
+    { d: '2026-01-01', start: 1, entries: [{ id: 'bench', sets: [{ w: 80, r: 5, done: true }] }] },
+    { d: '2026-01-08', start: 2, entries: [{ id: 'squat', sets: [{ w: 100, r: 5, done: true }] }] },
+    { d: '2026-01-15', start: 3, entries: [{ id: 'bench', sets: [{ w: 90, r: 5, done: true }, { w: 90, r: 3, done: false }] }] },
+    { d: '2026-01-22', start: 4, entries: [{ id: 'bench', sets: [{ w: 85, r: 5, done: true }] }] },
+    { d: '2026-01-29', start: 5, entries: [{ id: 'run', sets: [{ min: 30, speed: 10, done: true }] }] },
+  ],
+};
+
+export const cases = [
+  {
+    id: 'onerm-001',
+    fn: 'onerm.estimate1RM',
+    args: [100, 1],
+    from: 'onerm.test.js > estimate1RM > returns the load unchanged for a single rep',
+    vitest: 100,
+  },
+  {
+    id: 'onerm-002',
+    fn: 'onerm.estimate1RM',
+    args: [62.5, 1],
+    from: 'onerm.test.js > estimate1RM > returns the load unchanged for a single rep',
+    vitest: 62.5,
+  },
+  {
+    id: 'onerm-003',
+    fn: 'onerm.estimate1RM',
+    args: [100, 5],
+    from: 'onerm.test.js > estimate1RM > matches Epley by hand across the usual rep ranges',
+    vitest: 116.7,
+  },
+  {
+    id: 'onerm-004',
+    fn: 'onerm.estimate1RM',
+    args: [100, 10],
+    from: 'onerm.test.js > estimate1RM > matches Epley by hand across the usual rep ranges',
+    vitest: 133.3,
+  },
+  {
+    id: 'onerm-005',
+    fn: 'onerm.estimate1RM',
+    args: [80, 8],
+    from: 'onerm.test.js > estimate1RM > matches Epley by hand across the usual rep ranges',
+    vitest: 101.3,
+  },
+  {
+    id: 'onerm-006',
+    fn: 'onerm.estimate1RM',
+    args: [100, 12],
+    from: 'onerm.test.js > estimate1RM > refuses reps beyond the cap rather than guessing',
+    vitest: 140,
+  },
+  {
+    id: 'onerm-007',
+    fn: 'onerm.estimate1RM',
+    args: [100, 13],
+    from: 'onerm.test.js > estimate1RM > refuses reps beyond the cap rather than guessing',
+    vitest: null,
+  },
+  {
+    id: 'onerm-008',
+    fn: 'onerm.estimate1RM',
+    args: [0, 5],
+    from: 'onerm.test.js > estimate1RM > rejects invalid, zero and negative input',
+    vitest: null,
+  },
+  {
+    id: 'onerm-009',
+    fn: 'onerm.estimate1RM',
+    args: [-100, 5],
+    from: 'onerm.test.js > estimate1RM > rejects invalid, zero and negative input',
+    vitest: null,
+  },
+  {
+    id: 'onerm-010',
+    fn: 'onerm.estimate1RM',
+    args: [100, 5, 'brzycki'],
+    from: 'onerm.test.js > estimate1RM > offers the other documented formulas and agrees with them at low reps',
+    vitest: 112.5,
+  },
+  {
+    id: 'onerm-011',
+    fn: 'onerm.estimate1RM',
+    args: [100, 5, 'lombardi'],
+    from: 'onerm.test.js > estimate1RM > offers the other documented formulas and agrees with them at low reps',
+    vitest: 117.5,
+  },
+  {
+    id: 'onerm-012',
+    fn: 'onerm.estimate1RM',
+    args: [100, 5, UNDEF],
+    from: 'onerm.test.js > estimate1RM > falls back to default formula via undefined optional argument',
+    vitest: 116.7,
+  },
+  {
+    id: 'onerm-013',
+    fn: 'onerm.bestSetOf',
+    args: [
+      {
+        id: 'x',
+        sets: [
+          { w: 100, r: 5, done: true },
+          { w: 110, r: 3, done: true },
+          { w: 120, r: 1, done: true },
+        ],
+      },
+    ],
+    from: 'onerm.test.js > bestSetOf > picks the highest estimate, not the heaviest set',
+    vitest: { est: 121, w: 110, r: 3 },
+  },
+  {
+    id: 'onerm-014',
+    fn: 'onerm.bestSetOf',
+    args: [
+      {
+        id: 'warm-test',
+        sets: [
+          { w: 20, r: 8, done: true, warmup: true },
+          { w: 80, r: 5, done: true },
+        ],
+      },
+    ],
+    from: 'onerm.test.js > warm-up sets and 1RM > does not let a ticked-off warm-up set set or raise the estimated 1RM',
+    vitest: { est: 93.3, w: 80, r: 5 },
+  },
+  {
+    id: 'onerm-015',
+    fn: 'onerm.bestSetOf',
+    args: [
+      {
+        id: 'c',
+        sets: [{ min: 20, speed: 9, done: true }],
+      },
+    ],
+    from: 'onerm.test.js > bestSetOf > returns null for cardio and timed entries',
+    vitest: null,
+  },
+  {
+    id: 'onerm-016',
+    fn: 'onerm.e1rmSeries',
+    args: [S, 'bench'],
+    from: 'onerm.test.js > e1rmSeries / best1RM > yields one chronological point per workout that produced an estimate',
+    vitest: [
+      { d: '2026-01-01', t: 1, y: 93.3, w: 80, r: 5 },
+      { d: '2026-01-15', t: 3, y: 105, w: 90, r: 5 },
+      { d: '2026-01-22', t: 4, y: 99.2, w: 85, r: 5 },
+    ],
+  },
+  {
+    id: 'onerm-017',
+    fn: 'onerm.best1RM',
+    args: [S, 'bench'],
+    from: 'onerm.test.js > e1rmSeries / best1RM > reports the all-time best with the set behind it',
+    vitest: { est: 105, w: 90, r: 5, d: '2026-01-15', t: 3 },
+  },
+  {
+    id: 'onerm-018',
+    fn: 'onerm.is1RMRecord',
+    args: [S, 'bench', { id: 'bench', sets: [{ w: 95, r: 5, done: true }] }],
+    from: 'onerm.test.js > is1RMRecord > flags a session that beats every previous estimate',
+    vitest: { est: 110.8, w: 95, r: 5, prev: 105 },
+  },
+  {
+    id: 'onerm-019',
+    fn: 'onerm.is1RMRecord',
+    args: [S, 'bench', { id: 'bench', sets: [{ w: 90, r: 5, done: true }] }],
+    from: 'onerm.test.js > is1RMRecord > stays quiet when the session does not beat the record',
+    vitest: null,
+  },
+  {
+    id: 'onerm-020',
+    fn: 'onerm.is1RMRecord',
+    args: [S, 'deadlift', { id: 'deadlift', sets: [{ w: 140, r: 3, done: true }] }],
+    from: 'onerm.test.js > is1RMRecord > counts the first ever estimate as a record',
+    vitest: { est: 154, w: 140, r: 3, prev: 0 },
+  },
+];

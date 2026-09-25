@@ -1,0 +1,306 @@
+{
+  "schema": 1,
+  "module": "bar",
+  "openGymVersion": "1.3.8",
+  "sourceSha256": "2190ad561541aa09fc6745b92f1e0ff78063a58ad544c3d3c5eb0c36acc21dad",
+  "generatedBy": "tool/gen_js_fixtures.sh",
+  "cases": [
+    {
+      "id": "bar-001",
+      "fn": "bar.usesBar",
+      "args": [
+        {
+          "id": "sm",
+          "eq": "smith machine"
+        }
+      ],
+      "expected": true,
+      "from": "bar.test.js > bar equipment > usesBar answers for ids and exercise objects alike",
+      "vitest": true
+    },
+    {
+      "id": "bar-002",
+      "fn": "bar.usesBar",
+      "args": [
+        {
+          "id": "db",
+          "eq": "dumbbell"
+        }
+      ],
+      "expected": false,
+      "from": "bar.test.js > bar equipment > usesBar answers for ids and exercise objects alike",
+      "vitest": false
+    },
+    {
+      "id": "bar-003",
+      "fn": "bar.usesBar",
+      "args": [
+        null
+      ],
+      "expected": false,
+      "from": "bar.test.js > bar equipment > usesBar answers for ids and exercise objects alike",
+      "vitest": false
+    },
+    {
+      "id": "bar-004",
+      "fn": "bar.defaultBarWeight",
+      "args": [
+        "ez barbell",
+        "kg"
+      ],
+      "expected": 10,
+      "from": "bar.test.js > per-unit defaults > every bar type has a default in both units",
+      "vitest": 10
+    },
+    {
+      "id": "bar-005",
+      "fn": "bar.defaultBarWeight",
+      "args": [
+        "ez barbell",
+        "lb"
+      ],
+      "expected": 25,
+      "from": "bar.test.js > per-unit defaults > every bar type has a default in both units",
+      "vitest": 25
+    },
+    {
+      "id": "bar-006",
+      "fn": "bar.defaultBarWeight",
+      "args": [
+        "olympic barbell",
+        "kg"
+      ],
+      "expected": 20,
+      "from": "bar.test.js > per-unit defaults > every bar type has a default in both units",
+      "vitest": 20
+    },
+    {
+      "id": "bar-007",
+      "fn": "bar.defaultBarWeight",
+      "args": [
+        "barbell",
+        "lb"
+      ],
+      "expected": 45,
+      "from": "bar.test.js > per-unit defaults > every bar type has a default in both units",
+      "vitest": 45
+    },
+    {
+      "id": "bar-008",
+      "fn": "bar.defaultBarWeight",
+      "args": [
+        "dumbbell",
+        "kg"
+      ],
+      "expected": null,
+      "from": "bar.test.js > per-unit defaults > every bar type has a default in both units",
+      "vitest": null
+    },
+    {
+      "id": "bar-009",
+      "fn": "bar.isNoBar",
+      "args": [
+        {
+          "unit": "kg",
+          "barWeights": {
+            "sm": 0
+          }
+        },
+        "sm"
+      ],
+      "expected": true,
+      "from": "bar-nobar.test.js > no bar at all > tells \"no bar\" apart from \"nothing set\"",
+      "vitest": true
+    },
+    {
+      "id": "bar-010",
+      "fn": "bar.isNoBar",
+      "args": [
+        {
+          "unit": "kg",
+          "barWeights": {
+            "sm": 15
+          }
+        },
+        "sm"
+      ],
+      "expected": false,
+      "from": "bar-nobar.test.js > no bar at all > tells \"no bar\" apart from \"nothing set\"",
+      "vitest": false
+    },
+    {
+      "id": "bar-011",
+      "fn": "bar.hasBarOverride",
+      "args": [
+        {
+          "unit": "kg",
+          "barWeights": {
+            "sm": 0
+          }
+        },
+        "sm"
+      ],
+      "expected": true,
+      "from": "bar-nobar.test.js > no bar at all > tells \"no bar\" apart from \"nothing set\"",
+      "vitest": true
+    },
+    {
+      "id": "bar-012",
+      "fn": "bar.hasBarOverride",
+      "args": [
+        {
+          "unit": "kg",
+          "barWeights": {}
+        },
+        "sm"
+      ],
+      "expected": false,
+      "from": "bar-nobar.test.js > no bar at all > tells \"no bar\" apart from \"nothing set\"",
+      "vitest": false
+    },
+    {
+      "id": "bar-013",
+      "fn": "bar.barWeightFor",
+      "args": [
+        {
+          "unit": "kg",
+          "barWeights": {
+            "sm": 0
+          }
+        },
+        {
+          "id": "sm",
+          "eq": "smith machine"
+        }
+      ],
+      "expected": 0,
+      "from": "bar-nobar.test.js > no bar at all > keeps a stored 0 instead of falling back to the bar type default",
+      "vitest": 0
+    },
+    {
+      "id": "bar-014",
+      "fn": "bar.barWeightFor",
+      "args": [
+        {
+          "unit": "kg",
+          "barWeights": {}
+        },
+        {
+          "id": "sm",
+          "eq": "smith machine"
+        }
+      ],
+      "expected": 9,
+      "from": "bar-nobar.test.js > no bar at all > keeps a stored 0 instead of falling back to the bar type default",
+      "vitest": 9
+    },
+    {
+      "id": "bar-015",
+      "fn": "bar.barWeightFor",
+      "args": [
+        {
+          "unit": "lb",
+          "barWeights": {}
+        },
+        {
+          "id": "bb",
+          "eq": "barbell"
+        }
+      ],
+      "expected": 45,
+      "from": "bar.test.js > barWeightFor > falls back to the equipment default in the profile unit",
+      "vitest": 45
+    },
+    {
+      "id": "bar-016",
+      "fn": "bar.barWeightFor",
+      "args": [
+        {
+          "unit": "kg",
+          "barWeights": {
+            "ez": 7.5
+          }
+        },
+        {
+          "id": "ez",
+          "eq": "ez barbell"
+        }
+      ],
+      "expected": 7.5,
+      "from": "bar.test.js > barWeightFor > an explicit override wins over the default",
+      "vitest": 7.5
+    },
+    {
+      "id": "bar-017",
+      "fn": "bar.barWeightFor",
+      "args": [
+        {
+          "unit": "kg",
+          "barWeights": {}
+        },
+        {
+          "id": "db",
+          "eq": "dumbbell"
+        }
+      ],
+      "expected": null,
+      "from": "bar.test.js > barWeightFor > is null for anything without a bar",
+      "vitest": null
+    },
+    {
+      "id": "bar-018",
+      "fn": "bar.plateSplit",
+      "args": [
+        100,
+        20
+      ],
+      "expected": 40,
+      "from": "bar.test.js > plateSplit > splits what is beyond the bar evenly per side",
+      "vitest": 40
+    },
+    {
+      "id": "bar-019",
+      "fn": "bar.plateSplit",
+      "args": [
+        62.5,
+        20
+      ],
+      "expected": 21.25,
+      "from": "bar.test.js > plateSplit > splits what is beyond the bar evenly per side",
+      "vitest": 21.25
+    },
+    {
+      "id": "bar-020",
+      "fn": "bar.plateSplit",
+      "args": [
+        100,
+        0
+      ],
+      "expected": 50,
+      "from": "bar-nobar.test.js > no bar at all > counts every plate when there is no bar",
+      "vitest": 50
+    },
+    {
+      "id": "bar-021",
+      "fn": "bar.plateSplit",
+      "args": [
+        20,
+        20
+      ],
+      "expected": null,
+      "from": "bar.test.js > plateSplit > is null when there is nothing sensible to show",
+      "vitest": null
+    },
+    {
+      "id": "bar-022",
+      "fn": "bar.plateSplit",
+      "args": [
+        15,
+        20
+      ],
+      "expected": null,
+      "from": "bar.test.js > plateSplit > is null when there is nothing sensible to show",
+      "vitest": null
+    }
+  ]
+}

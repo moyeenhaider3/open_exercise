@@ -1,0 +1,595 @@
+{
+  "schema": 1,
+  "module": "history",
+  "openGymVersion": "1.3.8",
+  "sourceSha256": "2190ad561541aa09fc6745b92f1e0ff78063a58ad544c3d3c5eb0c36acc21dad",
+  "generatedBy": "tool/gen_js_fixtures.sh",
+  "cases": [
+    {
+      "id": "hist-001",
+      "fn": "history.modeOf",
+      "args": [
+        {
+          "id": "3220"
+        }
+      ],
+      "expected": "cardio",
+      "from": "history.test.js > modeOf > falls back to the body part when a plan has no mode",
+      "vitest": "cardio"
+    },
+    {
+      "id": "hist-002",
+      "fn": "history.modeOf",
+      "args": [
+        {
+          "id": "0011"
+        }
+      ],
+      "expected": "reps",
+      "from": "history.test.js > modeOf > falls back to the body part when a plan has no mode",
+      "vitest": "reps"
+    },
+    {
+      "id": "hist-003",
+      "fn": "history.modeOf",
+      "args": [
+        {
+          "id": "0011",
+          "mode": "time"
+        }
+      ],
+      "expected": "time",
+      "from": "history.test.js > modeOf > lets an explicit mode win over the body part",
+      "vitest": "time"
+    },
+    {
+      "id": "hist-004",
+      "fn": "history.modeOf",
+      "args": [
+        {
+          "id": "3220",
+          "mode": "reps"
+        }
+      ],
+      "expected": "reps",
+      "from": "history.test.js > modeOf > lets an explicit mode win over the body part",
+      "vitest": "reps"
+    },
+    {
+      "id": "hist-005",
+      "fn": "history.modeOf",
+      "args": [
+        {
+          "id": "0011",
+          "mode": "nonsense"
+        }
+      ],
+      "expected": "reps",
+      "from": "history.test.js > modeOf > ignores a mode it does not know",
+      "vitest": "reps"
+    },
+    {
+      "id": "hist-006",
+      "fn": "history.isTimed",
+      "args": [
+        {
+          "id": "0011",
+          "mode": "time"
+        }
+      ],
+      "expected": true,
+      "from": "history.test.js > modeOf > exposes the timed check",
+      "vitest": true
+    },
+    {
+      "id": "hist-007",
+      "fn": "history.isTimed",
+      "args": [
+        {
+          "id": "0011"
+        }
+      ],
+      "expected": false,
+      "from": "history.test.js > modeOf > exposes the timed check",
+      "vitest": false
+    },
+    {
+      "id": "hist-008",
+      "fn": "history.isBw",
+      "args": [
+        {
+          "id": "0001"
+        }
+      ],
+      "expected": true,
+      "from": "history.test.js > isBw > detects bodyweight exercises",
+      "vitest": true
+    },
+    {
+      "id": "hist-009",
+      "fn": "history.isBw",
+      "args": [
+        {
+          "id": "0011"
+        }
+      ],
+      "expected": false,
+      "from": "history.test.js > isBw > detects non-bodyweight exercises",
+      "vitest": false
+    },
+    {
+      "id": "hist-010",
+      "fn": "history.isPerSide",
+      "args": [
+        {
+          "side": true
+        }
+      ],
+      "expected": true,
+      "from": "history.test.js > isPerSide > detects per-side target",
+      "vitest": true
+    },
+    {
+      "id": "hist-011",
+      "fn": "history.isPerSide",
+      "args": [
+        {}
+      ],
+      "expected": false,
+      "from": "history.test.js > isPerSide > detects standard target",
+      "vitest": false
+    },
+    {
+      "id": "hist-012",
+      "fn": "history.sideReps",
+      "args": [
+        16
+      ],
+      "expected": 8,
+      "from": "history.test.js > sideReps > divides total reps by 2 for per-side",
+      "vitest": 8
+    },
+    {
+      "id": "hist-013",
+      "fn": "history.effortOf",
+      "args": [
+        {
+          "effort": "rpe"
+        }
+      ],
+      "expected": "rpe",
+      "from": "history.test.js > effortOf > reads the scale a profile logs",
+      "vitest": "rpe"
+    },
+    {
+      "id": "hist-014",
+      "fn": "history.effortOf",
+      "args": [
+        {
+          "effort": "rir"
+        }
+      ],
+      "expected": "rir",
+      "from": "history.test.js > effortOf > reads the scale a profile logs",
+      "vitest": "rir"
+    },
+    {
+      "id": "hist-015",
+      "fn": "history.effortOf",
+      "args": [
+        {
+          "effort": "none"
+        }
+      ],
+      "expected": "none",
+      "from": "history.test.js > effortOf > reads the scale a profile logs",
+      "vitest": "none"
+    },
+    {
+      "id": "hist-016",
+      "fn": "history.effortOf",
+      "args": [
+        {}
+      ],
+      "expected": "none",
+      "from": "history.test.js > effortOf > reads the scale a profile logs",
+      "vitest": "none"
+    },
+    {
+      "id": "hist-017",
+      "fn": "history.effortOf",
+      "args": [
+        {
+          "showRir": true
+        }
+      ],
+      "expected": "rir",
+      "from": "history.test.js > effortOf > keeps the column for a profile still carrying the old showRir flag",
+      "vitest": "rir"
+    },
+    {
+      "id": "hist-018",
+      "fn": "history.stepEffort",
+      "args": [
+        "rir",
+        null,
+        1
+      ],
+      "expected": 0,
+      "from": "history.test.js > stepEffort > starts at the bottom of the scale and walks up",
+      "vitest": 0
+    },
+    {
+      "id": "hist-019",
+      "fn": "history.stepEffort",
+      "args": [
+        "rpe",
+        null,
+        1
+      ],
+      "expected": 6,
+      "from": "history.test.js > stepEffort > starts at the bottom of the scale and walks up",
+      "vitest": 6
+    },
+    {
+      "id": "hist-020",
+      "fn": "history.stepEffort",
+      "args": [
+        "rir",
+        0,
+        1
+      ],
+      "expected": 0.5,
+      "from": "history.test.js > stepEffort > starts at the bottom of the scale and walks up",
+      "vitest": 0.5
+    },
+    {
+      "id": "hist-021",
+      "fn": "history.stepEffort",
+      "args": [
+        "rpe",
+        6,
+        1
+      ],
+      "expected": 6.5,
+      "from": "history.test.js > stepEffort > starts at the bottom of the scale and walks up",
+      "vitest": 6.5
+    },
+    {
+      "id": "hist-022",
+      "fn": "history.stepEffort",
+      "args": [
+        "rir",
+        null,
+        -1
+      ],
+      "expected": null,
+      "from": "history.test.js > stepEffort > leaves an untouched cell unlogged when stepped down",
+      "vitest": null
+    },
+    {
+      "id": "hist-023",
+      "fn": "history.workoutVolume",
+      "args": [
+        {
+          "entries": [
+            {
+              "id": "0011",
+              "sets": [
+                {
+                  "w": 60,
+                  "r": 10,
+                  "done": true
+                },
+                {
+                  "w": 60,
+                  "r": 10,
+                  "done": false
+                }
+              ]
+            },
+            {
+              "id": "0011",
+              "target": {
+                "mode": "time"
+              },
+              "sets": [
+                {
+                  "sec": 60,
+                  "w": 20,
+                  "done": true
+                }
+              ]
+            },
+            {
+              "id": "3220",
+              "sets": [
+                {
+                  "min": 20,
+                  "speed": 9,
+                  "done": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": 600,
+      "from": "history.test.js > workoutVolume > counts reps work and leaves timed/cardio sets out",
+      "vitest": 600
+    },
+    {
+      "id": "hist-024",
+      "fn": "history.workoutVolume",
+      "args": [
+        {
+          "entries": [
+            {
+              "id": "0011",
+              "target": {
+                "side": true
+              },
+              "sets": [
+                {
+                  "w": 20,
+                  "r": 16,
+                  "done": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": 320,
+      "from": "history.test.js > workoutVolume > needs no per-side case - the logged reps are already both sides",
+      "vitest": 320
+    },
+    {
+      "id": "hist-025",
+      "fn": "history.workoutVolume",
+      "args": [
+        {
+          "entries": [
+            {
+              "id": "0011",
+              "sets": [
+                {
+                  "type": "dropset",
+                  "w": 100,
+                  "r": 5,
+                  "done": true,
+                  "drops": [
+                    {
+                      "w": 80,
+                      "r": 5
+                    },
+                    {
+                      "w": 60,
+                      "r": 5
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": 1200,
+      "from": "history.test.js > workoutVolume > adds drop-set drops on top of the rows main set",
+      "vitest": 1200
+    },
+    {
+      "id": "hist-026",
+      "fn": "history.workoutVolume",
+      "args": [
+        {
+          "entries": [
+            {
+              "id": "0011",
+              "sets": [
+                {
+                  "type": "restpause",
+                  "w": 60,
+                  "r": 20,
+                  "done": true,
+                  "clusters": [
+                    {
+                      "r": 10,
+                      "restSec": 15
+                    },
+                    {
+                      "r": 5,
+                      "restSec": 15
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": 1200,
+      "from": "history.test.js > workoutVolume > counts a rest-pause row once",
+      "vitest": 1200
+    },
+    {
+      "id": "hist-027",
+      "fn": "history.workoutVolume",
+      "args": [
+        {
+          "entries": [
+            {
+              "id": "0011",
+              "sets": [
+                {
+                  "type": "dropset",
+                  "w": 100,
+                  "r": 5,
+                  "done": false,
+                  "drops": [
+                    {
+                      "w": 80,
+                      "r": 5
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": 0,
+      "from": "history.test.js > workoutVolume > ignores drops/bursts on a row that was never checked off",
+      "vitest": 0
+    },
+    {
+      "id": "hist-028",
+      "fn": "history.workoutVolume",
+      "args": [
+        {
+          "entries": [
+            {
+              "id": "0001",
+              "target": {
+                "bodyweight": true
+              },
+              "sets": [
+                {
+                  "w": 0,
+                  "r": 20,
+                  "done": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": 0,
+      "from": "history.test.js > workoutVolume > leaves an unloaded bodyweight set at zero volume",
+      "vitest": 0
+    },
+    {
+      "id": "hist-029",
+      "fn": "history.setsDone",
+      "args": [
+        {
+          "entries": [
+            {
+              "id": "0011",
+              "sets": [
+                {
+                  "done": true,
+                  "warmup": true
+                },
+                {
+                  "done": true,
+                  "phase": "work"
+                },
+                {
+                  "done": false,
+                  "phase": "work"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": 2,
+      "from": "history.test.js > setsDone > counts all done sets including warmup",
+      "vitest": 2
+    },
+    {
+      "id": "hist-030",
+      "fn": "history.workSetsDone",
+      "args": [
+        {
+          "entries": [
+            {
+              "id": "0011",
+              "sets": [
+                {
+                  "done": true,
+                  "warmup": true
+                },
+                {
+                  "done": true,
+                  "phase": "work"
+                },
+                {
+                  "done": false,
+                  "phase": "work"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": 1,
+      "from": "history.test.js > workSetsDone > counts only done work sets",
+      "vitest": 1
+    },
+    {
+      "id": "hist-031",
+      "fn": "history.bestWeightForEntry",
+      "args": [
+        {
+          "id": "0011",
+          "sets": [
+            {
+              "w": 50,
+              "done": true
+            },
+            {
+              "w": 60,
+              "done": true
+            },
+            {
+              "w": 70,
+              "done": false
+            }
+          ]
+        }
+      ],
+      "expected": 60,
+      "from": "history.test.js > bestWeightForEntry > finds highest weight among done sets",
+      "vitest": 60
+    },
+    {
+      "id": "hist-032",
+      "fn": "history.cascadeWeight",
+      "args": [
+        [
+          {
+            "w": 50,
+            "done": false
+          },
+          {
+            "w": 50,
+            "done": false
+          },
+          {
+            "w": 50,
+            "done": false
+          }
+        ],
+        0,
+        60
+      ],
+      "expected": [
+        {
+          "w": 50,
+          "done": false
+        },
+        {
+          "w": 60,
+          "done": false
+        },
+        {
+          "w": 60,
+          "done": false
+        }
+      ],
+      "from": "history.test.js > cascadeWeight > cascades new weight to all subsequent undone sets"
+    }
+  ]
+}

@@ -8,6 +8,7 @@ import 'app/dependencies.dart';
 import 'core/api/open_gym_api_client.dart';
 import 'core/data/gym_state_repository.dart';
 import 'core/db/app_database.dart';
+import 'core/js/js_engine_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,19 @@ Future<void> main() async {
     FlutterError.reportError(
       FlutterErrorDetails(exception: e, stack: st, library: 'open_exercise bootstrap'),
     );
-    runApp(const _StartupErrorApp());
+    runApp(const _StartupErrorApp(message: 'Could not open the local database.'));
+    return;
+  }
+
+  final JsEngineService jsEngine;
+  try {
+    jsEngine = await JsEngineService.load();
+  } catch (e, st) {
+    FlutterError.reportError(
+      FlutterErrorDetails(exception: e, stack: st, library: 'open_exercise bootstrap'),
+    );
+    await database.close();
+    runApp(const _StartupErrorApp(message: 'Could not start the calculation engine.'));
     return;
   }
 
@@ -33,15 +46,18 @@ Future<void> main() async {
       dependencies: AppDependencies(
         gymStateRepository: GymStateRepository(database: database),
         apiClientFactory: const ApiClientFactory(),
+        jsEngine: jsEngine,
       ),
     ),
   );
 }
 
-/// Minimal fallback shown when the local database cannot be opened at
-/// startup. "Try again" re-runs the whole bootstrap.
+/// Minimal fallback shown when the local database or JS engine cannot be opened
+/// at startup. "Try again" re-runs the whole bootstrap.
 class _StartupErrorApp extends StatelessWidget {
-  const _StartupErrorApp();
+  const _StartupErrorApp({required this.message});
+
+  final String message;
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +72,8 @@ class _StartupErrorApp extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text(
-                    'Could not open the local database.',
+                  Text(
+                    message,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),

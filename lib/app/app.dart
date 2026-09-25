@@ -41,6 +41,7 @@ class _OpenExerciseAppState extends State<OpenExerciseApp> {
       providers: <RepositoryProvider<Object>>[
         RepositoryProvider.value(value: widget.dependencies.gymStateRepository),
         RepositoryProvider.value(value: widget.dependencies.apiClientFactory),
+        RepositoryProvider.value(value: widget.dependencies.jsEngine),
       ],
       child: BlocProvider<ShellBloc>(
         create: (context) => ShellBloc(
