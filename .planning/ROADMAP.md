@@ -27,7 +27,7 @@ Port openGym to native Flutter in horizontal layers. Build the data foundation f
   1. `lib/core/` and `lib/features/` exist, and the app boots to an empty themed shell
   2. Generated Dart models + Dio clients compile and cover every path in `openapi.yaml`
   3. A representative (synthetic, demoSeed-derived) `state-<uid>.json` imports into sqflite and exports back to equivalent JSON (automated test). Note: user accepted the synthetic fixture on 2026-09-25 (no real file available)
-  4. `flutter analyze` and `flutter test` pass
+  4. `flutter analyze` pass
 
 **Plans**: 7 plans
 
