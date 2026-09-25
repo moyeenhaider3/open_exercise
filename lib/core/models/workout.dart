@@ -134,39 +134,59 @@ class Workout extends Equatable {
         'view': view,
       });
 
+  /// Returns a copy with the given fields replaced. Every field parameter defaults to a private
+  /// sentinel, so passing `null` explicitly *clears* the field (openGym writes explicit nulls,
+  /// e.g. `active = null` when a workout ends): the typed value becomes null and `extra` gets
+  /// `key: null`, so [toJson] emits an explicit null. Passing a non-null value sets the typed
+  /// field and drops any stale entry for that key from `extra` (left over from a null or
+  /// wrong-typed value demoted by `JsonReader`). Omitted fields are kept as they are.
+  /// [extra], if given, replaces the base `extra` map before those per-key adjustments.
   Workout copyWith({
-    String? id,
-    String? d,
-    num? start,
-    num? end,
-    String? routineId,
-    List<String>? routineIds,
-    String? name,
-    num? bw,
-    num? vol,
-    List<String>? prs,
-    List<WorkoutEntry>? entries,
-    int? cur,
-    String? view,
+    Object? id = _unset,
+    Object? d = _unset,
+    Object? start = _unset,
+    Object? end = _unset,
+    Object? routineId = _unset,
+    Object? routineIds = _unset,
+    Object? name = _unset,
+    Object? bw = _unset,
+    Object? vol = _unset,
+    Object? prs = _unset,
+    Object? entries = _unset,
+    Object? cur = _unset,
+    Object? view = _unset,
     Map<String, Object?>? extra,
   }) {
+    final Map<String, Object?> nextExtra = <String, Object?>{...(extra ?? this.extra)};
+    T? pick<T>(Object? value, T? current, String key) {
+      if (identical(value, _unset)) return current;
+      if (value == null) {
+        nextExtra[key] = null;
+        return null;
+      }
+      nextExtra.remove(key);
+      return value as T;
+    }
+
     return Workout(
-      id: id ?? this.id,
-      d: d ?? this.d,
-      start: start ?? this.start,
-      end: end ?? this.end,
-      routineId: routineId ?? this.routineId,
-      routineIds: routineIds ?? this.routineIds,
-      name: name ?? this.name,
-      bw: bw ?? this.bw,
-      vol: vol ?? this.vol,
-      prs: prs ?? this.prs,
-      entries: entries ?? this.entries,
-      cur: cur ?? this.cur,
-      view: view ?? this.view,
-      extra: extra ?? this.extra,
+      id: pick<String>(id, this.id, 'id'),
+      d: pick<String>(d, this.d, 'd'),
+      start: pick<num>(start, this.start, 'start'),
+      end: pick<num>(end, this.end, 'end'),
+      routineId: pick<String>(routineId, this.routineId, 'routineId'),
+      routineIds: pick<List<String>>(routineIds, this.routineIds, 'routineIds'),
+      name: pick<String>(name, this.name, 'name'),
+      bw: pick<num>(bw, this.bw, 'bw'),
+      vol: pick<num>(vol, this.vol, 'vol'),
+      prs: pick<List<String>>(prs, this.prs, 'prs'),
+      entries: pick<List<WorkoutEntry>>(entries, this.entries, 'entries'),
+      cur: pick<int>(cur, this.cur, 'cur'),
+      view: pick<String>(view, this.view, 'view'),
+      extra: Map<String, Object?>.unmodifiable(nextExtra),
     );
   }
+
+  static const Object _unset = Object();
 
   @override
   List<Object?> get props => <Object?>[

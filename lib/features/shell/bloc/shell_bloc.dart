@@ -70,7 +70,10 @@ class ShellBloc extends Bloc<ShellEvent, ShellState> {
       emit(ShellReady(settings: ThemeSettings.fromState(GymState.fromJson(doc))));
     } catch (e, st) {
       addError(e, st);
-      final GymState uiOnly = _currentAsState().copyWith(theme: theme, accent: accent);
+      // copyWith treats an explicit null as "clear", so only pass what is being changed.
+      GymState uiOnly = _currentAsState();
+      if (theme != null) uiOnly = uiOnly.copyWith(theme: theme);
+      if (accent != null) uiOnly = uiOnly.copyWith(accent: accent);
       emit(ShellReady(settings: ThemeSettings.fromState(uiOnly)));
     }
   }

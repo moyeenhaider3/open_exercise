@@ -128,8 +128,11 @@ class GymStateRepository {
         whereArgs: <Object?>[uid],
       );
       if (rows.isEmpty) {
-        final Map<String, Object?> doc =
-            GymState.defaults().copyWith(theme: theme, accent: accent, ts: now).toJson();
+        GymState fresh = GymState.defaults().copyWith(ts: now);
+        // copyWith treats an explicit null as "clear", so only pass what is being changed.
+        if (theme != null) fresh = fresh.copyWith(theme: theme);
+        if (accent != null) fresh = fresh.copyWith(accent: accent);
+        final Map<String, Object?> doc = fresh.toJson();
         await _importInTxn(txn, uid, doc);
         return doc;
       }
