@@ -113,7 +113,13 @@ class GymStateRepository {
   /// to the rest of the profile nor wipe it (CR-01/CR-03). If [uid] has no stored state yet, a
   /// fresh [GymState.defaults] document with the change applied is imported (openGym's DEF). If
   /// the stored `doc_json` cannot be decoded as an object this throws and writes nothing.
+  ///
+  /// This is a user-initiated local change, so like openGym's `persist(S, push, stamp = true)`
+  /// (`useStore.js`) it stamps `_ts` with the current time: `_ts` decides which copy wins on the
+  /// next pull (`restoredStateFor`). [importState] deliberately does not stamp (import/export
+  /// and adopted server copies keep their own `_ts`).
   Future<Map<String, Object?>> patchSettings(String uid, {String? theme, String? accent}) {
+    final int now = DateTime.now().millisecondsSinceEpoch;
     return _db.transaction((Transaction txn) async {
       final List<Map<String, Object?>> rows = await txn.query(
         Tables.userState,
@@ -123,7 +129,7 @@ class GymStateRepository {
       );
       if (rows.isEmpty) {
         final Map<String, Object?> doc =
-            GymState.defaults().copyWith(theme: theme, accent: accent).toJson();
+            GymState.defaults().copyWith(theme: theme, accent: accent, ts: now).toJson();
         await _importInTxn(txn, uid, doc);
         return doc;
       }
@@ -134,11 +140,13 @@ class GymStateRepository {
       final Map<String, Object?> doc = Map<String, Object?>.of(decoded);
       if (theme != null) doc['theme'] = theme;
       if (accent != null) doc['accent'] = accent;
+      doc['_ts'] = now;
       await txn.update(
         Tables.userState,
         <String, Object?>{
           Tables.colDocJson: jsonEncode(doc),
-          Tables.colUpdatedAt: DateTime.now().millisecondsSinceEpoch,
+          Tables.colTs: now,
+          Tables.colUpdatedAt: now,
         },
         where: '${Tables.colUid} = ?',
         whereArgs: <Object?>[uid],
