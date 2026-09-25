@@ -146,4 +146,5 @@ Both `option-retrofit` and `option-retrofit-preprocessed` remain viable choices 
 JVM required for either); `option-dart-dio` is not viable on this machine unless the user later
 reverses the JDK decision.
 
-Decision: PENDING
+Decision: option-retrofit
+Generator: openapi_retrofit_generator 2.0.4, plain spec, no preprocessing
