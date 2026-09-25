@@ -48,7 +48,7 @@ Plans:
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 01-06-PLAN.md — sqflite hybrid schema, GymStateRepository, round-trip test (wave 4)
+- [x] 01-06-PLAN.md — sqflite hybrid schema, GymStateRepository, round-trip test (wave 4)
 
 **Wave 5** *(blocked on Wave 4 completion)*
 
@@ -158,7 +158,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Models | 5/7 | In Progress|  |
+| 1. Foundation & Models | 6/7 | In Progress|  |
 | 2. Core Logic via QuickJS | 0/TBD | Not started | - |
 | 3. BLoC & UI Translation | 0/TBD | Not started | - |
 | 4. Muscle Map Rendering | 0/TBD | Not started | - |

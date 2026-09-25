@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-01-PLAN.md
-last_updated: "2026-09-25T09:35:07.257Z"
+stopped_at: Completed 01-06-PLAN.md
+last_updated: "2026-09-25T09:46:54.082Z"
 last_activity: 2026-09-25
 progress:
   total_phases: 8
   completed_phases: 0
   total_plans: 7
-  completed_plans: 5
+  completed_plans: 6
   percent: 0
 ---
 
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-09-24)
 ## Current Position
 
 Phase: 1 (Foundation & Models) — EXECUTING
-Plan: 6 of 7
+Plan: 7 of 7
 Status: Ready to execute
 Last activity: 2026-09-25
 
-Progress: [███████░░░] 71%
+Progress: [█████████░] 86%
 
 ## Performance Metrics
 
@@ -48,6 +48,7 @@ Progress: [███████░░░] 71%
 
 *Updated after each plan completion*
 | Phase 01 P01 | 10min | 2 tasks | 7 files |
+| Phase 01 P06 | 40min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -65,6 +66,8 @@ Recent decisions affecting current work:
 - [Project, 2026-09-25]: JS-03 parity is verified by a `tool/` parity script, not Dart tests
 - [Project, 2026-09-25]: Throwaway verification scripts allowed (temporary `dart run`, never committed, never in test paths, no permanent deps)
 - [Phase 01]: Phase 1 core dependency set installed (flutter_bloc, equatable, sqflite, dio, go_router, path_provider, path, collection) after user approval; dev-only test packages (sqflite_common_ffi, bloc_test, mocktail, yaml) skipped per no-tests rule
+- [Phase 01]: Phase 01/01-06: *_present columns are tri-state (null/0/1), not boolean, so exportState can tell absent vs [] vs a malformed non-list value apart
+- [Phase 01]: Phase 01/01-06: FND-04 round-trip verified via throwaway dart run scripts in a scratch Dart project outside the repo (sqflite_common_ffi against the real tool/fixtures/state_sample.json), never committed
 
 ### Pending Todos
 
@@ -84,6 +87,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-09-25T07:50:50.347Z
-Stopped at: Completed 01-01-PLAN.md
+Last session: 2026-09-25T09:46:54.075Z
+Stopped at: Completed 01-06-PLAN.md
 Resume file: None
