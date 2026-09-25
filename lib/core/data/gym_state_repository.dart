@@ -19,8 +19,10 @@ const String kLocalGuestUid = 'local';
 /// `importState`/`exportState` operate on the raw decoded document -- no `kDefaultState` overlay,
 /// no key stripping, no `_rev` stamping -- so `importState(uid, doc)` then `exportState(uid)`
 /// returns a document deep-equal to `doc`, whatever `doc` contains (including keys this model
-/// doesn't know about, wrongly-typed values, and explicit nulls). The `kDefaultState` overlay
-/// only happens when a typed [GymState] is built, in [loadState].
+/// doesn't know about, wrongly-typed values, and explicit nulls). Deep-equal only, not
+/// byte-for-byte: `workouts`/`routines`/`bodyweight` come back at the end of the key order, and
+/// re-encoding may format numbers differently from JavaScript (`60.0` vs `60`). The
+/// `kDefaultState` overlay only happens when a typed [GymState] is built, in [loadState].
 ///
 /// Every statement here uses `db.insert`/`db.query`/`db.delete`/`db.batch` with bound `whereArgs`
 /// -- never `rawQuery`/`rawInsert`/`rawUpdate`/`rawDelete`/`execute` with an interpolated value --

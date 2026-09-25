@@ -3,7 +3,8 @@
 /// `DEF` ported 1:1 from `../openGym/frontend/src/store/useStore.js` lines 23-85, plus `wc`
 /// expanded from `WC_DEFAULT` (`../openGym/frontend/src/lib/workout-controls.js`). Every key and
 /// default value here must match the JS source exactly -- this is what a brand-new profile (or
-/// any profile missing a key added after it was created) resolves to, byte-for-byte.
+/// any profile missing a key added after it was created) resolves to, key for key and value for
+/// value (deep-equal; serialized key order/number formatting are not guaranteed).
 ///
 /// Kept as a plain `const Map` (not a `GymState`) so [overlayOnDefaults] can reproduce openGym's
 /// own `loadState()`: `Object.assign(clone(DEF), loaded)` -- a shallow top-level overlay, not a

@@ -7,7 +7,13 @@
 /// enforced" with `additionalProperties: true` everywhere. Every model built on [JsonReader]
 /// must therefore retain any key it doesn't explicitly know about -- and any value of an
 /// unexpected type or an explicit null on a known key -- unchanged, so `toJson()` round-trips
-/// byte-for-byte for any input map, known or not.
+/// to a map deep-equal to any input map, known or not.
+///
+/// The round-trip is deep-equal, NOT byte-for-byte: [emit] writes `extra` keys first and then
+/// typed keys in declaration order (so the original key order is not preserved), and Dart's
+/// `jsonEncode` writes a double such as `60.0` where JavaScript writes `60`. Never compare
+/// serialized strings (hashes, backup diffs, "changed since last push" checks) -- compare decoded
+/// values instead.
 library;
 
 /// Reads typed fields out of a raw JSON map, routing anything unexpected (unknown keys, nulls
