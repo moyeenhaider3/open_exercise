@@ -1,17 +1,14 @@
-# open_exercise
+# open_exercise — openGym for Flutter
 
-A new Flutter project.
+A native Flutter (Android/iOS) port of [openGym](../openGym), the self-hosted gym and
+body-weight tracker: a 1:1 replica of openGym's features, offline persistence and UI layout,
+built with native Flutter widgets (Material 3) instead of a React/Capacitor WebView.
 
-## Getting Started
+Licensed **AGPL-3.0-or-later** as a derivative work of openGym. See [LICENSE](LICENSE) and
+[NOTICE.md](NOTICE.md) for full license text and third-party attributions.
 
-This project is a starting point for a Flutter application.
+This project does not use automated tests (project rule); verify changes with:
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+flutter analyze
+```
