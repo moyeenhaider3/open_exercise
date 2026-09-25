@@ -150,14 +150,30 @@ class SetEntry extends Equatable {
         'sides': sides?.toJson(),
       });
 
-  /// Mirrors `workout-model.js` `phaseForSet`: an explicit `phase` wins over the legacy
-  /// `warmup` boolean. No volume/1RM math lives here (that stays in JS, per JS-04) -- this is
-  /// read-only field resolution.
-  String get resolvedPhase {
-    if (phase == 'warmup') return 'warmup';
-    if (phase == 'work') return 'work';
-    return warmup == true ? 'warmup' : 'work';
+  /// Exact port of `workout-model.js` `normalizedPhase`: trims and lower-cases a string token,
+  /// accepts `warmup`/`warm-up`/`warm_up`, and maps anything else (including a non-string
+  /// value) to [fallback] (`'warmup'` only if [fallback] is exactly `'warmup'`, else `'work'`).
+  static String _normalizedPhase(Object? value, [String fallback = 'work']) {
+    final String token = value is String ? value.trim().toLowerCase() : '';
+    if (token == 'warmup' || token == 'warm-up' || token == 'warm_up') return 'warmup';
+    if (token == 'work') return 'work';
+    return fallback == 'warmup' ? 'warmup' : 'work';
   }
+
+  /// Exact port of `workout-model.js` `phaseForSet(set, fallback)`: an explicit, non-empty
+  /// `phase` wins over the legacy `warmup` boolean (even if the phase is unrecognised or not a
+  /// string). The raw value is read from [extra] as well, because a wrong-typed `phase`/`warmup`
+  /// is demoted there by [JsonReader] but still counts as "explicit" in openGym. No volume/1RM
+  /// math lives here (that stays in JS, per JS-04) -- this is read-only field resolution.
+  String resolvedPhaseOr([String fallback = 'work']) {
+    final Object? raw = phase ?? extra['phase'];
+    if (raw != null && raw != '') return _normalizedPhase(raw, fallback);
+    final Object? wu = warmup ?? extra['warmup'];
+    return wu == true ? 'warmup' : _normalizedPhase(null, fallback);
+  }
+
+  /// `phaseForSet(set)` with openGym's default `'work'` fallback.
+  String get resolvedPhase => resolvedPhaseOr();
 
   /// Mirrors `workout-model.js` `setType`.
   String get resolvedType => (type == 'dropset' || type == 'restpause') ? type! : 'straight';
