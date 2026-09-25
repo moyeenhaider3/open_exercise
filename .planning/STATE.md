@@ -61,6 +61,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-09-24
-Stopped at: Roadmap drafted, awaiting approval
-Resume file: None
+Last session: 2026-09-25
+Stopped at: Session resumed, proceeding to plan-phase 1 research (no CONTEXT.md, --skip-ui)
+Resume file: .planning/phases/01-foundation-models/.continue-here.md
