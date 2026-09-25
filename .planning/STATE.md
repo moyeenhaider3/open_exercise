@@ -42,6 +42,7 @@ Recent decisions affecting current work:
 - [Init]: Auth = native passkey + pairing-code fallback
 - [Init]: Local-first with server sync; full scope in v1
 - [Init]: User approves each phase before the next one starts
+- [Phase 1]: Round-trip fixture is synthetic (user accepted 2026-09-25, no real file available)
 
 ### Pending Todos
 

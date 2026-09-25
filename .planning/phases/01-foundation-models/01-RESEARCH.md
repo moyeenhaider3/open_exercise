@@ -450,22 +450,25 @@ const Map<String, Color> kAccents = {
 
 **If this table is empty:** N/A — see rows above.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Which OpenAPI generator actually works cleanly against this real 3.1 spec?**
    - What we know: Two viable pub packages exist (`openapi_generator` JVM-based official generator wrapper; `openapi_retrofit_generator` pure-Dart). Neither was actually run against `../openGym/api/openapi.yaml` in this research session (no JVM available to test the first; the second wasn't executed either, to keep this research read-only).
    - What's unclear: Whether either cleanly handles this spec's `oneOf: [Schema, {type: 'null'}]` pattern (used repeatedly, e.g. `GET /api/data`'s `state` property) and its `additionalProperties: true` schemas without manual post-processing.
    - Recommendation: The planner should schedule a **Wave 0 spike task**: install a JVM (`brew install openjdk` or similar) and run `openapi_generator`'s codegen once against the real spec; in parallel/fallback, try `openapi_retrofit_generator` without a JVM. Whichever produces compiling Dart with the fewest manual fixups wins. Do not lock the generator choice in the plan without this spike.
+   - **RESOLVED:** Plan 01-02 runs the generator spike followed by a `checkpoint:decision` to pick the generator.
 
 2. **Is there any real `state-<uid>.json` file the team can use as the FND-04 fixture?**
    - What we know: None exists in `../openGym/` or anywhere searched on this machine. `demoSeed.js`'s `buildDemoState()` is a pure, dependency-light function that produces a realistic 12-week history (workouts, routines, bodyweight, effort ratings) but does **not** cover dropsets, restpause clusters, per-side (unilateral) entries, supersets, `equipProfiles`, `gymCards`, `customEx`, `favEx`, `barWeights`, or `exNotes`.
    - What's unclear: Whether the user has access to (or is willing to export) a real profile's `state-<uid>.json` from a running openGym instance, which would be the strongest possible fixture.
    - Recommendation: If no real file is available, generate a base fixture via Node (`node` v26 is available in this dev environment) importing `buildDemoState()` and merging onto `DEF` exactly as `useStore.js` does at its own `persist(Object.assign(clone(DEF), buildDemoState()), false)` call site, then hand-augment the JSON with at least one dropset, one restpause set with clusters, one per-side (unilateral) entry, one superset pairing, and non-empty `equipProfiles`/`gymCards`/`customEx`/`favEx`/`barWeights`/`exNotes` — cross-check the exact superset field name against `../openGym/frontend/src/lib/history.js`'s `supersetUnits()` before hand-authoring that part, since it wasn't located precisely in this session.
+   - **RESOLVED:** Synthetic fixture (demoSeed.js + hand-augmented cases) in Plan 01-03. The user accepted this deviation on 2026-09-25; no real file will be supplied.
 
 3. **Does openGym's bodyweight log allow more than one entry per calendar day?**
    - What we know: `BodyweightEntry` has `d` (date), `w` (weight), `t` (timestamp) — the presence of a separate timestamp alongside the date suggests multiple same-day entries might be intentional (or `t` might just be for sub-day timezone/ordering safety).
    - What's unclear: Whether `(uid, d)` should be the practical uniqueness constraint or whether `(uid, d, t)` (as proposed in the schema above) is required.
    - Recommendation: Before finalizing the `bodyweight` table's primary key, grep `useStore.js`'s bodyweight-logging action for any same-day dedupe/overwrite logic.
+   - **RESOLVED:** Plan 01-06 uses a `(uid, pos)` key. openGym dedupes per date in the UI (sheets.jsx ~210), but stored duplicates are kept as they are so the round-trip stays exact.
 
 ## Environment Availability
 
