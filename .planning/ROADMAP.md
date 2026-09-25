@@ -7,7 +7,7 @@ Port openGym to native Flutter in horizontal layers. Build the data foundation f
 ## Phases
 
 - [ ] **Phase 1: Foundation & Models** - Folder structure, OpenAPI models + Dio clients, state models, sqflite schema
-- [ ] **Phase 2: Core Logic via QuickJS** - Bundle openGym lib JS, JsEngineService, parity tests
+- [ ] **Phase 2: Core Logic via QuickJS** - Bundle openGym lib JS, JsEngineService, parity script
 - [ ] **Phase 3: BLoC & UI Translation** - Library, workout tracker, plan, history, stats, settings in Material 3
 - [ ] **Phase 4: Muscle Map Rendering** - SVG paths → CustomPainter with fatigue/volume shading
 - [ ] **Phase 5: Timers & Passkeys** - Background rest alerts, reminders, passkey + pairing sign-in
@@ -44,7 +44,7 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. One script rebuilds the JS bundle asset from `../openGym/frontend/src/lib/`
   2. `JsEngineService` returns 1RM, progression, plate and recovery results as Dart models
-  3. Parity tests match openGym's vitest fixtures exactly
+  3. The parity script (`tool/`, not a test) matches openGym's vitest fixtures exactly
 **Plans**: TBD
 
 ### Phase 3: BLoC & UI Translation

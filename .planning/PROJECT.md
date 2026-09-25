@@ -35,7 +35,7 @@ Log a workout fully offline with **exactly** the same numbers as openGym. The sa
 - [ ] Dart models + Dio clients generated from `openapi.yaml`
 - [ ] sqflite schema that mirrors the `state-<uid>.json` structure and round-trips it without loss
 - [ ] openGym `lib/*.js` bundled as a Flutter asset and run through flutter_js (QuickJS) by a `JsEngineService`. No hand translation of 1RM, progression or plate math.
-- [ ] Parity tests: JS engine output matches openGym's vitest fixtures
+- [ ] Parity script (not tests): JS engine output matches openGym's vitest fixtures
 - [ ] Exercise library, workout tracker, routines/plan, history, stats, settings translated to Material 3, with `ListView.builder` lists and memory-cached WebP/GIF media
 - [ ] Muscle map: SVG path strings parsed with `xml` + `path_drawing` and drawn with `CustomPainter`, keeping the fatigue/volume shading
 - [ ] Rest timer and reminders with flutter_local_notifications (exact alarm when the app is backgrounded)

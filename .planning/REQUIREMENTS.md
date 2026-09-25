@@ -15,7 +15,7 @@
 ### Core Logic via QuickJS (JS)
 - [ ] **JS-01**: openGym `frontend/src/lib/*.js` domain modules are bundled (esbuild → a single global/IIFE) into a Flutter asset by a reproducible script
 - [ ] **JS-02**: `JsEngineService` loads the bundle in flutter_js and exposes typed Dart calls for 1RM, progression, plate/bar math, workout-model helpers, recovery/fatigue, history and session merge
-- [ ] **JS-03**: Parity tests run openGym's test fixtures (onerm, progression, bar, workout-model, recovery) through the Dart bridge and match the vitest results exactly
+- [ ] **JS-03**: A parity script (a `tool/` CLI script, not a Dart test, per the no-tests rule) runs openGym's test fixtures (onerm, progression, bar, workout-model, recovery) through the Dart bridge and matches the vitest results exactly
 - [ ] **JS-04**: No 1RM, progression or plate math is hand-written in Dart (enforced by review)
 
 ### UI Translation (UI)

@@ -43,6 +43,8 @@ Recent decisions affecting current work:
 - [Init]: Local-first with server sync; full scope in v1
 - [Init]: User approves each phase before the next one starts
 - [Phase 1]: Round-trip fixture is synthetic (user accepted 2026-09-25, no real file available)
+- [Project, 2026-09-25]: NO TESTS rule (CLAUDE.md + hook). Phase 1 plans keep their test content; executors must SKIP every test task/step, test file and test dev-dependency, and verify with `flutter analyze` + source/CLI checks instead
+- [Project, 2026-09-25]: JS-03 parity is verified by a `tool/` parity script, not Dart tests
 
 ### Pending Todos
 
