@@ -65,7 +65,28 @@ Plans:
   2. `JsEngineService` returns 1RM, progression, plate and recovery results as Dart models
   3. The parity script (`tool/`, not a test) matches openGym's vitest fixtures exactly
 
-**Plans**: TBD
+**Plans:** 8 plans
+
+Plans:
+**Wave 1**
+
+- [ ] 02-01-PLAN.md — Vendor openGym lib modules (SHA-256 manifest) + pinned esbuild IIFE bundle via tool/gen_js_bundle.sh (JS-01)
+- [ ] 02-02-PLAN.md — Add flutter_js, verify its real API, headless probe, Android/iOS build probes, CocoaPods decision checkpoint
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 02-03-PLAN.md — JsEngineService (safe JSON call protocol, strict codec), app DI wiring, engine smoke on QuickJS + JavaScriptCore
+- [ ] 02-04-PLAN.md — Plain-Node parity oracle: bridge inventory, vitest-cross-checked, TZ-deterministic fixtures embedded for the harness
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 02-05-PLAN.md — onerm/bar/workout-model typed facades + dispatch; remove SetEntry hand-port (CR-02); tool/js04_audit.sh (JS-04)
+- [ ] 02-06-PLAN.md — progression + recovery typed facades + dispatch
+- [ ] 02-07-PLAN.md — history + session start/merge typed facades + dispatch
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 02-08-PLAN.md — Device-run parity harness + tool/run_parity.sh; PASS on Android (QuickJS) and iOS (JavaScriptCore); final JS-04 + reproducibility gates
 
 ### Phase 3: BLoC & UI Translation
 
