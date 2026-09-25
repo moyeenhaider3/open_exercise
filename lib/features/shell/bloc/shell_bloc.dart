@@ -14,8 +14,13 @@ import 'shell_state.dart';
 ///
 /// The shell must always boot (T-1-12): an unknown theme/accent value falls
 /// back to dark/lime (see [ThemeSettings.fromState]), and a [loadState]
-/// failure falls back to [GymState.defaults] rather than leaving the Bloc
-/// stuck on [ShellInitial].
+/// failure falls back to [GymState.defaults] *for rendering only* rather than
+/// leaving the Bloc stuck on [ShellInitial].
+///
+/// That defaults fallback is never written back: [GymStateRepository.saveState]
+/// replaces every row for the uid (workouts, routines, body weight), so saving
+/// a document built from a failed load would wipe the user's profile. After a
+/// failed load a theme/accent change is shown in the UI but not persisted.
 class ShellBloc extends Bloc<ShellEvent, ShellState> {
   // Keeps the public `repository:` param name independent of the private field name.
   ShellBloc({required GymStateRepository repository, this.uid = kLocalGuestUid})
@@ -31,32 +36,50 @@ class ShellBloc extends Bloc<ShellEvent, ShellState> {
   final String uid;
 
   Future<void> _onStarted(ShellStarted event, Emitter<ShellState> emit) async {
-    final GymState state = await _loadOrDefaults();
-    emit(ShellReady(settings: ThemeSettings.fromState(state)));
-  }
-
-  Future<void> _onThemeChanged(ShellThemeChanged event, Emitter<ShellState> emit) async {
-    final GymState current = await _loadOrDefaults();
-    final GymState next = current.copyWith(theme: event.theme);
-    await _repository.saveState(uid, next);
-    emit(ShellReady(settings: ThemeSettings.fromState(next)));
-  }
-
-  Future<void> _onAccentChanged(ShellAccentChanged event, Emitter<ShellState> emit) async {
-    final GymState current = await _loadOrDefaults();
-    final GymState next = current.copyWith(accent: event.accentKey);
-    await _repository.saveState(uid, next);
-    emit(ShellReady(settings: ThemeSettings.fromState(next)));
-  }
-
-  /// [GymStateRepository.loadState], or [GymState.defaults] if there is no
-  /// stored state yet, or if loading throws for any reason.
-  Future<GymState> _loadOrDefaults() async {
+    GymState? stored;
     try {
-      final GymState? loaded = await _repository.loadState(uid);
-      return loaded ?? GymState.defaults();
-    } catch (_) {
-      return GymState.defaults();
+      stored = await _repository.loadState(uid);
+    } catch (e, st) {
+      addError(e, st);
     }
+    emit(ShellReady(settings: ThemeSettings.fromState(stored ?? GymState.defaults())));
+  }
+
+  Future<void> _onThemeChanged(ShellThemeChanged event, Emitter<ShellState> emit) =>
+      _persistChange(emit, (GymState s) => s.copyWith(theme: event.theme));
+
+  Future<void> _onAccentChanged(ShellAccentChanged event, Emitter<ShellState> emit) =>
+      _persistChange(emit, (GymState s) => s.copyWith(accent: event.accentKey));
+
+  /// Loads the stored profile, applies [change] and saves it. "No stored state
+  /// yet" (`null`) starts from [GymState.defaults], exactly like openGym's DEF.
+  /// A load that *throws* is different: the change is only emitted to the UI
+  /// (on top of the current settings), and nothing is saved.
+  Future<void> _persistChange(
+    Emitter<ShellState> emit,
+    GymState Function(GymState) change,
+  ) async {
+    final GymState? stored;
+    try {
+      stored = await _repository.loadState(uid);
+    } catch (e, st) {
+      addError(e, st);
+      emit(ShellReady(settings: ThemeSettings.fromState(change(_currentAsState()))));
+      return;
+    }
+    final GymState next = change(stored ?? GymState.defaults());
+    await _repository.saveState(uid, next);
+    emit(ShellReady(settings: ThemeSettings.fromState(next)));
+  }
+
+  /// The currently shown settings as a (never persisted) [GymState], so a
+  /// UI-only change keeps the other setting as the user currently sees it.
+  GymState _currentAsState() {
+    final ShellState s = state;
+    if (s is! ShellReady) return GymState.defaults();
+    return GymState.defaults().copyWith(
+      theme: ThemeSettings.themeModeToOpenGym(s.themeMode),
+      accent: s.accentKey,
+    );
   }
 }
