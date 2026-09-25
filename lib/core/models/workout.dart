@@ -1,0 +1,188 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+import 'package:equatable/equatable.dart';
+
+import 'json_passthrough.dart';
+import 'set_entry.dart';
+
+/// One exercise's sets within a workout (`../openGym/api/openapi.yaml` Workout schema `entries`;
+/// `sg` from `../openGym/frontend/src/lib/history.js` `supersetUnits` -- consecutive entries
+/// sharing `sg` are a superset).
+class WorkoutEntry extends Equatable {
+  const WorkoutEntry({
+    this.id,
+    this.sets,
+    this.topW,
+    this.sg,
+    this.rid,
+    this.extra = const <String, Object?>{},
+  });
+
+  final String? id;
+  final List<SetEntry>? sets;
+  final num? topW;
+  final String? sg;
+  final String? rid;
+  final Map<String, Object?> extra;
+
+  static const Set<String> _known = <String>{'id', 'sets', 'topW', 'sg', 'rid'};
+
+  factory WorkoutEntry.fromJson(Map<String, Object?> json) {
+    final JsonReader reader = JsonReader(json, known: _known);
+    return WorkoutEntry(
+      id: reader.string('id'),
+      sets: reader.objectList<SetEntry>('sets', SetEntry.fromJson),
+      topW: reader.number('topW'),
+      sg: reader.string('sg'),
+      rid: reader.string('rid'),
+      extra: reader.extra,
+    );
+  }
+
+  Map<String, Object?> toJson() => emit(extra, <String, Object?>{
+        'id': id,
+        'sets': sets?.map((SetEntry s) => s.toJson()).toList(),
+        'topW': topW,
+        'sg': sg,
+        'rid': rid,
+      });
+
+  @override
+  List<Object?> get props => <Object?>[id, sets, topW, sg, rid, extra];
+}
+
+/// A completed workout (`../openGym/frontend/src/lib/demoSeed.js` ~line 125,
+/// `../openGym/api/openapi.yaml` Workout schema) or the in-progress `active` workout
+/// (`../openGym/frontend/src/sheets.jsx` ~line 1814 -- same shape, plus active-only keys such
+/// as `routineIds`, `cur`, `view`, `backfill`, which fall through to [extra] on a completed
+/// workout and are read directly here since `active` is also modeled as a [Workout]).
+///
+/// Passthrough-safe: every unknown key, explicit null and wrong-typed value on a known field
+/// survives `fromJson` -> `toJson` unchanged, at every nesting level (entries, sets, drops,
+/// clusters, sides).
+class Workout extends Equatable {
+  const Workout({
+    this.id,
+    this.d,
+    this.start,
+    this.end,
+    this.routineId,
+    this.routineIds,
+    this.name,
+    this.bw,
+    this.vol,
+    this.prs,
+    this.entries,
+    this.cur,
+    this.view,
+    this.extra = const <String, Object?>{},
+  });
+
+  final String? id;
+  final String? d;
+  final num? start;
+  final num? end;
+  final String? routineId;
+  final List<String>? routineIds;
+  final String? name;
+  final num? bw;
+  final num? vol;
+  final List<String>? prs;
+  final List<WorkoutEntry>? entries;
+  final int? cur;
+  final String? view;
+  final Map<String, Object?> extra;
+
+  static const Set<String> _known = <String>{
+    'id', 'd', 'start', 'end', 'routineId', 'routineIds', 'name', 'bw', 'vol', 'prs', 'entries',
+    'cur', 'view',
+  };
+
+  factory Workout.fromJson(Map<String, Object?> json) {
+    final JsonReader reader = JsonReader(json, known: _known);
+    return Workout(
+      id: reader.string('id'),
+      d: reader.string('d'),
+      start: reader.number('start'),
+      end: reader.number('end'),
+      routineId: reader.string('routineId'),
+      routineIds: reader.stringList('routineIds'),
+      name: reader.string('name'),
+      bw: reader.number('bw'),
+      vol: reader.number('vol'),
+      prs: reader.stringList('prs'),
+      entries: reader.objectList<WorkoutEntry>('entries', WorkoutEntry.fromJson),
+      cur: reader.integer('cur'),
+      view: reader.string('view'),
+      extra: reader.extra,
+    );
+  }
+
+  Map<String, Object?> toJson() => emit(extra, <String, Object?>{
+        'id': id,
+        'd': d,
+        'start': start,
+        'end': end,
+        'routineId': routineId,
+        'routineIds': routineIds,
+        'name': name,
+        'bw': bw,
+        'vol': vol,
+        'prs': prs,
+        'entries': entries?.map((WorkoutEntry e) => e.toJson()).toList(),
+        'cur': cur,
+        'view': view,
+      });
+
+  Workout copyWith({
+    String? id,
+    String? d,
+    num? start,
+    num? end,
+    String? routineId,
+    List<String>? routineIds,
+    String? name,
+    num? bw,
+    num? vol,
+    List<String>? prs,
+    List<WorkoutEntry>? entries,
+    int? cur,
+    String? view,
+    Map<String, Object?>? extra,
+  }) {
+    return Workout(
+      id: id ?? this.id,
+      d: d ?? this.d,
+      start: start ?? this.start,
+      end: end ?? this.end,
+      routineId: routineId ?? this.routineId,
+      routineIds: routineIds ?? this.routineIds,
+      name: name ?? this.name,
+      bw: bw ?? this.bw,
+      vol: vol ?? this.vol,
+      prs: prs ?? this.prs,
+      entries: entries ?? this.entries,
+      cur: cur ?? this.cur,
+      view: view ?? this.view,
+      extra: extra ?? this.extra,
+    );
+  }
+
+  @override
+  List<Object?> get props => <Object?>[
+        id,
+        d,
+        start,
+        end,
+        routineId,
+        routineIds,
+        name,
+        bw,
+        vol,
+        prs,
+        entries,
+        cur,
+        view,
+        extra,
+      ];
+}
