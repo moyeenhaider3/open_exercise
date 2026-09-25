@@ -10,7 +10,8 @@ import '../../../core/theme/accents.dart';
 /// accent colour, mapped from openGym's raw `'dark'|'light'|'system'` /
 /// accent-key strings (`../openGym/frontend/src/App.jsx:47-48`) to typed
 /// Flutter values, with the same fallbacks openGym applies for unknown
-/// values (unknown theme -> dark, unknown accent -> lime).
+/// values (`App.jsx` `resolveTheme`: anything other than `'light'`/`'dark'`
+/// -> follow the OS setting; unknown accent -> lime).
 final class ThemeSettings extends Equatable {
   const ThemeSettings({required this.themeMode, required this.accentKey});
 
@@ -21,16 +22,19 @@ final class ThemeSettings extends Equatable {
   /// (see [fromState]), so this never throws.
   Color get accent => kAccents[accentKey]!;
 
-  /// Maps [GymState.theme]/[GymState.accent] to typed [ThemeSettings],
-  /// falling back to openGym's own defaults
-  /// (`GymState.defaultTheme` == `'dark'`, `GymState.defaultAccent` ==
-  /// `'lime'`) for a missing or unrecognised value. Passing `null` (no
-  /// stored state at all) returns [ThemeSettings.defaults].
+  /// Maps [GymState.theme]/[GymState.accent] to typed [ThemeSettings].
+  /// A theme other than `'light'`/`'dark'` (including `'system'`, a typo, or
+  /// `null` from an explicit null or a wrong-typed value demoted by
+  /// `JsonReader`) follows the OS setting, as openGym's `resolveTheme` does.
+  /// A missing `theme` key never reaches here as `null`: the `kDefaultState`
+  /// overlay fills it with DEF's `'dark'`. An unknown accent falls back to
+  /// `'lime'`. Passing `null` (no stored state at all) returns
+  /// [ThemeSettings.defaults] (dark/lime, from DEF).
   factory ThemeSettings.fromState(GymState? s) {
-    final String theme = s?.theme ?? GymState.defaultTheme;
-    final String accentKey = s?.accent ?? GymState.defaultAccent;
+    if (s == null) return const ThemeSettings.defaults();
+    final String accentKey = s.accent ?? GymState.defaultAccent;
     return ThemeSettings(
-      themeMode: _themeModeFromOpenGym(theme),
+      themeMode: _themeModeFromOpenGym(s.theme),
       accentKey: kAccents.containsKey(accentKey) ? accentKey : kDefaultAccentKey,
     );
   }
@@ -41,17 +45,13 @@ final class ThemeSettings extends Equatable {
       : themeMode = ThemeMode.dark,
         accentKey = kDefaultAccentKey;
 
-  static ThemeMode _themeModeFromOpenGym(String theme) {
-    switch (theme) {
-      case 'light':
-        return ThemeMode.light;
-      case 'system':
-        return ThemeMode.system;
-      case 'dark':
-      default:
-        return ThemeMode.dark;
-    }
-  }
+  /// `App.jsx` `resolveTheme`: only `'light'` and `'dark'` are explicit;
+  /// every other value follows the OS (`prefers-color-scheme`).
+  static ThemeMode _themeModeFromOpenGym(String? theme) => switch (theme) {
+        'light' => ThemeMode.light,
+        'dark' => ThemeMode.dark,
+        _ => ThemeMode.system,
+      };
 
   /// Inverse of [_themeModeFromOpenGym], for persisting a [ThemeMode] back
   /// into [GymState.theme]'s `'dark'|'light'|'system'` string form.

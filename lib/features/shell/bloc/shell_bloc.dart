@@ -19,8 +19,8 @@ import 'shell_state.dart';
 /// never rewrites the workout/routine/body-weight tables, so a settings change
 /// cannot revert another setting or drop a concurrent write to the profile.
 ///
-/// The shell must always boot (T-1-12): an unknown theme/accent value falls
-/// back to dark/lime (see [ThemeSettings.fromState]), and a [loadState]
+/// The shell must always boot (T-1-12): an unknown theme follows the OS and an
+/// unknown accent falls back to lime (see [ThemeSettings.fromState]), and a [loadState]
 /// failure falls back to [GymState.defaults] *for rendering only* rather than
 /// leaving the Bloc stuck on [ShellInitial]. That fallback is never written
 /// back: if the stored profile cannot be read (or the write fails), the change
