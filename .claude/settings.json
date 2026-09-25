@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r \".tool_input.file_path // .tool_input.notebook_path // empty\"); if printf \"%s\" \"$f\" | grep -Eq \"(^|/)(test|integration_test|test_driver)/|_test\\.dart$\"; then echo \"Project rule: no tests. Writing test files is forbidden in this project (see CLAUDE.md). Blocked: $f\" >&2; exit 2; fi",
+            "statusMessage": "Checking no-tests rule"
+          }
+        ]
+      }
+    ]
+  }
+}

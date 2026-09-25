@@ -12,6 +12,7 @@ A native Flutter (Android/iOS) port of **openGym** (`../openGym/`), the self-hos
 - **License:** AGPL-3.0-or-later. This port is a derivative work and must use the same license.
 - **Stack (user-mandated):** flutter_bloc, equatable, sqflite, Dio (OpenAPI-generated), flutter_js, flutter_local_notifications, flutter_passkey_service, xml, path_drawing.
 - **Process:** one phase at a time. Wait for user approval before starting each next phase.
+- **No tests (user-mandated, enforced):** never write, generate, or plan test code: no `test/`, `integration_test/` or `test_driver/` files, no `*_test.dart`, and no test dev-dependencies (`bloc_test`, `mocktail`, `sqflite_common_ffi`, etc.). Plans must not contain test tasks, TDD tasks, or test-based acceptance criteria. Use `flutter analyze` and source/CLI assertions for verification instead. A PreToolUse hook in `.claude/settings.json` blocks writes to test paths.
 <!-- GSD:project-end -->
 
 <!-- GSD:stack-start source:STACK.md -->
