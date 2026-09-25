@@ -63,6 +63,7 @@ Recent decisions affecting current work:
 - [Phase 1]: Round-trip fixture is synthetic (user accepted 2026-09-25, no real file available)
 - [Project, 2026-09-25]: NO TESTS rule (CLAUDE.md + hook). Phase 1 plans keep their test content; executors must SKIP every test task/step, test file and test dev-dependency, and verify with `flutter analyze` + source/CLI checks instead
 - [Project, 2026-09-25]: JS-03 parity is verified by a `tool/` parity script, not Dart tests
+- [Project, 2026-09-25]: Throwaway verification scripts allowed (temporary `dart run`, never committed, never in test paths, no permanent deps)
 - [Phase 01]: Phase 1 core dependency set installed (flutter_bloc, equatable, sqflite, dio, go_router, path_provider, path, collection) after user approval; dev-only test packages (sqflite_common_ffi, bloc_test, mocktail, yaml) skipped per no-tests rule
 
 ### Pending Todos
