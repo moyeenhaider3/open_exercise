@@ -34,7 +34,7 @@ Port openGym to native Flutter in horizontal layers. Build the data foundation f
 Plans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — Gate + install core deps, AGPL license/NOTICE, strict analyzer (wave 1)
+- [x] 01-01-PLAN.md — Gate + install core deps, AGPL license/NOTICE, strict analyzer (wave 1)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -158,7 +158,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Models | 0/7 | Planned | - |
+| 1. Foundation & Models | 1/7 | In Progress|  |
 | 2. Core Logic via QuickJS | 0/TBD | Not started | - |
 | 3. BLoC & UI Translation | 0/TBD | Not started | - |
 | 4. Muscle Map Rendering | 0/TBD | Not started | - |

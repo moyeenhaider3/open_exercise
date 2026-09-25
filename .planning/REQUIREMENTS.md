@@ -6,7 +6,7 @@
 ## v1 Requirements
 
 ### Foundation (FND)
-- [ ] **FND-01**: App uses a feature-first layout (`lib/core/`, `lib/features/<feature>/{data,bloc,view}`) with flutter_bloc + equatable; every Bloc has sealed State classes and explicit Event classes
+- [x] **FND-01**: App uses a feature-first layout (`lib/core/`, `lib/features/<feature>/{data,bloc,view}`) with flutter_bloc + equatable; every Bloc has sealed State classes and explicit Event classes
 - [ ] **FND-02**: Dart models and Dio API clients are generated from `../openGym/api/openapi.yaml` and cover every route (auth, pair, data/rev, push, activity, admin)
 - [ ] **FND-03**: Dart models exist for the full user state (`DEF` in `useStore.js`: settings, bodyweight, routines, week, dayPlan, exWeights, workouts, active, customEx, equipProfiles, exNotes, favEx, barWeights, gymCards, …), including set `phase`/`type`, drops and clusters
 - [ ] **FND-04**: A sqflite schema stores that state, and importing a representative (synthetic, demoSeed-derived) `state-<uid>.json` then exporting it again gives equivalent JSON (round-trip test). Note: user accepted the synthetic fixture on 2026-09-25 (no real file available)
