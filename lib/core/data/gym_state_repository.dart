@@ -163,28 +163,33 @@ class GymStateRepository {
   /// `bodyweight` are rebuilt (in `pos` order) only when they were stored as array rows; a
   /// present-but-not-a-list value (or an absent key) was never touched, so it survives unchanged
   /// inside `doc_json`.
-  Future<Map<String, Object?>?> exportState(String uid) async {
-    final List<Map<String, Object?>> rows = await _db.query(
-      Tables.userState,
-      where: '${Tables.colUid} = ?',
-      whereArgs: <Object?>[uid],
-    );
-    if (rows.isEmpty) return null;
-    final Map<String, Object?> row = rows.first;
-    final Map<String, Object?> doc = Map<String, Object?>.from(
-      jsonDecode(row[Tables.colDocJson]! as String) as Map<String, Object?>,
-    );
+  ///
+  /// All reads run inside one transaction, so a concurrent [importState] for the same [uid] can
+  /// never produce a torn document mixing old `doc_json`/presence flags with new array rows.
+  Future<Map<String, Object?>?> exportState(String uid) {
+    return _db.transaction((Transaction txn) async {
+      final List<Map<String, Object?>> rows = await txn.query(
+        Tables.userState,
+        where: '${Tables.colUid} = ?',
+        whereArgs: <Object?>[uid],
+      );
+      if (rows.isEmpty) return null;
+      final Map<String, Object?> row = rows.first;
+      final Map<String, Object?> doc = Map<String, Object?>.from(
+        jsonDecode(row[Tables.colDocJson]! as String) as Map<String, Object?>,
+      );
 
-    if (row[Tables.colWorkoutsPresent] == 1) {
-      doc['workouts'] = await _rebuildList(Tables.workouts, uid);
-    }
-    if (row[Tables.colRoutinesPresent] == 1) {
-      doc['routines'] = await _rebuildList(Tables.routines, uid);
-    }
-    if (row[Tables.colBodyweightPresent] == 1) {
-      doc['bodyweight'] = await _rebuildList(Tables.bodyweight, uid);
-    }
-    return doc;
+      if (row[Tables.colWorkoutsPresent] == 1) {
+        doc['workouts'] = await _rebuildList(txn, Tables.workouts, uid);
+      }
+      if (row[Tables.colRoutinesPresent] == 1) {
+        doc['routines'] = await _rebuildList(txn, Tables.routines, uid);
+      }
+      if (row[Tables.colBodyweightPresent] == 1) {
+        doc['bodyweight'] = await _rebuildList(txn, Tables.bodyweight, uid);
+      }
+      return doc;
+    });
   }
 
   /// [exportState] plus the `kDefaultState` overlay ([GymState.fromJson]), or `null` if [uid] has
@@ -208,8 +213,8 @@ class GymStateRepository {
     });
   }
 
-  Future<List<Object?>> _rebuildList(String table, String uid) async {
-    final List<Map<String, Object?>> rows = await _db.query(
+  Future<List<Object?>> _rebuildList(Transaction txn, String table, String uid) async {
+    final List<Map<String, Object?>> rows = await txn.query(
       table,
       where: '${Tables.colUid} = ?',
       whereArgs: <Object?>[uid],
