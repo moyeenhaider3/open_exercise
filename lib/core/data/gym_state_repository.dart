@@ -46,58 +46,104 @@ class GymStateRepository {
   /// here -- that is server-side PUT /api/data behaviour (`../openGym/api/server.js`
   /// `PUT /api/data`), not local import/export (Research Pitfall 5).
   Future<void> importState(String uid, Map<String, Object?> doc) async {
-    await _db.transaction((Transaction txn) async {
-      await txn.delete(Tables.userState, where: '${Tables.colUid} = ?', whereArgs: <Object?>[uid]);
-      await txn.delete(Tables.workouts, where: '${Tables.colUid} = ?', whereArgs: <Object?>[uid]);
-      await txn.delete(Tables.routines, where: '${Tables.colUid} = ?', whereArgs: <Object?>[uid]);
-      await txn.delete(Tables.bodyweight, where: '${Tables.colUid} = ?', whereArgs: <Object?>[uid]);
+    await _db.transaction((Transaction txn) => _importInTxn(txn, uid, doc));
+  }
 
-      final Map<String, Object?> rest = Map<String, Object?>.of(doc);
-      final Batch batch = txn.batch();
+  /// [importState]'s body, run inside the caller's [txn].
+  Future<void> _importInTxn(Transaction txn, String uid, Map<String, Object?> doc) async {
+    await txn.delete(Tables.userState, where: '${Tables.colUid} = ?', whereArgs: <Object?>[uid]);
+    await txn.delete(Tables.workouts, where: '${Tables.colUid} = ?', whereArgs: <Object?>[uid]);
+    await txn.delete(Tables.routines, where: '${Tables.colUid} = ?', whereArgs: <Object?>[uid]);
+    await txn.delete(Tables.bodyweight, where: '${Tables.colUid} = ?', whereArgs: <Object?>[uid]);
 
-      final int? workoutsPresent = _splitArrayKey(
-        batch: batch,
-        rest: rest,
-        doc: doc,
-        uid: uid,
-        key: 'workouts',
-        table: Tables.workouts,
-        indexColumns: _workoutIndexColumns,
+    final Map<String, Object?> rest = Map<String, Object?>.of(doc);
+    final Batch batch = txn.batch();
+
+    final int? workoutsPresent = _splitArrayKey(
+      batch: batch,
+      rest: rest,
+      doc: doc,
+      uid: uid,
+      key: 'workouts',
+      table: Tables.workouts,
+      indexColumns: _workoutIndexColumns,
+    );
+    final int? routinesPresent = _splitArrayKey(
+      batch: batch,
+      rest: rest,
+      doc: doc,
+      uid: uid,
+      key: 'routines',
+      table: Tables.routines,
+      indexColumns: _routineIndexColumns,
+    );
+    final int? bodyweightPresent = _splitArrayKey(
+      batch: batch,
+      rest: rest,
+      doc: doc,
+      uid: uid,
+      key: 'bodyweight',
+      table: Tables.bodyweight,
+      indexColumns: _bodyweightIndexColumns,
+    );
+
+    final Object? tsRaw = doc['_ts'];
+    final Object? revRaw = doc['_rev'];
+
+    batch.insert(Tables.userState, <String, Object?>{
+      Tables.colUid: uid,
+      Tables.colDocJson: jsonEncode(rest),
+      Tables.colTs: tsRaw is num ? tsRaw : null,
+      Tables.colRev: revRaw is int ? revRaw : null,
+      Tables.colWorkoutsPresent: workoutsPresent,
+      Tables.colRoutinesPresent: routinesPresent,
+      Tables.colBodyweightPresent: bodyweightPresent,
+      Tables.colUpdatedAt: DateTime.now().millisecondsSinceEpoch,
+    });
+
+    await batch.commit(noResult: true);
+  }
+
+  /// Sets only the top-level `theme` and/or `accent` keys of [uid]'s profile (a `null` argument
+  /// leaves that key alone), and returns the updated `user_state.doc_json` document (it does not
+  /// contain split-out `workouts`/`routines`/`bodyweight`).
+  ///
+  /// Read and write happen in one transaction, and only the `user_state` row is updated -- the
+  /// array tables are never touched -- so a settings change can neither lose a concurrent write
+  /// to the rest of the profile nor wipe it (CR-01/CR-03). If [uid] has no stored state yet, a
+  /// fresh [GymState.defaults] document with the change applied is imported (openGym's DEF). If
+  /// the stored `doc_json` cannot be decoded as an object this throws and writes nothing.
+  Future<Map<String, Object?>> patchSettings(String uid, {String? theme, String? accent}) {
+    return _db.transaction((Transaction txn) async {
+      final List<Map<String, Object?>> rows = await txn.query(
+        Tables.userState,
+        columns: <String>[Tables.colDocJson],
+        where: '${Tables.colUid} = ?',
+        whereArgs: <Object?>[uid],
       );
-      final int? routinesPresent = _splitArrayKey(
-        batch: batch,
-        rest: rest,
-        doc: doc,
-        uid: uid,
-        key: 'routines',
-        table: Tables.routines,
-        indexColumns: _routineIndexColumns,
+      if (rows.isEmpty) {
+        final Map<String, Object?> doc =
+            GymState.defaults().copyWith(theme: theme, accent: accent).toJson();
+        await _importInTxn(txn, uid, doc);
+        return doc;
+      }
+      final Object? decoded = jsonDecode(rows.first[Tables.colDocJson]! as String);
+      if (decoded is! Map<String, Object?>) {
+        throw FormatException('user_state.doc_json for this uid is not a JSON object');
+      }
+      final Map<String, Object?> doc = Map<String, Object?>.of(decoded);
+      if (theme != null) doc['theme'] = theme;
+      if (accent != null) doc['accent'] = accent;
+      await txn.update(
+        Tables.userState,
+        <String, Object?>{
+          Tables.colDocJson: jsonEncode(doc),
+          Tables.colUpdatedAt: DateTime.now().millisecondsSinceEpoch,
+        },
+        where: '${Tables.colUid} = ?',
+        whereArgs: <Object?>[uid],
       );
-      final int? bodyweightPresent = _splitArrayKey(
-        batch: batch,
-        rest: rest,
-        doc: doc,
-        uid: uid,
-        key: 'bodyweight',
-        table: Tables.bodyweight,
-        indexColumns: _bodyweightIndexColumns,
-      );
-
-      final Object? tsRaw = doc['_ts'];
-      final Object? revRaw = doc['_rev'];
-
-      batch.insert(Tables.userState, <String, Object?>{
-        Tables.colUid: uid,
-        Tables.colDocJson: jsonEncode(rest),
-        Tables.colTs: tsRaw is num ? tsRaw : null,
-        Tables.colRev: revRaw is int ? revRaw : null,
-        Tables.colWorkoutsPresent: workoutsPresent,
-        Tables.colRoutinesPresent: routinesPresent,
-        Tables.colBodyweightPresent: bodyweightPresent,
-        Tables.colUpdatedAt: DateTime.now().millisecondsSinceEpoch,
-      });
-
-      await batch.commit(noResult: true);
+      return doc;
     });
   }
 

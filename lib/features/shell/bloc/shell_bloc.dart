@@ -12,30 +12,43 @@ import 'shell_state.dart';
 /// boot and persists any change the user makes. All theme/accent logic
 /// lives here; widgets only dispatch [ShellEvent]s (FND-01).
 ///
+/// Every [ShellEvent] goes through one handler with a sequential transformer,
+/// so events are processed strictly one at a time, in order (bloc's default is
+/// concurrent). Changes are written with [GymStateRepository.patchSettings],
+/// which updates only the `theme`/`accent` keys in a single transaction and
+/// never rewrites the workout/routine/body-weight tables, so a settings change
+/// cannot revert another setting or drop a concurrent write to the profile.
+///
 /// The shell must always boot (T-1-12): an unknown theme/accent value falls
 /// back to dark/lime (see [ThemeSettings.fromState]), and a [loadState]
 /// failure falls back to [GymState.defaults] *for rendering only* rather than
-/// leaving the Bloc stuck on [ShellInitial].
-///
-/// That defaults fallback is never written back: [GymStateRepository.saveState]
-/// replaces every row for the uid (workouts, routines, body weight), so saving
-/// a document built from a failed load would wipe the user's profile. After a
-/// failed load a theme/accent change is shown in the UI but not persisted.
+/// leaving the Bloc stuck on [ShellInitial]. That fallback is never written
+/// back: if the stored profile cannot be read (or the write fails), the change
+/// is reported via [addError] and only shown in the UI, never persisted.
 class ShellBloc extends Bloc<ShellEvent, ShellState> {
   // Keeps the public `repository:` param name independent of the private field name.
   ShellBloc({required GymStateRepository repository, this.uid = kLocalGuestUid})
       // ignore: prefer_initializing_formals
       : _repository = repository,
         super(const ShellInitial()) {
-    on<ShellStarted>(_onStarted);
-    on<ShellThemeChanged>(_onThemeChanged);
-    on<ShellAccentChanged>(_onAccentChanged);
+    on<ShellEvent>(_onEvent, transformer: _sequential<ShellEvent>());
   }
 
   final GymStateRepository _repository;
   final String uid;
 
-  Future<void> _onStarted(ShellStarted event, Emitter<ShellState> emit) async {
+  /// Processes events one at a time: the next event's handler starts only
+  /// after the previous one completes.
+  static EventTransformer<E> _sequential<E>() =>
+      (Stream<E> events, EventMapper<E> mapper) => events.asyncExpand(mapper);
+
+  Future<void> _onEvent(ShellEvent event, Emitter<ShellState> emit) => switch (event) {
+        ShellStarted() => _onStarted(emit),
+        ShellThemeChanged(:final String theme) => _persistChange(emit, theme: theme),
+        ShellAccentChanged(:final String accentKey) => _persistChange(emit, accent: accentKey),
+      };
+
+  Future<void> _onStarted(Emitter<ShellState> emit) async {
     GymState? stored;
     try {
       stored = await _repository.loadState(uid);
@@ -45,31 +58,21 @@ class ShellBloc extends Bloc<ShellEvent, ShellState> {
     emit(ShellReady(settings: ThemeSettings.fromState(stored ?? GymState.defaults())));
   }
 
-  Future<void> _onThemeChanged(ShellThemeChanged event, Emitter<ShellState> emit) =>
-      _persistChange(emit, (GymState s) => s.copyWith(theme: event.theme));
-
-  Future<void> _onAccentChanged(ShellAccentChanged event, Emitter<ShellState> emit) =>
-      _persistChange(emit, (GymState s) => s.copyWith(accent: event.accentKey));
-
-  /// Loads the stored profile, applies [change] and saves it. "No stored state
-  /// yet" (`null`) starts from [GymState.defaults], exactly like openGym's DEF.
-  /// A load that *throws* is different: the change is only emitted to the UI
-  /// (on top of the current settings), and nothing is saved.
-  Future<void> _persistChange(
-    Emitter<ShellState> emit,
-    GymState Function(GymState) change,
-  ) async {
-    final GymState? stored;
+  /// Persists a theme and/or accent change via
+  /// [GymStateRepository.patchSettings]. "No stored state yet" starts from
+  /// [GymState.defaults], exactly like openGym's DEF. If the patch throws
+  /// (unreadable profile, database error) nothing is written: the change is
+  /// only emitted to the UI, on top of the settings currently shown.
+  Future<void> _persistChange(Emitter<ShellState> emit, {String? theme, String? accent}) async {
     try {
-      stored = await _repository.loadState(uid);
+      final Map<String, Object?> doc =
+          await _repository.patchSettings(uid, theme: theme, accent: accent);
+      emit(ShellReady(settings: ThemeSettings.fromState(GymState.fromJson(doc))));
     } catch (e, st) {
       addError(e, st);
-      emit(ShellReady(settings: ThemeSettings.fromState(change(_currentAsState()))));
-      return;
+      final GymState uiOnly = _currentAsState().copyWith(theme: theme, accent: accent);
+      emit(ShellReady(settings: ThemeSettings.fromState(uiOnly)));
     }
-    final GymState next = change(stored ?? GymState.defaults());
-    await _repository.saveState(uid, next);
-    emit(ShellReady(settings: ThemeSettings.fromState(next)));
   }
 
   /// The currently shown settings as a (never persisted) [GymState], so a
