@@ -64,9 +64,30 @@ class ApiClientFactory {
   }
 }
 
+/// Thrown by [OpenGymApiClient.fetchState]/[OpenGymApiClient.pushState] when
+/// `/api/data` answers with a body that is not the expected JSON object shape
+/// (an HTML error or captive-portal page, a non-object `state`, a non-numeric
+/// `rev`, ...). Kept distinct from "the server has nothing" so a sync layer
+/// never pushes over, or adopts, garbage.
+class UnexpectedResponseException implements Exception {
+  const UnexpectedResponseException(this.message, {this.body});
+
+  final String message;
+
+  /// The decoded response body that failed validation, for diagnostics.
+  final Object? body;
+
+  @override
+  String toString() => 'UnexpectedResponseException: $message';
+}
+
 /// A record of `/api/data`'s response: the raw state `Map` (or `null` if
 /// nothing has synced yet) and the server's revision of that document.
-typedef FetchStateResult = ({Map<String, Object?>? state, int rev});
+///
+/// [rev] is `null` only when the server answered without a `rev` at all: a
+/// server from before revisions (`../openGym/frontend/src/store/useStore.js`
+/// treats `rev == null` as "no revision to hold", not as rev 0).
+typedef FetchStateResult = ({Map<String, Object?>? state, int? rev});
 
 /// Hand-authored wrapper over the generated openGym Dio/Retrofit clients.
 ///
@@ -95,37 +116,49 @@ class OpenGymApiClient {
 
   /// `GET /api/data`, read raw so unknown `state` keys are never dropped.
   ///
-  /// Returns the state as a plain `Map` (or `null` when nothing has synced
-  /// yet) alongside the server's revision (`0` when there is no document).
+  /// Returns the state as a plain `Map` (or `null` when the server explicitly
+  /// answers `state: null`, i.e. nothing has synced yet) alongside the
+  /// server's revision (`0` when there is no document, `null` for a server
+  /// from before revisions that sends no `rev`).
+  ///
+  /// Throws [UnexpectedResponseException] if the body is not a JSON object, if
+  /// `state` is missing or neither `null` nor an object, or if `rev` is
+  /// present but not a number.
   Future<FetchStateResult> fetchState() async {
     final response = await _dio.get<Object?>('/api/data');
     final body = response.data;
 
-    Map<String, Object?>? state;
-    var rev = 0;
-
-    if (body is Map) {
-      final rawState = body['state'];
-      if (rawState is Map) {
-        state = rawState.map(
-          (key, value) => MapEntry(key.toString(), value),
-        );
-      }
-      final rawRev = body['rev'];
-      if (rawRev is num) {
-        rev = rawRev.toInt();
-      }
+    if (body is! Map) {
+      throw UnexpectedResponseException('GET /api/data: body is not a JSON object', body: body);
+    }
+    if (!body.containsKey('state')) {
+      throw UnexpectedResponseException('GET /api/data: response has no state', body: body);
+    }
+    final rawState = body['state'];
+    final Map<String, Object?>? state;
+    if (rawState == null) {
+      state = null;
+    } else if (rawState is Map) {
+      state = rawState.map((key, value) => MapEntry(key.toString(), value));
+    } else {
+      throw UnexpectedResponseException('GET /api/data: state is not an object', body: body);
     }
 
-    return (state: state, rev: rev);
+    return (state: state, rev: _revOf(body, 'GET /api/data'));
   }
 
   /// `PUT /api/data`, sent raw so the [state] `Map` round-trips untouched.
   ///
   /// [baseRev] makes the write conditional (see `DataClient.putData`'s doc
   /// comment on the generated method for the server's 409-on-mismatch
-  /// behavior). Returns the revision the write produced.
-  Future<int> pushState({
+  /// behavior). Returns the revision the write produced, or `null` if the
+  /// server sent no `rev` (a server from before revisions -- the caller should
+  /// drop its stored revision, as `useStore.js` does, rather than assume the
+  /// write landed at [baseRev]).
+  ///
+  /// Throws [UnexpectedResponseException] if the body is not a JSON object or
+  /// `rev` is present but not a number.
+  Future<int?> pushState({
     required Map<String, Object?> state,
     required int baseRev,
   }) async {
@@ -135,13 +168,18 @@ class OpenGymApiClient {
     );
     final body = response.data;
 
-    if (body is Map) {
-      final rawRev = body['rev'];
-      if (rawRev is num) {
-        return rawRev.toInt();
-      }
+    if (body is! Map) {
+      throw UnexpectedResponseException('PUT /api/data: body is not a JSON object', body: body);
     }
+    return _revOf(body, 'PUT /api/data');
+  }
 
-    return baseRev;
+  /// `rev` as an int; `null` if absent or null (pre-revision server); throws
+  /// for any other type.
+  static int? _revOf(Map<dynamic, dynamic> body, String op) {
+    final rawRev = body['rev'];
+    if (rawRev == null) return null;
+    if (rawRev is num) return rawRev.toInt();
+    throw UnexpectedResponseException('$op: rev is not a number', body: body);
   }
 }
