@@ -27,7 +27,7 @@ Port openGym to native Flutter in horizontal layers. Build the data foundation f
   1. `lib/core/` and `lib/features/` exist, and the app boots to an empty themed shell
   2. Generated Dart models + Dio clients compile and cover every path in `openapi.yaml`
   3. A representative (synthetic, demoSeed-derived) `state-<uid>.json` imports into sqflite and exports back to equivalent JSON (automated test). Note: user accepted the synthetic fixture on 2026-09-25 (no real file available)
-  4. `flutter analyze` pass
+  4. `flutter analyze` and `flutter test` pass
 
 **Plans**: 7 plans
 
@@ -43,8 +43,8 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-04-PLAN.md — Routine/bodyweight/part models, kDefaultState, GymState (wave 3)
-- [ ] 01-05-PLAN.md — Generate Dio clients from openapi.yaml, 30-operation coverage test (wave 3)
+- [x] 01-04-PLAN.md — Routine/bodyweight/part models, kDefaultState, GymState (wave 3)
+- [x] 01-05-PLAN.md — Generate Dio clients from openapi.yaml, 30-operation coverage test (wave 3)
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
@@ -158,7 +158,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Models | 3/7 | In Progress|  |
+| 1. Foundation & Models | 5/7 | In Progress|  |
 | 2. Core Logic via QuickJS | 0/TBD | Not started | - |
 | 3. BLoC & UI Translation | 0/TBD | Not started | - |
 | 4. Muscle Map Rendering | 0/TBD | Not started | - |
