@@ -22,14 +22,14 @@ result: [pending]
 
 ### 3. Decide on code-review Critical findings CR-01 / CR-03
 expected: Fixed now (/gsd-code-review 1 --fix) or recorded as a Phase 3 prerequisite in STATE.md
-result: in progress — user chose fix now (/gsd-code-review 1 --fix)
+result: passed — CR-01/02/03 + WR-01..08 fixed (5460a13..2aff7aa), see 01-REVIEW-FIX.md
 
 ## Summary
 
 total: 3
-passed: 1
+passed: 2
 issues: 0
-pending: 2
+pending: 1
 skipped: 0
 blocked: 0
 
