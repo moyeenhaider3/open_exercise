@@ -6,7 +6,7 @@ Port openGym to native Flutter in horizontal layers. Build the data foundation f
 
 ## Phases
 
-- [ ] **Phase 1: Foundation & Models** - Folder structure, OpenAPI models + Dio clients, state models, sqflite schema
+- [x] **Phase 1: Foundation & Models** - Folder structure, OpenAPI models + Dio clients, state models, sqflite schema (completed 2026-09-25)
 - [ ] **Phase 2: Core Logic via QuickJS** - Bundle openGym lib JS, JsEngineService, parity script
 - [ ] **Phase 3: BLoC & UI Translation** - Library, workout tracker, plan, history, stats, settings in Material 3
 - [ ] **Phase 4: Muscle Map Rendering** - SVG paths → CustomPainter with fatigue/volume shading
@@ -52,7 +52,7 @@ Plans:
 
 **Wave 5** *(blocked on Wave 4 completion)*
 
-- [ ] 01-07-PLAN.md — Theme/accents, sealed ShellBloc, go_router, DI, boot + layout tests (wave 5)
+- [x] 01-07-PLAN.md — Theme/accents, sealed ShellBloc, go_router, DI, boot + layout tests (wave 5)
 
 ### Phase 2: Core Logic via QuickJS
 
@@ -158,7 +158,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Models | 6/7 | In Progress|  |
+| 1. Foundation & Models | 7/7 | Complete   | 2026-09-25 |
 | 2. Core Logic via QuickJS | 0/TBD | Not started | - |
 | 3. BLoC & UI Translation | 0/TBD | Not started | - |
 | 4. Muscle Map Rendering | 0/TBD | Not started | - |

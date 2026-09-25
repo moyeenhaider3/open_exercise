@@ -10,7 +10,7 @@
 - [x] **FND-02**: Dart models and Dio API clients are generated from `../openGym/api/openapi.yaml` and cover every route (auth, pair, data/rev, push, activity, admin)
 - [x] **FND-03**: Dart models exist for the full user state (`DEF` in `useStore.js`: settings, bodyweight, routines, week, dayPlan, exWeights, workouts, active, customEx, equipProfiles, exNotes, favEx, barWeights, gymCards, …), including set `phase`/`type`, drops and clusters
 - [x] **FND-04**: A sqflite schema stores that state, and importing a representative (synthetic, demoSeed-derived) `state-<uid>.json` then exporting it again gives equivalent JSON (round-trip test). Note: user accepted the synthetic fixture on 2026-09-25 (no real file available)
-- [ ] **FND-05**: The app boots to an empty shell with dependency injection, routing and a theme (dark/light, accent) wired up
+- [x] **FND-05**: The app boots to an empty shell with dependency injection, routing and a theme (dark/light, accent) wired up
 
 ### Core Logic via QuickJS (JS)
 - [ ] **JS-01**: openGym `frontend/src/lib/*.js` domain modules are bundled (esbuild → a single global/IIFE) into a Flutter asset by a reproducible script
