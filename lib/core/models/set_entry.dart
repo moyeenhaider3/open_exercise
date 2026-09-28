@@ -84,6 +84,9 @@ class SideSets extends Equatable {
 /// straight sets, warm-ups (explicit `phase` or legacy `warmup` boolean), dropsets, rest-pause
 /// sets, and per-side (unilateral) sets. Passthrough-safe: every unknown key, explicit null and
 /// wrong-typed value on a known field survives `fromJson` -> `toJson` unchanged.
+///
+/// Phase and type resolution lives in openGym's `workout-model.js` and is reached via
+/// `JsEngineService.workoutModel.phaseForSet` / `.setType` (JS-04, Phase 1 CR-02).
 class SetEntry extends Equatable {
   const SetEntry({
     this.w,
@@ -149,34 +152,6 @@ class SetEntry extends Equatable {
         'clusters': clusters?.map((ClusterEntry c) => c.toJson()).toList(),
         'sides': sides?.toJson(),
       });
-
-  /// Exact port of `workout-model.js` `normalizedPhase`: trims and lower-cases a string token,
-  /// accepts `warmup`/`warm-up`/`warm_up`, and maps anything else (including a non-string
-  /// value) to [fallback] (`'warmup'` only if [fallback] is exactly `'warmup'`, else `'work'`).
-  static String _normalizedPhase(Object? value, [String fallback = 'work']) {
-    final String token = value is String ? value.trim().toLowerCase() : '';
-    if (token == 'warmup' || token == 'warm-up' || token == 'warm_up') return 'warmup';
-    if (token == 'work') return 'work';
-    return fallback == 'warmup' ? 'warmup' : 'work';
-  }
-
-  /// Exact port of `workout-model.js` `phaseForSet(set, fallback)`: an explicit, non-empty
-  /// `phase` wins over the legacy `warmup` boolean (even if the phase is unrecognised or not a
-  /// string). The raw value is read from [extra] as well, because a wrong-typed `phase`/`warmup`
-  /// is demoted there by [JsonReader] but still counts as "explicit" in openGym. No volume/1RM
-  /// math lives here (that stays in JS, per JS-04) -- this is read-only field resolution.
-  String resolvedPhaseOr([String fallback = 'work']) {
-    final Object? raw = phase ?? extra['phase'];
-    if (raw != null && raw != '') return _normalizedPhase(raw, fallback);
-    final Object? wu = warmup ?? extra['warmup'];
-    return wu == true ? 'warmup' : _normalizedPhase(null, fallback);
-  }
-
-  /// `phaseForSet(set)` with openGym's default `'work'` fallback.
-  String get resolvedPhase => resolvedPhaseOr();
-
-  /// Mirrors `workout-model.js` `setType`.
-  String get resolvedType => (type == 'dropset' || type == 'restpause') ? type! : 'straight';
 
   @override
   List<Object?> get props =>
