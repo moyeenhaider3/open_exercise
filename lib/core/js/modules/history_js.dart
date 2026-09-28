@@ -119,6 +119,15 @@ final class HistoryJs {
     return jsListOf<RoutineExercise>(result, 'history.cleanupSg', RoutineExercise.fromJson);
   }
 
+  /// Cleans up superset groups in a list of workout entries.
+  List<WorkoutEntry> cleanupSgWorkoutEntries(List<WorkoutEntry> ex) {
+    final Object? result = _engine.call(
+      'history.cleanupSg',
+      <Object?>[ex.map((WorkoutEntry e) => e.toJson()).toList()],
+    );
+    return jsListOf<WorkoutEntry>(result, 'history.cleanupSg', WorkoutEntry.fromJson);
+  }
+
   /// Pairs two adjacent exercises into a superset.
   List<RoutineExercise> pairAdjacent(
     List<RoutineExercise> items,
@@ -138,6 +147,25 @@ final class HistoryJs {
     return jsListOf<RoutineExercise>(result, 'history.pairAdjacent', RoutineExercise.fromJson);
   }
 
+  /// Pairs two adjacent workout entries into a superset.
+  List<WorkoutEntry> pairAdjacentWorkoutEntries(
+    List<WorkoutEntry> items,
+    int first,
+    int second, [
+    String? groupId,
+  ]) {
+    final Object? result = _engine.call(
+      'history.pairAdjacent',
+      <Object?>[
+        items.map((WorkoutEntry e) => e.toJson()).toList(),
+        first,
+        second,
+        groupId ?? jsUndefined,
+      ],
+    );
+    return jsListOf<WorkoutEntry>(result, 'history.pairAdjacent', WorkoutEntry.fromJson);
+  }
+
   /// Unpairs an exercise from its superset.
   List<RoutineExercise> unpairSuperset(List<RoutineExercise> items, int idx) {
     final Object? result = _engine.call(
@@ -148,6 +176,18 @@ final class HistoryJs {
       ],
     );
     return jsListOf<RoutineExercise>(result, 'history.unpairSuperset', RoutineExercise.fromJson);
+  }
+
+  /// Unpairs a workout entry from its superset.
+  List<WorkoutEntry> unpairSupersetWorkoutEntries(List<WorkoutEntry> items, int idx) {
+    final Object? result = _engine.call(
+      'history.unpairSuperset',
+      <Object?>[
+        items.map((WorkoutEntry e) => e.toJson()).toList(),
+        idx,
+      ],
+    );
+    return jsListOf<WorkoutEntry>(result, 'history.unpairSuperset', WorkoutEntry.fromJson);
   }
 
   /// True if a completed entry is excluded from progression.
