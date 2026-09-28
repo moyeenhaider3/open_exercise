@@ -21,6 +21,10 @@ History, Stats, Home, Check-in and Settings (UI-05, UI-06) moved to **Phase 3.1*
 
 ### Timers
 - D-02: No rest/work timer of any kind in Phase 3, not even a foreground one. Timers, sound and background alerts belong to Phase 5 (TMR-01..03). Any timer control in openGym's Workout view is left out or shown as a non-functional placeholder, as stated in the plan.
+- D-02a: The active-workout header's elapsed session clock (a passive `m:ss` display computed from the workout start time, with no alerts) is kept. The user confirmed this on 2026-09-28.
+
+### Plan sharing
+- D-06: openGym's Plan-header "Share your plan" (export, print and import plan files) is deferred to Phase 8 (IMP-04). It needs plugins outside the mandated stack. The UI-07 checklist records it as deferred. The user confirmed this on 2026-09-28.
 
 ### Check-in
 - D-03: When Check-in is built (Phase 3.1), it ships display/reorder/edit/delete only. "Add card" is deferred to Phase 8 (barcode scanning, IMP-03). Recorded here so Phase 3's state layer does not need to support card creation.

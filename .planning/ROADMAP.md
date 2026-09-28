@@ -101,7 +101,40 @@ Plans:
   3. Plan and RoutineEdit screens work (drag to reorder), and data persists across restarts
   4. Every in-scope Zustand action maps to a Bloc event (checklist in the phase summary)
 
-**Plans**: TBD
+**Plans**: 16 plans in 5 waves
+
+Plans:
+**Wave 1**
+
+- [ ] 03-01-PLAN.md — State layer: single-writer GymStateCubit (D-04), model copyWith/extras, S.week lists, ShellBloc on the cubit, provider files
+- [ ] 03-02-PLAN.md — JS bridge additions: exercises, muscles, effort, starter, exerciseHistory, repRange, progressionCopy, finish shim + parity
+- [ ] 03-03-PLAN.md — Presentation foundation: path_drawing AppIcon (generated from Icon.jsx), t(), format.js/glyphs/workout-controls ports, setLabel/exLine
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 03-04-PLAN.md — ui_kit: ui.jsx controls, AppPalette, native sheet/dialog/toast helpers (D-05)
+- [ ] 03-05-PLAN.md — Exercise catalogue (generated), typo-tolerant search port, favourites/equipment, LibraryBloc + ExercisesBloc, registerCustom
+- [ ] 03-06-PLAN.md — App shell: go_router route table + TabBar.jsx port
+- [ ] 03-07-PLAN.md — WorkoutBloc lifecycle/session events + supersetFlow/order/swap ports (no timers, D-02)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 03-08-PLAN.md — ExConfig + ProgressionFields, glyph picker, AddToRoutine, BarWeightEditor sheets
+- [ ] 03-09-PLAN.md — Exercise media (CDN + ImageCache), custom exercise form/delete, exercise picker
+- [ ] 03-10-PLAN.md — WorkoutBloc set editing, tick/superset flow, progression reconfigure, WorkoutEntryView
+- [ ] 03-11-PLAN.md — PlanBloc + Plan screen + day/starter sheets
+- [ ] 03-12-PLAN.md — Workout session sheets: weigh-in, effort picker, notes, rename, add routine, remove/swap, finish flow
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 03-13-PLAN.md — Exercise detail + history (LineChart) + Library screen [device check]
+- [ ] 03-14-PLAN.md — RoutineEdit (ReorderableListView, Dismissible) [device check incl. restart persistence]
+- [ ] 03-15-PLAN.md — ExerciseBlock + set rows (all set types)
+
+**Wave 5** *(blocked on Wave 4 completion)*
+
+- [ ] 03-16-PLAN.md — Start chooser, ActiveWorkout (cards/list/compact), tab Start, UI-07 checklist [device check]
+
 **UI hint**: yes
 
 ### Phase 03.1: History, Stats, Home, Check-in & Settings (INSERTED)

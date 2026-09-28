@@ -672,7 +672,7 @@ needs a concrete non-test verification method; the general project checklist
 | A5 | The pinned jsDelivr commit SHA (`7455efae41b330c265e7cd4b78dfa848e7ce5ebd`) from openGym 1.3.8's `package.json` is still the correct/current one to pin in this Flutter port | Exercise Media section | If openGym has since re-pinned to a newer commit (bugfixes/corrections in the dataset), the Flutter port would serve stale images; low risk (a pinned SHA, by construction, never silently changes) but should be re-checked against the current `../openGym` checkout at plan/execution time |
 | A6 | `SegmentedButton` and `Slider` (Material 3 SDK widgets) are acceptable substitutes for openGym's hand-rolled `Segmented`/`Slider` controls rather than needing pixel-identical custom widgets | Screen Map (`components/ui.jsx` row) | If "layouts match openGym views 1:1" (UI-08) is read as pixel-identical custom styling rather than equivalent M3 controls, this assumption under-scopes the visual polish work |
 
-## Open Questions
+## Open Questions (RESOLVED — see 03-CONTEXT.md: Q1→D-02/D-02a, Q2→Claude's Discretion (Dart catalogue copy), Q3→03-05 execution-time SHA re-check, Q4→D-03)
 
 1. **Does Phase 3 need any live rest/work timer at all, even without background notifications?**
    - What we know: TMR-01..03 (Phase 5) explicitly own "the in-app rest timer" and "background
