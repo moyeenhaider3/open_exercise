@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-09-24)
 Phase: 2 (Complete)
 Plan: 02-08-PLAN.md (Completed)
 Status: Complete
-Last activity: 2026-09-28 -- Phase 2 complete; all 8 plans executed, 167/167 vitest fixtures PASS on QuickJS & JavaScriptCore
+Last activity: 2026-09-28 - Completed quick task 260928-j9u: Refresh CLAUDE.md, add port-from-opengym skill, add permissions.deny rules
 
 Progress: [██████████] 100% (Phase 2: 8/8 plans)
 
@@ -80,6 +80,12 @@ None yet.
 - flutter_passkey_service: confirm the package exists, is maintained, and works with the server's RP_ID (research in Phase 5)
 - Native passkeys need assetlinks.json / AASA on the user's server domain
 - flutter_js ships QuickJS on Android but JavaScriptCore on iOS, so parity tests must run on both engines
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260928-j9u | Refresh CLAUDE.md, add port-from-opengym skill, add permissions.deny rules | 2026-09-28 | bb3c1c2 | [260928-j9u-refresh-claude-md-add-port-from-opengym-](./quick/260928-j9u-refresh-claude-md-add-port-from-opengym-/) |
 
 ## Deferred Items
 
