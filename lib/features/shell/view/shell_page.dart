@@ -2,18 +2,30 @@
 
 import 'package:flutter/material.dart';
 
-/// The app's empty Material 3 shell (FND-05). No feature screens, tabs or
-/// demo content live here: Phase 3 builds screens 1:1 from openGym's views
-/// and plugs them into this frame (via `lib/core/router/app_router.dart`).
+import 'app_tab_bar.dart';
+
+/// The app's primary shell scaffold embedding [AppTabBar] and active child route.
+///
+/// Ports openGym's main layout container from `../openGym/frontend/src/App.jsx`.
 class ShellPage extends StatelessWidget {
-  const ShellPage({super.key});
+  const ShellPage({
+    super.key,
+    required this.location,
+    required this.child,
+  });
+
+  final String location;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: const Key('shell-scaffold'),
-      appBar: AppBar(title: const Text('openGym')),
-      body: const SizedBox.shrink(),
+      body: SafeArea(
+        bottom: false,
+        child: child,
+      ),
+      bottomNavigationBar: AppTabBar(location: location),
     );
   }
 }

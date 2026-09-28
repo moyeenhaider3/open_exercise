@@ -114,7 +114,7 @@ Plans:
 
 - [x] 03-04-PLAN.md — ui_kit: ui.jsx controls, AppPalette, native sheet/dialog/toast helpers (D-05)
 - [x] 03-05-PLAN.md — Exercise catalogue (generated), typo-tolerant search port, favourites/equipment, LibraryBloc + ExercisesBloc, registerCustom
-- [ ] 03-06-PLAN.md — App shell: go_router route table + TabBar.jsx port
+- [x] 03-06-PLAN.md — App shell: go_router route table + TabBar.jsx port
 - [ ] 03-07-PLAN.md — WorkoutBloc lifecycle/session events + supersetFlow/order/swap ports (no timers, D-02)
 
 **Wave 3** *(blocked on Wave 2 completion)*
