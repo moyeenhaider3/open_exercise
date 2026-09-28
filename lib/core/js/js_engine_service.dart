@@ -67,6 +67,14 @@ final class JsEngineService {
     'history',
     'sessionStart',
     'sessionMerge',
+    'exercises',
+    'muscles',
+    'effort',
+    'starter',
+    'exerciseHistory',
+    'repRange',
+    'progressionCopy',
+    'finish',
   };
 
   static final RegExp _pathRegex = RegExp(r'^([A-Za-z]+)\.([A-Za-z_$][A-Za-z0-9_$]*)$');

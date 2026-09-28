@@ -2,7 +2,7 @@
   "schema": 1,
   "module": "bar",
   "openGymVersion": "1.3.8",
-  "sourceSha256": "2190ad561541aa09fc6745b92f1e0ff78063a58ad544c3d3c5eb0c36acc21dad",
+  "sourceSha256": "7238ac9d42c47af1e25d4dd1a146321feb6994d7e9c6a9e1993d399540ee9dcb",
   "generatedBy": "tool/gen_js_fixtures.sh",
   "cases": [
     {

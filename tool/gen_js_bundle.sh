@@ -27,6 +27,8 @@ EXPECTED_ESBUILD_VERSION="0.28.2"
 
 FILES=(
   "bar.js"
+  "effort.js"
+  "exercise-history.js"
   "exercise-muscle-batch-1.js"
   "exercise-muscle-batch-1.json"
   "exercise-muscle-batch-2.js"
@@ -34,16 +36,19 @@ FILES=(
   "exercise-muscle-olympic.json"
   "exercises-data.js"
   "exercises.js"
+  "finish-workout.js"
   "format.js"
   "history.js"
   "i18n-core.js"
   "muscles.js"
   "onerm.js"
+  "progression-copy.js"
   "progression.js"
   "recovery.js"
   "rep-range.js"
   "session-merge.js"
   "session-start.js"
+  "starter.js"
   "workout-model.js"
 )
 
@@ -153,13 +158,15 @@ node -e "
   const meta = JSON.parse(fs.readFileSync('$METAFILE_TMP', 'utf8'));
   const allowed = new Set([
     'tool/js/entry.js',
+    'tool/js/shims/finish-workout-shim.js',
     ...[
-      'bar.js', 'exercise-muscle-batch-1.js', 'exercise-muscle-batch-1.json',
+      'bar.js', 'effort.js', 'exercise-history.js',
+      'exercise-muscle-batch-1.js', 'exercise-muscle-batch-1.json',
       'exercise-muscle-batch-2.js', 'exercise-muscle-batch-2.json',
       'exercise-muscle-olympic.json', 'exercises-data.js', 'exercises.js',
-      'format.js', 'history.js', 'i18n-core.js', 'muscles.js', 'onerm.js',
-      'progression.js', 'recovery.js', 'rep-range.js', 'session-merge.js',
-      'session-start.js', 'workout-model.js'
+      'finish-workout.js', 'format.js', 'history.js', 'i18n-core.js', 'muscles.js', 'onerm.js',
+      'progression-copy.js', 'progression.js', 'recovery.js', 'rep-range.js', 'session-merge.js',
+      'session-start.js', 'starter.js', 'workout-model.js'
     ].map(f => 'third_party/opengym/lib/' + f)
   ]);
   const inputs = Object.keys(meta.inputs);

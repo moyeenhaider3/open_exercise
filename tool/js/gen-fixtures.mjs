@@ -17,6 +17,14 @@ import * as recovery from '../../third_party/opengym/lib/recovery.js';
 import * as history from '../../third_party/opengym/lib/history.js';
 import * as sessionStart from '../../third_party/opengym/lib/session-start.js';
 import * as sessionMerge from '../../third_party/opengym/lib/session-merge.js';
+import * as exercises from '../../third_party/opengym/lib/exercises.js';
+import * as muscles from '../../third_party/opengym/lib/muscles.js';
+import * as effort from '../../third_party/opengym/lib/effort.js';
+import * as starter from '../../third_party/opengym/lib/starter.js';
+import * as exerciseHistory from '../../third_party/opengym/lib/exercise-history.js';
+import * as repRange from '../../third_party/opengym/lib/rep-range.js';
+import * as progressionCopy from '../../third_party/opengym/lib/progression-copy.js';
+import * as finish from './shims/finish-workout-shim.js';
 
 const MODULES = {
   onerm,
@@ -27,6 +35,14 @@ const MODULES = {
   history,
   sessionStart,
   sessionMerge,
+  exercises,
+  muscles,
+  effort,
+  starter,
+  exerciseHistory,
+  repRange,
+  progressionCopy,
+  finish,
 };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -74,6 +90,8 @@ const MODULE_FILES = [
   { name: 'recovery', file: './fixture-cases/recovery.mjs' },
   { name: 'history', file: './fixture-cases/history.mjs' },
   { name: 'session', file: './fixture-cases/session.mjs' },
+  { name: 'exercises', file: './fixture-cases/exercises.mjs' },
+  { name: 'phase3', file: './fixture-cases/phase3.mjs' },
 ];
 
 function serializeArgs(args) {

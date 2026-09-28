@@ -1,6 +1,7 @@
 {
   "name": "open-exercise-js-tools",
   "private": true,
+  "type": "module",
   "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "esbuild": "0.28.2"

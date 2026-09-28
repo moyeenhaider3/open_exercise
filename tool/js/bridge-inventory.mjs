@@ -79,6 +79,8 @@ export const INVENTORY = {
       'DELOAD_FACTOR_MAX',
       'DEFAULT_SEC_INCREMENT',
       'MAX_BW_SETS',
+      'POLICY_NAME',
+      'POLICY_DESC',
     ],
     keys: [],
   },
@@ -156,13 +158,51 @@ export const INVENTORY = {
     constants: [],
     keys: [],
   },
+  exercises: {
+    functions: ['registerCustom', 'isAssisted', 'betterWeight', 'beatsWeight', 'isCardio', 'isBodyweightEq'],
+    constants: [],
+    keys: [],
+  },
+  muscles: {
+    functions: ['inMuscleOrder', 'hasExplicitMuscleMetadata', 'normalizeMuscleGroups', 'exerciseMuscleSnapshot'],
+    constants: ['MUSCLES', 'MUSCLE_NAME'],
+    keys: [],
+  },
+  effort: {
+    functions: ['rirOf', 'toScale', 'effortColor'],
+    constants: ['EFFORT_PRESETS', 'HARD_RIR'],
+    keys: [],
+  },
+  starter: {
+    functions: ['starterPlanOptions', 'starterPlanDays', 'buildStarterPlan'],
+    constants: [],
+    keys: [],
+  },
+  exerciseHistory: {
+    functions: ['exerciseHistory'],
+    constants: [],
+    keys: [],
+  },
+  repRange: {
+    functions: ['normalizeRepRange'],
+    constants: [],
+    keys: [],
+  },
+  progressionCopy: {
+    functions: ['progressionGuidance'],
+    constants: [],
+    keys: [],
+  },
+  finish: {
+    functions: ['completeWorkout'],
+    constants: [],
+    keys: [],
+  },
 };
 
 export const NOT_BRIDGED = {
   'history.setLabel': 'Localized presentation string; English fallback only in JS engine, owned by Dart i18n',
   'history.exLine': 'Localized presentation string; English fallback only in JS engine, owned by Dart i18n',
   'history.fmtSec': 'Localized presentation string; English fallback only in JS engine, owned by Dart i18n',
-  'progression.POLICY_NAME': 'Localized presentation string; owned by Dart i18n',
-  'progression.POLICY_DESC': 'Localized presentation string; owned by Dart i18n',
   'history.streakWeeks': 'Reads new Date() directly; banned from fixtures due to wall-clock dependency',
 };

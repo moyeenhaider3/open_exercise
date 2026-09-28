@@ -17,8 +17,10 @@ import 'package:open_exercise/core/js/js_bridge_exception.dart';
 import 'package:open_exercise/core/js/js_engine_service.dart';
 
 import 'dispatch/bar_dispatch.dart';
+import 'dispatch/exercises_dispatch.dart';
 import 'dispatch/history_dispatch.dart';
 import 'dispatch/onerm_dispatch.dart';
+import 'dispatch/phase3_dispatch.dart';
 import 'dispatch/progression_dispatch.dart';
 import 'dispatch/recovery_dispatch.dart';
 import 'dispatch/session_dispatch.dart';
@@ -68,7 +70,7 @@ Future<void> main() async {
     exit(1);
   }
 
-  // Merge all 8 dispatch tables.
+  // Merge all dispatch tables.
   final Map<String, ParityCall> dispatch = <String, ParityCall>{
     ...onermDispatch(engine),
     ...barDispatch(engine),
@@ -78,6 +80,8 @@ Future<void> main() async {
     ...historyDispatch(engine),
     ...sessionStartDispatch(engine),
     ...sessionMergeDispatch(engine),
+    ...exercisesDispatch(engine),
+    ...phase3Dispatch(engine),
   };
 
   final Set<String> inventorySet = kBridgeInventory.toSet();

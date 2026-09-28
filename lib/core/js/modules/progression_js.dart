@@ -222,6 +222,26 @@ final class ProgressionJs {
 
   /// Maximum number of sets to grow bodyweight progression to (6).
   int get maxBwSets => jsInt(_engine.read('progression.MAX_BW_SETS'), 'progression.MAX_BW_SETS');
+
+  /// Policy display names.
+  Map<String, String> get policyName {
+    final Map<String, Object?> raw =
+        jsMap(_engine.read('progression.POLICY_NAME'), 'progression.POLICY_NAME');
+    return raw.map(
+      (String k, Object? v) =>
+          MapEntry<String, String>(k, jsString(v, 'progression.POLICY_NAME["$k"]')),
+    );
+  }
+
+  /// Policy descriptions.
+  Map<String, String> get policyDesc {
+    final Map<String, Object?> raw =
+        jsMap(_engine.read('progression.POLICY_DESC'), 'progression.POLICY_DESC');
+    return raw.map(
+      (String k, Object? v) =>
+          MapEntry<String, String>(k, jsString(v, 'progression.POLICY_DESC["$k"]')),
+    );
+  }
 }
 
 extension ProgressionJsAccess on JsEngineService {

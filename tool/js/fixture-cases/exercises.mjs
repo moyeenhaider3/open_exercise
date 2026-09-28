@@ -1,0 +1,106 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+const customEx = [
+  { id: 'cust_01', n: 'Custom Assisted Machine', eq: 'leverage machine', assisted: true },
+];
+
+export const cases = [
+  {
+    id: 'ex-001',
+    fn: 'exercises.registerCustom',
+    args: [customEx],
+    from: 'exercises.test.js > registerCustom > adds custom exercises into index',
+    vitest: null,
+  },
+  {
+    id: 'ex-002',
+    fn: 'exercises.isAssisted',
+    args: ['0017'],
+    from: 'assisted.test.js > which exercises count as assisted > takes leverage machine whose name says assisted',
+    vitest: true,
+  },
+  {
+    id: 'ex-003',
+    fn: 'exercises.isAssisted',
+    args: ['0025'],
+    from: 'assisted.test.js > which exercises count as assisted > plain barbell is not assisted',
+    vitest: false,
+  },
+  {
+    id: 'ex-004',
+    fn: 'exercises.isAssisted',
+    args: ['cust_01'],
+    from: 'assisted.test.js > which exercises count as assisted > custom exercise registered as assisted',
+    vitest: true,
+  },
+  {
+    id: 'ex-005',
+    fn: 'exercises.betterWeight',
+    args: ['0017', 30, 20],
+    from: 'assisted.test.js > folds and compares loads > assisted less weight is better',
+    vitest: 20,
+  },
+  {
+    id: 'ex-006',
+    fn: 'exercises.betterWeight',
+    args: ['0025', 30, 20],
+    from: 'assisted.test.js > folds and compares loads > standard more weight is better',
+    vitest: 30,
+  },
+  {
+    id: 'ex-007',
+    fn: 'exercises.beatsWeight',
+    args: ['0017', 20, 30],
+    from: 'assisted.test.js > folds and compares loads > assisted lighter weight beats heavier',
+    vitest: true,
+  },
+  {
+    id: 'ex-008',
+    fn: 'exercises.beatsWeight',
+    args: ['0017', 40, 30],
+    from: 'assisted.test.js > folds and compares loads > assisted heavier weight does not beat lighter',
+    vitest: false,
+  },
+  {
+    id: 'ex-009',
+    fn: 'exercises.beatsWeight',
+    args: ['0025', 100, 90],
+    from: 'assisted.test.js > folds and compares loads > standard heavier beats lighter',
+    vitest: true,
+  },
+  {
+    id: 'ex-010',
+    fn: 'exercises.beatsWeight',
+    args: ['0025', 90, 100],
+    from: 'assisted.test.js > folds and compares loads > standard lighter does not beat heavier',
+    vitest: false,
+  },
+  {
+    id: 'ex-011',
+    fn: 'exercises.isCardio',
+    args: ['0025'],
+    from: 'exercises.js > isCardio > bench press is not cardio',
+    vitest: false,
+  },
+  {
+    id: 'ex-012',
+    fn: 'exercises.isCardio',
+    args: [{ bp: 'cardio' }],
+    from: 'exercises.js > isCardio > exercise with bp cardio is cardio',
+    vitest: true,
+  },
+  {
+    id: 'ex-013',
+    fn: 'exercises.isBodyweightEq',
+    args: ['0025'],
+    from: 'exercises.js > isBodyweightEq > barbell is not body weight',
+    vitest: false,
+  },
+  {
+    id: 'ex-014',
+    fn: 'exercises.isBodyweightEq',
+    args: [{ eq: 'body weight' }],
+    from: 'exercises.js > isBodyweightEq > body weight equipment is bodyweight',
+    vitest: true,
+  },
+];
