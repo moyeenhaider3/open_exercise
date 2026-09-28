@@ -5,7 +5,9 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/gym_state_repository.dart';
+import '../js/modules/exercises_js.dart';
 import '../models/gym_state.dart';
+import '../models/state_parts.dart';
 
 /// Single-writer state container for openGym user profile (D-04).
 ///
@@ -18,6 +20,7 @@ final class GymStateCubit extends Cubit<GymState> {
     required String uid,
     required GymState initial,
     required bool canPersist,
+    this._exercisesJs,
   })  :
         // ignore: prefer_initializing_formals
         _repository = repository,
@@ -30,6 +33,7 @@ final class GymStateCubit extends Cubit<GymState> {
   final GymStateRepository _repository;
   final String _uid;
   final bool _canPersist;
+  final ExercisesJs? _exercisesJs;
 
   Completer<void>? _inFlightCompleter;
   Completer<void>? _nextCompleter;
@@ -47,6 +51,7 @@ final class GymStateCubit extends Cubit<GymState> {
   static Future<GymStateCubit> load({
     required GymStateRepository repository,
     String uid = kLocalGuestUid,
+    ExercisesJs? exercisesJs,
   }) async {
     GymState? initial;
     Object? loadError;
@@ -67,13 +72,34 @@ final class GymStateCubit extends Cubit<GymState> {
       uid: uid,
       initial: initial ?? GymState.defaults(),
       canPersist: canPersist,
+      exercisesJs: exercisesJs,
     );
 
     if (loadError != null) {
       cubit.addError(loadError, loadStackTrace);
     }
 
+    cubit._registerCustomSafe();
+
     return cubit;
+  }
+
+  void _registerCustomSafe() {
+    if (_exercisesJs == null) return;
+    try {
+      _exercisesJs.registerCustom(state.customEx);
+    } catch (e, st) {
+      addError(e, st);
+    }
+  }
+
+  @override
+  void emit(GymState state) {
+    final List<CustomExercise>? prevCustom = this.state.customEx;
+    super.emit(state);
+    if (!identical(state.customEx, prevCustom)) {
+      _registerCustomSafe();
+    }
   }
 
   /// Mirrors `useStore.update`: applies [fn], stamps `_ts = Date.now()`, emits

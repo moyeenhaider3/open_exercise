@@ -1,14 +1,17 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'app/app.dart';
 import 'app/dependencies.dart';
 import 'core/api/open_gym_api_client.dart';
+import 'core/catalogue/exercise_catalogue.dart';
 import 'core/data/gym_state_repository.dart';
 import 'core/db/app_database.dart';
 import 'core/js/js_engine_service.dart';
+import 'core/js/modules/exercises_js.dart';
 import 'core/state/gym_state_cubit.dart';
 
 Future<void> main() async {
@@ -42,9 +45,22 @@ Future<void> main() async {
     return;
   }
 
+  final ExerciseCatalogue exerciseCatalogue;
+  try {
+    exerciseCatalogue = await ExerciseCatalogue.load(rootBundle);
+  } catch (e, st) {
+    FlutterError.reportError(
+      FlutterErrorDetails(exception: e, stack: st, library: 'open_exercise bootstrap'),
+    );
+    await database.close();
+    runApp(const _StartupErrorApp(message: 'Could not load exercise catalogue.'));
+    return;
+  }
+
   final GymStateRepository gymStateRepository = GymStateRepository(database: database);
   final GymStateCubit gymStateCubit = await GymStateCubit.load(
     repository: gymStateRepository,
+    exercisesJs: jsEngine.exercises,
   );
 
   runApp(
@@ -53,6 +69,7 @@ Future<void> main() async {
         gymStateRepository: gymStateRepository,
         apiClientFactory: const ApiClientFactory(),
         jsEngine: jsEngine,
+        exerciseCatalogue: exerciseCatalogue,
       ),
       gymStateCubit: gymStateCubit,
     ),

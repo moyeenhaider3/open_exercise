@@ -33,3 +33,10 @@ The Flutter/Dart packages this project depends on (see `pubspec.yaml`) are used 
 respective published licenses (MIT/BSD-style for the current Phase 1 dependency set: flutter_bloc,
 equatable, sqflite, dio, go_router, path_provider, path, collection). No modifications have been
 made to their source; they are consumed as-is from pub.dev.
+
+## Exercise data & media
+
+Exercise definitions and instructions reach this app from ExerciseDB v1 via [hasaneyldrm/exercises-dataset](https://github.com/hasaneyldrm/exercises-dataset) under the MIT License.
+
+Exercise images and animated GIFs are **not** covered by openGym's AGPL and are not distributed in this repository or packaged as application assets. They are loaded at runtime over HTTPS from jsDelivr at the pinned commit `7455efae41b330c265e7cd4b78dfa848e7ce5ebd`, attributed to **© Gym Visual** via `hasaneyldrm/exercises-dataset`.
+

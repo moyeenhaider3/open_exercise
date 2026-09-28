@@ -71,6 +71,7 @@ class _OpenExerciseAppState extends State<OpenExerciseApp> {
         RepositoryProvider.value(value: widget.dependencies.gymStateRepository),
         RepositoryProvider.value(value: widget.dependencies.apiClientFactory),
         RepositoryProvider.value(value: widget.dependencies.jsEngine),
+        RepositoryProvider.value(value: widget.dependencies.exerciseCatalogue),
       ],
       child: MultiBlocProvider(
         providers: <BlocProvider>[

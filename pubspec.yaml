@@ -75,6 +75,7 @@ flutter:
 
   assets:
     - assets/js/opengym-lib.bundle.js
+    - assets/data/exercise_catalogue.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
