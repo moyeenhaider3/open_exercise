@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'app_palette.dart';
+
 /// Background colours openGym uses for its dark/light shells
 /// (`../openGym/frontend/src/App.jsx:57`).
 const Color kDarkBackground = Color(0xFF000000);
@@ -18,5 +20,8 @@ ThemeData buildAppTheme(Brightness brightness, Color accent) {
       brightness: brightness,
     ).copyWith(primary: accent),
     scaffoldBackgroundColor: isDark ? kDarkBackground : kLightBackground,
+    extensions: <ThemeExtension<dynamic>>[
+      isDark ? AppPalette.dark(accent) : AppPalette.light(accent),
+    ],
   );
 }
