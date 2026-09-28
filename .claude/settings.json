@@ -12,5 +12,15 @@
         ]
       }
     ]
+  },
+  "permissions": {
+    "deny": [
+      "Read(./build/**)",
+      "Read(./.dart_tool/**)",
+      "Read(./ios/Pods/**)",
+      "Read(./android/.gradle/**)",
+      "Read(./tool/js/node_modules/**)",
+      "Read(./lib/core/api/generated/**)"
+    ]
   }
 }
