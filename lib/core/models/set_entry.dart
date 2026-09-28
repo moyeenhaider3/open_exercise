@@ -119,6 +119,7 @@ class SetEntry extends Equatable {
   static const Set<String> _known = <String>{
     'w', 'r', 'done', 'rir', 'rpe', 'phase', 'warmup', 'type', 'drops', 'clusters', 'sides',
   };
+  static const Set<String> knownKeys = _known;
 
   factory SetEntry.fromJson(Map<String, Object?> json) {
     final JsonReader reader = JsonReader(json, known: _known);
@@ -152,6 +153,52 @@ class SetEntry extends Equatable {
         'clusters': clusters?.map((ClusterEntry c) => c.toJson()).toList(),
         'sides': sides?.toJson(),
       });
+
+  /// Returns a copy with the given fields replaced. Uses the same sentinel pattern as
+  /// [Workout.copyWith]: explicit null clears the field and writes `key: null` into [extra],
+  /// while non-null removes stale demoted keys.
+  SetEntry copyWith({
+    Object? w = _unset,
+    Object? r = _unset,
+    Object? done = _unset,
+    Object? rir = _unset,
+    Object? rpe = _unset,
+    Object? phase = _unset,
+    Object? warmup = _unset,
+    Object? type = _unset,
+    Object? drops = _unset,
+    Object? clusters = _unset,
+    Object? sides = _unset,
+    Map<String, Object?>? extra,
+  }) {
+    final Map<String, Object?> nextExtra = <String, Object?>{...(extra ?? this.extra)};
+    T? pick<T>(Object? value, T? current, String key) {
+      if (identical(value, _unset)) return current;
+      if (value == null) {
+        nextExtra[key] = null;
+        return null;
+      }
+      nextExtra.remove(key);
+      return value as T;
+    }
+
+    return SetEntry(
+      w: pick<num>(w, this.w, 'w'),
+      r: pick<num>(r, this.r, 'r'),
+      done: pick<bool>(done, this.done, 'done'),
+      rir: pick<num>(rir, this.rir, 'rir'),
+      rpe: pick<num>(rpe, this.rpe, 'rpe'),
+      phase: pick<String>(phase, this.phase, 'phase'),
+      warmup: pick<bool>(warmup, this.warmup, 'warmup'),
+      type: pick<String>(type, this.type, 'type'),
+      drops: pick<List<DropEntry>>(drops, this.drops, 'drops'),
+      clusters: pick<List<ClusterEntry>>(clusters, this.clusters, 'clusters'),
+      sides: pick<SideSets>(sides, this.sides, 'sides'),
+      extra: Map<String, Object?>.unmodifiable(nextExtra),
+    );
+  }
+
+  static const Object _unset = Object();
 
   @override
   List<Object?> get props =>

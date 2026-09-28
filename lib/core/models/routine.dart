@@ -29,6 +29,7 @@ class RoutineExercise extends Equatable {
   final Map<String, Object?> extra;
 
   static const Set<String> _known = <String>{'id', 'sets', 'reps', 'weight', 'note', 'sg'};
+  static const Set<String> knownKeys = _known;
 
   factory RoutineExercise.fromJson(Map<String, Object?> json) {
     final JsonReader reader = JsonReader(json, known: _known);
@@ -51,6 +52,42 @@ class RoutineExercise extends Equatable {
         'note': note,
         'sg': sg,
       });
+
+  /// Returns a copy with the given fields replaced. Uses the same sentinel pattern as
+  /// [Workout.copyWith]: explicit null clears the field and writes `key: null` into [extra],
+  /// while non-null removes stale demoted keys.
+  RoutineExercise copyWith({
+    Object? id = _unset,
+    Object? sets = _unset,
+    Object? reps = _unset,
+    Object? weight = _unset,
+    Object? note = _unset,
+    Object? sg = _unset,
+    Map<String, Object?>? extra,
+  }) {
+    final Map<String, Object?> nextExtra = <String, Object?>{...(extra ?? this.extra)};
+    T? pick<T>(Object? value, T? current, String key) {
+      if (identical(value, _unset)) return current;
+      if (value == null) {
+        nextExtra[key] = null;
+        return null;
+      }
+      nextExtra.remove(key);
+      return value as T;
+    }
+
+    return RoutineExercise(
+      id: pick<String>(id, this.id, 'id'),
+      sets: pick<num>(sets, this.sets, 'sets'),
+      reps: pick<num>(reps, this.reps, 'reps'),
+      weight: pick<num>(weight, this.weight, 'weight'),
+      note: pick<String>(note, this.note, 'note'),
+      sg: pick<String>(sg, this.sg, 'sg'),
+      extra: Map<String, Object?>.unmodifiable(nextExtra),
+    );
+  }
+
+  static const Object _unset = Object();
 
   @override
   List<Object?> get props => <Object?>[id, sets, reps, weight, note, sg, extra];
@@ -75,6 +112,7 @@ class Routine extends Equatable {
   final Map<String, Object?> extra;
 
   static const Set<String> _known = <String>{'id', 'name', 'emoji', 'ex'};
+  static const Set<String> knownKeys = _known;
 
   factory Routine.fromJson(Map<String, Object?> json) {
     final JsonReader reader = JsonReader(json, known: _known);
@@ -93,6 +131,38 @@ class Routine extends Equatable {
         'emoji': emoji,
         'ex': ex?.map((RoutineExercise e) => e.toJson()).toList(),
       });
+
+  /// Returns a copy with the given fields replaced. Uses the same sentinel pattern as
+  /// [Workout.copyWith]: explicit null clears the field and writes `key: null` into [extra],
+  /// while non-null removes stale demoted keys.
+  Routine copyWith({
+    Object? id = _unset,
+    Object? name = _unset,
+    Object? emoji = _unset,
+    Object? ex = _unset,
+    Map<String, Object?>? extra,
+  }) {
+    final Map<String, Object?> nextExtra = <String, Object?>{...(extra ?? this.extra)};
+    T? pick<T>(Object? value, T? current, String key) {
+      if (identical(value, _unset)) return current;
+      if (value == null) {
+        nextExtra[key] = null;
+        return null;
+      }
+      nextExtra.remove(key);
+      return value as T;
+    }
+
+    return Routine(
+      id: pick<String>(id, this.id, 'id'),
+      name: pick<String>(name, this.name, 'name'),
+      emoji: pick<String>(emoji, this.emoji, 'emoji'),
+      ex: pick<List<RoutineExercise>>(ex, this.ex, 'ex'),
+      extra: Map<String, Object?>.unmodifiable(nextExtra),
+    );
+  }
+
+  static const Object _unset = Object();
 
   @override
   List<Object?> get props => <Object?>[id, name, emoji, ex, extra];

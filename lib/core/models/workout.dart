@@ -26,6 +26,7 @@ class WorkoutEntry extends Equatable {
   final Map<String, Object?> extra;
 
   static const Set<String> _known = <String>{'id', 'sets', 'topW', 'sg', 'rid'};
+  static const Set<String> knownKeys = _known;
 
   factory WorkoutEntry.fromJson(Map<String, Object?> json) {
     final JsonReader reader = JsonReader(json, known: _known);
@@ -46,6 +47,40 @@ class WorkoutEntry extends Equatable {
         'sg': sg,
         'rid': rid,
       });
+
+  /// Returns a copy with the given fields replaced. Uses the same sentinel pattern as
+  /// [Workout.copyWith]: explicit null clears the field and writes `key: null` into [extra],
+  /// while non-null removes stale demoted keys.
+  WorkoutEntry copyWith({
+    Object? id = _unset,
+    Object? sets = _unset,
+    Object? topW = _unset,
+    Object? sg = _unset,
+    Object? rid = _unset,
+    Map<String, Object?>? extra,
+  }) {
+    final Map<String, Object?> nextExtra = <String, Object?>{...(extra ?? this.extra)};
+    T? pick<T>(Object? value, T? current, String key) {
+      if (identical(value, _unset)) return current;
+      if (value == null) {
+        nextExtra[key] = null;
+        return null;
+      }
+      nextExtra.remove(key);
+      return value as T;
+    }
+
+    return WorkoutEntry(
+      id: pick<String>(id, this.id, 'id'),
+      sets: pick<List<SetEntry>>(sets, this.sets, 'sets'),
+      topW: pick<num>(topW, this.topW, 'topW'),
+      sg: pick<String>(sg, this.sg, 'sg'),
+      rid: pick<String>(rid, this.rid, 'rid'),
+      extra: Map<String, Object?>.unmodifiable(nextExtra),
+    );
+  }
+
+  static const Object _unset = Object();
 
   @override
   List<Object?> get props => <Object?>[id, sets, topW, sg, rid, extra];
@@ -97,6 +132,7 @@ class Workout extends Equatable {
     'id', 'd', 'start', 'end', 'routineId', 'routineIds', 'name', 'bw', 'vol', 'prs', 'entries',
     'cur', 'view',
   };
+  static const Set<String> knownKeys = _known;
 
   factory Workout.fromJson(Map<String, Object?> json) {
     final JsonReader reader = JsonReader(json, known: _known);

@@ -2,6 +2,8 @@
 
 import 'package:equatable/equatable.dart';
 
+import '../../../core/models/gym_state.dart';
+
 /// Explicit events for [ShellBloc] (`lib/features/shell/bloc/shell_bloc.dart`).
 /// Widgets only ever dispatch these; all theme/accent logic lives in the
 /// Bloc (FND-01).
@@ -15,6 +17,16 @@ sealed class ShellEvent extends Equatable {
 /// Dispatched once at app boot to load the persisted theme/accent.
 final class ShellStarted extends ShellEvent {
   const ShellStarted();
+}
+
+/// Internal event dispatched when [GymStateCubit] emits an updated state.
+final class ShellStateUpdated extends ShellEvent {
+  const ShellStateUpdated(this.state);
+
+  final GymState state;
+
+  @override
+  List<Object?> get props => <Object?>[state];
 }
 
 /// The user picked a new theme mode string (openGym's raw

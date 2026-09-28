@@ -32,6 +32,42 @@ Map<String, String>? _stringValueMap(
   return result;
 }
 
+/// Reads a JSON object field as `Map<String, Object>`, where every value is either a `String` or
+/// a `List<String>` (openGym stores both: old profiles a single id, current openGym writes
+/// lists). A present map matching that rule is typed; a present map with any other value shape
+/// is demoted whole (unparsed) into [demotions] under [key], exactly like an unknown/wrong-typed
+/// scalar field.
+Map<String, Object>? _weekMap(
+  JsonReader reader,
+  String key,
+  Map<String, Object?> demotions,
+) {
+  final Map<String, Object?>? raw = reader.map(key);
+  if (raw == null) return null;
+  final Map<String, Object> result = <String, Object>{};
+  for (final MapEntry<String, Object?> entry in raw.entries) {
+    final Object? val = entry.value;
+    if (val case final String s) {
+      result[entry.key] = s;
+    } else if (val case final List<Object?> l) {
+      final List<String> stringList = <String>[];
+      for (final Object? item in l) {
+        if (item case final String s) {
+          stringList.add(s);
+        } else {
+          demotions[key] = raw;
+          return null;
+        }
+      }
+      result[entry.key] = stringList;
+    } else {
+      demotions[key] = raw;
+      return null;
+    }
+  }
+  return result;
+}
+
 /// As [_stringValueMap], but for `Map<String, num>` (`barWeights`).
 Map<String, num>? _numValueMap(
   JsonReader reader,
@@ -142,7 +178,7 @@ class GymState extends Equatable {
   final num? targetW;
   final List<BodyweightEntry>? bodyweight;
   final List<Routine>? routines;
-  final Map<String, String>? week;
+  final Map<String, Object>? week;
   final Map<String, String>? dayPlan;
   final Map<String, ExWeight>? exWeights;
   final List<Workout>? workouts;
@@ -185,6 +221,7 @@ class GymState extends Equatable {
     'weekStart', 'wdec', 'barWeights', 'gymCards', 'lastGymCardId', 'checkIn', 'weighIn',
     '_ts', '_rev',
   };
+  static const Set<String> knownKeys = _known;
 
   /// Overlays [json] onto [kDefaultState] (exactly like openGym's `loadState`) and parses the
   /// result. Every DEF key an older/partial profile is missing is filled in from the default;
@@ -195,7 +232,7 @@ class GymState extends Equatable {
     final JsonReader reader = JsonReader(merged, known: _known);
     final Map<String, Object?> demotions = <String, Object?>{};
 
-    final Map<String, String>? week = _stringValueMap(reader, 'week', demotions);
+    final Map<String, Object>? week = _weekMap(reader, 'week', demotions);
     final Map<String, String>? dayPlan = _stringValueMap(reader, 'dayPlan', demotions);
     final Map<String, String>? exNotes = _stringValueMap(reader, 'exNotes', demotions);
     final Map<String, num>? barWeights = _numValueMap(reader, 'barWeights', demotions);
@@ -372,7 +409,7 @@ class GymState extends Equatable {
       targetW: pick<num>(targetW, this.targetW, 'targetW'),
       bodyweight: pick<List<BodyweightEntry>>(bodyweight, this.bodyweight, 'bodyweight'),
       routines: pick<List<Routine>>(routines, this.routines, 'routines'),
-      week: pick<Map<String, String>>(week, this.week, 'week'),
+      week: pick<Map<String, Object>>(week is Map ? Map<String, Object>.from(week) : week, this.week, 'week'),
       dayPlan: pick<Map<String, String>>(dayPlan, this.dayPlan, 'dayPlan'),
       exWeights: pick<Map<String, ExWeight>>(exWeights, this.exWeights, 'exWeights'),
       workouts: pick<List<Workout>>(workouts, this.workouts, 'workouts'),

@@ -9,6 +9,7 @@ import 'core/api/open_gym_api_client.dart';
 import 'core/data/gym_state_repository.dart';
 import 'core/db/app_database.dart';
 import 'core/js/js_engine_service.dart';
+import 'core/state/gym_state_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,13 +42,19 @@ Future<void> main() async {
     return;
   }
 
+  final GymStateRepository gymStateRepository = GymStateRepository(database: database);
+  final GymStateCubit gymStateCubit = await GymStateCubit.load(
+    repository: gymStateRepository,
+  );
+
   runApp(
     OpenExerciseApp(
       dependencies: AppDependencies(
-        gymStateRepository: GymStateRepository(database: database),
+        gymStateRepository: gymStateRepository,
         apiClientFactory: const ApiClientFactory(),
         jsEngine: jsEngine,
       ),
+      gymStateCubit: gymStateCubit,
     ),
   );
 }
