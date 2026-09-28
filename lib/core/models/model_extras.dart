@@ -203,6 +203,35 @@ extension RoutineExerciseExtras on RoutineExercise {
   /// Mirrors `../openGym/frontend/src/sheets.jsx` ExConfig lines 1175-1422: `ex.bw`.
   num? get bw => extra['bw'] is num ? extra['bw'] as num : null;
 
+  /// Progression step increment override.
+  /// Mirrors `../openGym/frontend/src/sheets.jsx` ExConfig lines 1175-1422: `ex.inc`.
+  num? get inc => extra['inc'] is num ? extra['inc'] as num : null;
+
+  /// Minimum reps for rep-range / double progression.
+  /// Mirrors `../openGym/frontend/src/sheets.jsx` ExConfig lines 1175-1422: `ex.repsMin`.
+  num? get repsMin => extra['repsMin'] is num ? extra['repsMin'] as num : null;
+
+  /// Number of planned warm-up sets.
+  /// Mirrors `../openGym/frontend/src/sheets.jsx` ExConfig lines 1175-1422: `ex.warmups`.
+  num? get warmups => extra['warmups'] is num ? extra['warmups'] as num : null;
+
+  /// Whether unilateral per-side logging is forced on.
+  /// Mirrors `../openGym/frontend/src/sheets.jsx` ExConfig lines 1175-1422: `ex.perSide`.
+  bool get perSide => extra['perSide'] == true;
+
+  /// Per-exercise progression policy override.
+  /// Mirrors `../openGym/frontend/src/sheets.jsx` ExConfig lines 1175-1422: `ex.prog`.
+  String? get prog => extra['prog'] as String?;
+
+  /// Deload factor override.
+  /// Mirrors `../openGym/frontend/src/sheets.jsx` ExConfig lines 1175-1422: `ex.deloadFactor`.
+  num? get deloadFactor => extra['deloadFactor'] is num ? extra['deloadFactor'] as num : null;
+
+  /// Intensifier plan (drop sets, rest-pause).
+  /// Mirrors `../openGym/frontend/src/sheets.jsx` ExConfig lines 1175-1422: `ex.plan`.
+  Map<String, Object?>? get plan =>
+      extra['plan'] is Map<String, Object?> ? extra['plan'] as Map<String, Object?> : null;
+
   /// Sets or removes keys in [extra] only.
   /// Removing a key deletes it; typed fields are never duplicated into extra.
   RoutineExercise withExtraFields(Map<String, Object?> set, {Iterable<String>? remove}) {

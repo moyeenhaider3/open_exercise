@@ -119,7 +119,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 03-08-PLAN.md — ExConfig + ProgressionFields, glyph picker, AddToRoutine, BarWeightEditor sheets
+- [x] 03-08-PLAN.md — ExConfig + ProgressionFields, glyph picker, AddToRoutine, BarWeightEditor sheets
 - [ ] 03-09-PLAN.md — Exercise media (CDN + ImageCache), custom exercise form/delete, exercise picker
 - [ ] 03-10-PLAN.md — WorkoutBloc set editing, tick/superset flow, progression reconfigure, WorkoutEntryView
 - [ ] 03-11-PLAN.md — PlanBloc + Plan screen + day/starter sheets
