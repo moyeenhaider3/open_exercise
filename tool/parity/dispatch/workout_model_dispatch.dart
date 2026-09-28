@@ -33,15 +33,18 @@ Map<String, ParityCall> workoutModelDispatch(JsEngineService engine) {
       return toPlainJson(wm.isRestPauseSet(set));
     },
     'workoutModel.dropsOf': (List<Object?> args) {
-      final SetEntry set = SetEntry.fromJson(jsonMapArg(args, 0));
+      final Object? a0 = argAt(args, 0);
+      final SetEntry? set = a0 is Map ? SetEntry.fromJson(Map<String, Object?>.from(a0)) : null;
       return toPlainJson(wm.dropsOf(set));
     },
     'workoutModel.clustersOf': (List<Object?> args) {
-      final SetEntry set = SetEntry.fromJson(jsonMapArg(args, 0));
+      final Object? a0 = argAt(args, 0);
+      final SetEntry? set = a0 is Map ? SetEntry.fromJson(Map<String, Object?>.from(a0)) : null;
       return toPlainJson(wm.clustersOf(set));
     },
     'workoutModel.extraVolumeOf': (List<Object?> args) {
-      final SetEntry set = SetEntry.fromJson(jsonMapArg(args, 0));
+      final Object? a0 = argAt(args, 0);
+      final SetEntry? set = a0 is Map ? SetEntry.fromJson(Map<String, Object?>.from(a0)) : null;
       return toPlainJson(wm.extraVolumeOf(set));
     },
     'workoutModel.addDrop': (List<Object?> args) {

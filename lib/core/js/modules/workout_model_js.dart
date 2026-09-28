@@ -51,20 +51,29 @@ final class WorkoutModelJs {
   }
 
   /// Weight drops of a dropset, oldest first; empty for other set types.
-  List<DropEntry> dropsOf(SetEntry set) {
-    final Object? result = _engine.call('workoutModel.dropsOf', <Object?>[set.toJson()]);
+  List<DropEntry> dropsOf(SetEntry? set) {
+    final Object? result = _engine.call(
+      'workoutModel.dropsOf',
+      <Object?>[set != null ? set.toJson() : jsUndefined],
+    );
     return jsListOf<DropEntry>(result, 'workoutModel.dropsOf', DropEntry.fromJson);
   }
 
   /// Short-rest bursts of a rest-pause set; empty for other set types.
-  List<ClusterEntry> clustersOf(SetEntry set) {
-    final Object? result = _engine.call('workoutModel.clustersOf', <Object?>[set.toJson()]);
+  List<ClusterEntry> clustersOf(SetEntry? set) {
+    final Object? result = _engine.call(
+      'workoutModel.clustersOf',
+      <Object?>[set != null ? set.toJson() : jsUndefined],
+    );
     return jsListOf<ClusterEntry>(result, 'workoutModel.clustersOf', ClusterEntry.fromJson);
   }
 
   /// Weight x reps volume from drops on top of the main set.
-  double extraVolumeOf(SetEntry set) {
-    final Object? result = _engine.call('workoutModel.extraVolumeOf', <Object?>[set.toJson()]);
+  double extraVolumeOf(SetEntry? set) {
+    final Object? result = _engine.call(
+      'workoutModel.extraVolumeOf',
+      <Object?>[set != null ? set.toJson() : jsUndefined],
+    );
     return jsDouble(result, 'workoutModel.extraVolumeOf');
   }
 

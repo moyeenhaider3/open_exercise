@@ -145,12 +145,12 @@ final class ProgressionJs {
   }
 
   /// Counts consecutive stalled sessions leading up to the most recent.
-  int stallCount(List<SessionSummary> sessions, String policy) {
+  int stallCount(List<SessionSummary> sessions, [String? policy]) {
     final Object? result = _engine.call(
       'progression.stallCount',
       <Object?>[
         sessions.map((SessionSummary s) => s.toJson()).toList(),
-        policy,
+        policy ?? jsUndefined,
       ],
     );
     return jsInt(result, 'progression.stallCount');

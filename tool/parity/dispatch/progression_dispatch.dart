@@ -25,27 +25,27 @@ Map<String, ParityCall> progressionDispatch(JsEngineService engine) {
       return toPlainJson(prog.deloadFactorOf(cfg));
     },
     'progression.epley1RM': (List<Object?> args) {
-      final num? weight = argAt(args, 0) as num?;
-      final num? reps = argAt(args, 1) as num?;
+      final num? weight = hasArg(args, 0) && argAt(args, 0) != null ? argAt(args, 0) as num? : null;
+      final num? reps = hasArg(args, 1) && argAt(args, 1) != null ? argAt(args, 1) as num? : null;
       return toPlainJson(prog.epley1RM(weight, reps));
     },
     'progression.deloadTarget1RM': (List<Object?> args) {
-      final num? weight = argAt(args, 0) as num?;
-      final num? reps = argAt(args, 1) as num?;
-      final num? factor = hasArg(args, 2) ? argAt(args, 2) as num? : null;
-      final bool? perSide = hasArg(args, 3) ? argAt(args, 3) as bool? : null;
+      final num? weight = hasArg(args, 0) && argAt(args, 0) != null ? argAt(args, 0) as num? : null;
+      final num? reps = hasArg(args, 1) && argAt(args, 1) != null ? argAt(args, 1) as num? : null;
+      final num? factor = hasArg(args, 2) && argAt(args, 2) != null ? argAt(args, 2) as num? : null;
+      final bool? perSide = hasArg(args, 3) && argAt(args, 3) != null ? argAt(args, 3) as bool? : null;
       return toPlainJson(prog.deloadTarget1RM(weight, reps, factor: factor, perSide: perSide));
     },
     'progression.defaultIncrement': (List<Object?> args) {
-      final String? exId = argAt(args, 0) as String?;
-      final String? unit = argAt(args, 1) as String?;
+      final String? exId = hasArg(args, 0) && argAt(args, 0) != null ? argAt(args, 0) as String? : null;
+      final String? unit = hasArg(args, 1) && argAt(args, 1) != null ? argAt(args, 1) as String? : null;
       return toPlainJson(prog.defaultIncrement(exId, unit));
     },
     'progression.weightIncrement': (List<Object?> args) {
       final RoutineExercise? cfg = hasArg(args, 0) && argAt(args, 0) != null
           ? RoutineExercise.fromJson(jsonMapArg(args, 0))
           : null;
-      final String? unit = argAt(args, 1) as String?;
+      final String? unit = hasArg(args, 1) && argAt(args, 1) != null ? argAt(args, 1) as String? : null;
       return toPlainJson(prog.weightIncrement(cfg, unit));
     },
     'progression.policyFor': (List<Object?> args) {
@@ -60,17 +60,17 @@ Map<String, ParityCall> progressionDispatch(JsEngineService engine) {
     },
     'progression.snapWeight': (List<Object?> args) {
       final num v = argAt(args, 0) as num;
-      final num? step = argAt(args, 1) as num?;
+      final num? step = hasArg(args, 1) && argAt(args, 1) != null ? argAt(args, 1) as num? : null;
       return toPlainJson(prog.snapWeight(v, step));
     },
     'progression.addStep': (List<Object?> args) {
-      final num? w = argAt(args, 0) as num?;
+      final num? w = hasArg(args, 0) && argAt(args, 0) != null ? argAt(args, 0) as num? : null;
       final num step = argAt(args, 1) as num;
-      final num? inc = argAt(args, 2) as num?;
+      final num? inc = hasArg(args, 2) && argAt(args, 2) != null ? argAt(args, 2) as num? : null;
       return toPlainJson(prog.addStep(w, step, inc));
     },
     'progression.stepWeight': (List<Object?> args) {
-      final num? value = argAt(args, 0) as num?;
+      final num? value = hasArg(args, 0) && argAt(args, 0) != null ? argAt(args, 0) as num? : null;
       final num step = argAt(args, 1) as num;
       final num direction = argAt(args, 2) as num;
       return toPlainJson(prog.stepWeight(value, step, direction));
@@ -78,7 +78,7 @@ Map<String, ParityCall> progressionDispatch(JsEngineService engine) {
     'progression.deloadTo': (List<Object?> args) {
       final num cur = argAt(args, 0) as num;
       final num step = argAt(args, 1) as num;
-      final num? factor = hasArg(args, 2) ? argAt(args, 2) as num? : null;
+      final num? factor = hasArg(args, 2) && argAt(args, 2) != null ? argAt(args, 2) as num? : null;
       return toPlainJson(prog.deloadTo(cur, step, factor: factor));
     },
     'progression.selectDeloadCandidate': (List<Object?> args) {
@@ -101,7 +101,7 @@ Map<String, ParityCall> progressionDispatch(JsEngineService engine) {
       final List<SessionSummary> sessions = rawList
           .map((Object? item) => SessionSummary.fromJson(item as Map<String, Object?>))
           .toList();
-      final String policy = argAt(args, 1) as String;
+      final String? policy = hasArg(args, 1) && argAt(args, 1) != null ? argAt(args, 1) as String? : null;
       return toPlainJson(prog.stallCount(sessions, policy));
     },
     'progression.nextPrescription': (List<Object?> args) {
