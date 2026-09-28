@@ -106,14 +106,14 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 03-01-PLAN.md — State layer: single-writer GymStateCubit (D-04), model copyWith/extras, S.week lists, ShellBloc on the cubit, provider files
-- [ ] 03-02-PLAN.md — JS bridge additions: exercises, muscles, effort, starter, exerciseHistory, repRange, progressionCopy, finish shim + parity
-- [ ] 03-03-PLAN.md — Presentation foundation: path_drawing AppIcon (generated from Icon.jsx), t(), format.js/glyphs/workout-controls ports, setLabel/exLine
+- [x] 03-01-PLAN.md — State layer: single-writer GymStateCubit (D-04), model copyWith/extras, S.week lists, ShellBloc on the cubit, provider files
+- [x] 03-02-PLAN.md — JS bridge additions: exercises, muscles, effort, starter, exerciseHistory, repRange, progressionCopy, finish shim + parity
+- [x] 03-03-PLAN.md — Presentation foundation: path_drawing AppIcon (generated from Icon.jsx), t(), format.js/glyphs/workout-controls ports, setLabel/exLine
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 03-04-PLAN.md — ui_kit: ui.jsx controls, AppPalette, native sheet/dialog/toast helpers (D-05)
-- [ ] 03-05-PLAN.md — Exercise catalogue (generated), typo-tolerant search port, favourites/equipment, LibraryBloc + ExercisesBloc, registerCustom
+- [x] 03-04-PLAN.md — ui_kit: ui.jsx controls, AppPalette, native sheet/dialog/toast helpers (D-05)
+- [x] 03-05-PLAN.md — Exercise catalogue (generated), typo-tolerant search port, favourites/equipment, LibraryBloc + ExercisesBloc, registerCustom
 - [ ] 03-06-PLAN.md — App shell: go_router route table + TabBar.jsx port
 - [ ] 03-07-PLAN.md — WorkoutBloc lifecycle/session events + supersetFlow/order/swap ports (no timers, D-02)
 
