@@ -8,7 +8,8 @@ Port openGym to native Flutter in horizontal layers. Build the data foundation f
 
 - [x] **Phase 1: Foundation & Models** - Folder structure, OpenAPI models + Dio clients, state models, sqflite schema (completed 2026-09-25)
 - [ ] **Phase 2: Core Logic via QuickJS** - Bundle openGym lib JS, JsEngineService, parity script
-- [ ] **Phase 3: BLoC & UI Translation** - Library, workout tracker, plan, history, stats, settings in Material 3
+- [ ] **Phase 3: BLoC & UI Translation** - State layer, Library, exercise detail, workout tracker, plan/routines in Material 3
+- [ ] **Phase 3.1: History, Stats, Home, Check-in & Settings** (INSERTED) - Remaining screens on the Phase 3 state layer
 - [ ] **Phase 4: Muscle Map Rendering** - SVG paths → CustomPainter with fatigue/volume shading
 - [ ] **Phase 5: Timers & Passkeys** - Background rest alerts, reminders, passkey + pairing sign-in
 - [ ] **Phase 6: Server Sync** - Local-first sync with rev polling and sync-merge.js
@@ -92,13 +93,28 @@ Plans:
 
 **Goal**: A user can browse exercises and run a full workout offline, with screens that match openGym
 **Depends on**: Phase 2
-**Requirements**: UI-01, UI-02, UI-03, UI-04, UI-05, UI-06, UI-07, UI-08
+**Requirements**: UI-01, UI-02, UI-03, UI-04, UI-07 (Phase 3 screens), UI-08 (Phase 3 screens)
 **Success Criteria** (what must be TRUE):
 
   1. User can find an exercise, start a workout, log straight/warm-up/drop/rest-pause sets and finish it, all offline
   2. Progression suggestions shown in the UI match openGym for the same history
-  3. Plan, History, Stats and Settings screens work, and data persists across restarts
-  4. Every Zustand action maps to a Bloc event (checklist in the phase summary)
+  3. Plan and RoutineEdit screens work (drag to reorder), and data persists across restarts
+  4. Every in-scope Zustand action maps to a Bloc event (checklist in the phase summary)
+
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 03.1: History, Stats, Home, Check-in & Settings (INSERTED)
+
+**Goal**: The remaining openGym screens (History, Stats, Home, Check-in, Settings) work offline on the Phase 3 state layer and match openGym
+**Depends on**: Phase 3
+**Requirements**: UI-05, UI-06, UI-07 (remaining screens), UI-08 (remaining screens)
+**Success Criteria** (what must be TRUE):
+
+  1. History and Stats show charts, heatmap, 1RM trends and bodyweight (Stats muscle-balance card deferred to Phase 4)
+  2. Home, Check-in (display/reorder/edit/delete; Add card deferred to Phase 8) and Settings match openGym's options
+  3. Settings changes persist across restarts
+  4. The UI-07 Zustand-to-Bloc checklist is complete across Phase 3 + 3.1
 
 **Plans**: TBD
 **UI hint**: yes

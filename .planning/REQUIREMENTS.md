@@ -88,7 +88,9 @@
 |-------------|-------|--------|
 | FND-01..05 | Phase 1 | Pending |
 | JS-01..04 | Phase 2 | Pending |
-| UI-01..08 | Phase 3 | Pending |
+| UI-01..04 | Phase 3 | Pending |
+| UI-05..06 | Phase 3.1 | Pending |
+| UI-07..08 | Phase 3 + 3.1 | Pending |
 | MAP-01..03 | Phase 4 | Pending |
 | TMR-01..03, AUTH-01..05 | Phase 5 | Pending |
 | SYNC-01..03 | Phase 6 | Pending |

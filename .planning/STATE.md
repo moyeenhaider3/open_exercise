@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: complete
-stopped_at: Completed Phase 2 (02-01 through 02-08 complete; 167/167 exact parity verified on QuickJS & JavaScriptCore)
-last_updated: "2026-09-28T13:45:00.000Z"
-last_activity: 2026-09-28 -- Phase 2 complete; all 8 plans executed, 167/167 vitest fixtures PASS on QuickJS & JavaScriptCore
+status: completed
+stopped_at: Session resumed, ready to execute Phase 2 Plan 02-05
+last_updated: "2026-09-28T09:12:42.129Z"
+last_activity: "2026-09-28 - Completed quick task 260928-j9u: Refresh CLAUDE.md, add port-from-opengym skill, add permissions.deny rules"
 progress:
-  total_phases: 8
+  total_phases: 9
   completed_phases: 2
   total_plans: 15
   completed_plans: 15
-  percent: 100
+  percent: 22
 ---
 
 # Project State
@@ -52,6 +52,10 @@ Progress: [██████████] 100% (Phase 2: 8/8 plans)
 | Phase 01 P07 | 50min | 3 tasks | 11 files |
 
 ## Accumulated Context
+
+### Roadmap Evolution
+
+- Phase 03.1 inserted after Phase 3: Split Phase 3 (~18 plans): 3 = state layer, Library, detail, Workout, Plan/RoutineEdit; 3.1 = History, Stats, Home, Check-in, Settings (user decision 2026-09-28)
 
 ### Decisions
 
