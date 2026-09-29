@@ -203,7 +203,7 @@ class _AppTabBarState extends State<AppTabBar> with SingleTickerProviderStateMix
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    const SizedBox(height: 42.0),
+                    const SizedBox(height: 38.0),
                     Text(
                       label,
                       maxLines: 1,
@@ -215,7 +215,7 @@ class _AppTabBarState extends State<AppTabBar> with SingleTickerProviderStateMix
                         letterSpacing: 0.05,
                       ),
                     ),
-                    const SizedBox(height: 6.0),
+                    const SizedBox(height: 4.0),
                   ],
                 ),
                 Positioned(

@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../core/api/open_gym_api_client.dart';
+import '../core/catalogue/exercise_catalogue.dart';
+import '../core/data/gym_state_repository.dart';
+import '../core/js/js_engine_service.dart';
 import '../core/router/app_router.dart';
 import '../core/state/gym_state_cubit.dart';
 import '../core/theme/app_theme.dart';
@@ -67,11 +71,19 @@ class _OpenExerciseAppState extends State<OpenExerciseApp> {
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
-      providers: <RepositoryProvider<Object>>[
-        RepositoryProvider.value(value: widget.dependencies.gymStateRepository),
-        RepositoryProvider.value(value: widget.dependencies.apiClientFactory),
-        RepositoryProvider.value(value: widget.dependencies.jsEngine),
-        RepositoryProvider.value(value: widget.dependencies.exerciseCatalogue),
+      providers: [
+        RepositoryProvider<GymStateRepository>.value(
+          value: widget.dependencies.gymStateRepository,
+        ),
+        RepositoryProvider<ApiClientFactory>.value(
+          value: widget.dependencies.apiClientFactory,
+        ),
+        RepositoryProvider<JsEngineService>.value(
+          value: widget.dependencies.jsEngine,
+        ),
+        RepositoryProvider<ExerciseCatalogue>.value(
+          value: widget.dependencies.exerciseCatalogue,
+        ),
       ],
       child: MultiBlocProvider(
         providers: <BlocProvider>[
