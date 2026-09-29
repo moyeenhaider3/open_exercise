@@ -13,6 +13,7 @@ List<BlocProvider> workoutBlocProviders(AppDependencies deps) => <BlocProvider>[
         create: (context) => WorkoutBloc(
           gymState: context.read<GymStateCubit>(),
           engine: deps.jsEngine,
+          catalogue: deps.exerciseCatalogue,
         ),
         lazy: false,
       ),
