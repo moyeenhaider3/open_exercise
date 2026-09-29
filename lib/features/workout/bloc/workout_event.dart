@@ -229,3 +229,336 @@ final class WorkoutRoutineAddedToSession extends WorkoutEvent {
   @override
   List<Object?> get props => <Object?>[routineId];
 }
+
+/// Dispatched to update a single field on a set row (or cascade weight when field is 'w').
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:629-637 setField.
+final class WorkoutSetFieldChanged extends WorkoutEvent {
+  const WorkoutSetFieldChanged(this.entryIdx, this.setIdx, this.field, this.value);
+
+  final int entryIdx;
+  final int setIdx;
+  final String field;
+  final num? value;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx, setIdx, field, value];
+}
+
+/// Dispatched when stepping a set field up (+1) or down (-1).
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:174-180 bump, 286-294 sideBump.
+final class WorkoutSetFieldBumped extends WorkoutEvent {
+  const WorkoutSetFieldBumped(
+    this.entryIdx,
+    this.setIdx,
+    this.field,
+    this.direction,
+    this.step, {
+    this.side,
+  });
+
+  final int entryIdx;
+  final int setIdx;
+  final String field;
+  final int direction;
+  final num step;
+  final String? side;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx, setIdx, field, direction, step, side];
+}
+
+/// Dispatched to add a new set to an exercise in the active workout.
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:639-654 addSet.
+final class WorkoutSetAdded extends WorkoutEvent {
+  const WorkoutSetAdded(this.entryIdx);
+
+  final int entryIdx;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx];
+}
+
+/// Dispatched to remove the last set of an exercise (if more than 1 set exists).
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:655 removeSet.
+final class WorkoutSetRemoved extends WorkoutEvent {
+  const WorkoutSetRemoved(this.entryIdx);
+
+  final int entryIdx;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx];
+}
+
+/// Dispatched to insert a warm-up row ramping toward the work weight.
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:656-659 addWarmup.
+final class WorkoutWarmupAdded extends WorkoutEvent {
+  const WorkoutWarmupAdded(this.entryIdx);
+
+  final int entryIdx;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx];
+}
+
+/// Dispatched to remove a specific set row by index.
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:660 removeSetAt.
+final class WorkoutSetRemovedAt extends WorkoutEvent {
+  const WorkoutSetRemovedAt(this.entryIdx, this.setIdx);
+
+  final int entryIdx;
+  final int setIdx;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx, setIdx];
+}
+
+/// Dispatched to add a drop-set row to a set.
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:87-97 addDropRow.
+final class WorkoutDropAdded extends WorkoutEvent {
+  const WorkoutDropAdded(this.entryIdx, this.setIdx);
+
+  final int entryIdx;
+  final int setIdx;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx, setIdx];
+}
+
+/// Dispatched to add a rest-pause cluster burst to a set.
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:101-108 addBurstRow.
+final class WorkoutBurstAdded extends WorkoutEvent {
+  const WorkoutBurstAdded(this.entryIdx, this.setIdx);
+
+  final int entryIdx;
+  final int setIdx;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx, setIdx];
+}
+
+/// Dispatched when stepping a drop-set field up (+1) or down (-1).
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:346-347, 361-367 miniStepper.
+final class WorkoutDropFieldBumped extends WorkoutEvent {
+  const WorkoutDropFieldBumped(
+    this.entryIdx,
+    this.setIdx,
+    this.dropIdx,
+    this.field,
+    this.direction,
+    this.step, {
+    this.side,
+  });
+
+  final int entryIdx;
+  final int setIdx;
+  final int dropIdx;
+  final String field;
+  final int direction;
+  final num step;
+  final String? side;
+
+  @override
+  List<Object?> get props => <Object?>[
+        entryIdx,
+        setIdx,
+        dropIdx,
+        field,
+        direction,
+        step,
+        side,
+      ];
+}
+
+/// Dispatched when stepping a rest-pause burst reps count up (+1) or down (-1).
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:351, 361-367 miniStepper.
+final class WorkoutBurstFieldBumped extends WorkoutEvent {
+  const WorkoutBurstFieldBumped(
+    this.entryIdx,
+    this.setIdx,
+    this.clusterIdx,
+    this.direction, {
+    this.side,
+  });
+
+  final int entryIdx;
+  final int setIdx;
+  final int clusterIdx;
+  final int direction;
+  final String? side;
+
+  @override
+  List<Object?> get props => <Object?>[
+        entryIdx,
+        setIdx,
+        clusterIdx,
+        direction,
+        side,
+      ];
+}
+
+/// Dispatched to remove a drop-set row by index.
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:113 removeDrop.
+final class WorkoutDropRemoved extends WorkoutEvent {
+  const WorkoutDropRemoved(this.entryIdx, this.setIdx, this.dropIdx);
+
+  final int entryIdx;
+  final int setIdx;
+  final int dropIdx;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx, setIdx, dropIdx];
+}
+
+/// Dispatched to remove a rest-pause burst row by index.
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:114-118 removeCluster.
+final class WorkoutBurstRemoved extends WorkoutEvent {
+  const WorkoutBurstRemoved(this.entryIdx, this.setIdx, this.clusterIdx);
+
+  final int entryIdx;
+  final int setIdx;
+  final int clusterIdx;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx, setIdx, clusterIdx];
+}
+
+/// Dispatched to change a field value on a drop-set row.
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:119 setDropField.
+final class WorkoutDropFieldChanged extends WorkoutEvent {
+  const WorkoutDropFieldChanged(
+    this.entryIdx,
+    this.setIdx,
+    this.dropIdx,
+    this.field,
+    this.value, {
+    this.side,
+  });
+
+  final int entryIdx;
+  final int setIdx;
+  final int dropIdx;
+  final String field;
+  final num? value;
+  final String? side;
+
+  @override
+  List<Object?> get props => <Object?>[
+        entryIdx,
+        setIdx,
+        dropIdx,
+        field,
+        value,
+        side,
+      ];
+}
+
+/// Dispatched to change reps on a rest-pause burst row.
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:121-125 setClusterField.
+final class WorkoutBurstFieldChanged extends WorkoutEvent {
+  const WorkoutBurstFieldChanged(
+    this.entryIdx,
+    this.setIdx,
+    this.clusterIdx,
+    this.value, {
+    this.side,
+  });
+
+  final int entryIdx;
+  final int setIdx;
+  final int clusterIdx;
+  final num? value;
+  final String? side;
+
+  @override
+  List<Object?> get props => <Object?>[
+        entryIdx,
+        setIdx,
+        clusterIdx,
+        value,
+        side,
+      ];
+}
+
+/// Dispatched to change a field value on a single side ('L' or 'R') of a unilateral set.
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:110 setSide.
+final class WorkoutSideFieldChanged extends WorkoutEvent {
+  const WorkoutSideFieldChanged(
+    this.entryIdx,
+    this.setIdx,
+    this.side,
+    this.field,
+    this.value,
+  );
+
+  final int entryIdx;
+  final int setIdx;
+  final String side;
+  final String field;
+  final Object? value;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx, setIdx, side, field, value];
+}
+
+/// Dispatched when toggling the done state of a set row or unilateral side.
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:863-945 toggle.
+final class WorkoutSetToggled extends WorkoutEvent {
+  const WorkoutSetToggled(
+    this.entryIdx,
+    this.setIdx, {
+    this.side,
+  });
+
+  final int entryIdx;
+  final int setIdx;
+  final String? side;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx, setIdx, side];
+}
+
+/// Dispatched when picking or clearing an effort rating (RIR/RPE), concluding the set if not done.
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:253-285 effortCell, 305-325 sideEffortCell.
+final class WorkoutEffortPicked extends WorkoutEvent {
+  const WorkoutEffortPicked(
+    this.entryIdx,
+    this.setIdx, {
+    this.side,
+    this.value,
+  });
+
+  final int entryIdx;
+  final int setIdx;
+  final String? side;
+  final num? value;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx, setIdx, side, value];
+}
+
+/// Dispatched to reconfigure an exercise's progression settings mid-session and rebuild rows.
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:771-817 openProgressionSettings.
+final class WorkoutProgressionConfigured extends WorkoutEvent {
+  const WorkoutProgressionConfigured({
+    required this.activeId,
+    required this.entryIdx,
+    required this.entryId,
+    required this.entryCount,
+    required this.cfg,
+  });
+
+  final String activeId;
+  final int entryIdx;
+  final String entryId;
+  final int entryCount;
+  final RoutineExercise cfg;
+
+  @override
+  List<Object?> get props => <Object?>[
+        activeId,
+        entryIdx,
+        entryId,
+        entryCount,
+        cfg,
+      ];
+}

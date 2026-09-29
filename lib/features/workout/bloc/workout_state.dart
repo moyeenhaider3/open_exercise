@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import '../../../core/format/workout_controls.dart';
 import '../../../core/js/models/phase3_models.dart';
 import '../../../core/models/workout.dart';
+import 'workout_entry_view.dart';
 
 /// One-shot signals emitted by [WorkoutBloc].
 sealed class WorkoutSignal extends Equatable {
@@ -96,6 +97,7 @@ final class WorkoutRunning extends WorkoutState {
     required this.setsDone,
     required this.setsTotal,
     required this.wc,
+    required this.entryViews,
     super.signal,
     super.seq = 0,
   });
@@ -109,6 +111,7 @@ final class WorkoutRunning extends WorkoutState {
   final int setsDone;
   final int setsTotal;
   final WorkoutControlsView wc;
+  final List<WorkoutEntryView> entryViews;
 
   WorkoutRunning withSignal(WorkoutSignal sig) => WorkoutRunning(
         active: active,
@@ -120,6 +123,7 @@ final class WorkoutRunning extends WorkoutState {
         setsDone: setsDone,
         setsTotal: setsTotal,
         wc: wc,
+        entryViews: entryViews,
         signal: sig,
         seq: seq + 1,
       );
@@ -134,6 +138,7 @@ final class WorkoutRunning extends WorkoutState {
     int? setsDone,
     int? setsTotal,
     WorkoutControlsView? wc,
+    List<WorkoutEntryView>? entryViews,
     WorkoutSignal? signal,
     int? seq,
   }) {
@@ -147,6 +152,7 @@ final class WorkoutRunning extends WorkoutState {
       setsDone: setsDone ?? this.setsDone,
       setsTotal: setsTotal ?? this.setsTotal,
       wc: wc ?? this.wc,
+      entryViews: entryViews ?? this.entryViews,
       signal: signal ?? this.signal,
       seq: seq ?? this.seq,
     );
@@ -163,6 +169,7 @@ final class WorkoutRunning extends WorkoutState {
         setsDone,
         setsTotal,
         wc,
+        entryViews,
         signal,
         seq,
       ];
