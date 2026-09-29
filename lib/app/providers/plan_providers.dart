@@ -2,8 +2,17 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/state/gym_state_cubit.dart';
+import '../../features/plan/bloc/plan_bloc.dart';
 import '../dependencies.dart';
 
 /// Per-feature BlocProvider list for Plan features.
-/// Filled by plan 03-11; each feature Bloc reads GymStateCubit via context.read in create.
-List<BlocProvider> planBlocProviders(AppDependencies deps) => <BlocProvider>[];
+/// Filled by plan 03-11.
+List<BlocProvider> planBlocProviders(AppDependencies deps) => <BlocProvider>[
+      BlocProvider<PlanBloc>(
+        create: (context) => PlanBloc(
+          gymState: context.read<GymStateCubit>(),
+          engine: deps.jsEngine,
+        ),
+      ),
+    ];
