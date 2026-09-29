@@ -7,8 +7,8 @@ Port openGym to native Flutter in horizontal layers. Build the data foundation f
 ## Phases
 
 - [x] **Phase 1: Foundation & Models** - Folder structure, OpenAPI models + Dio clients, state models, sqflite schema (completed 2026-09-25)
-- [ ] **Phase 2: Core Logic via QuickJS** - Bundle openGym lib JS, JsEngineService, parity script
-- [ ] **Phase 3: BLoC & UI Translation** - State layer, Library, exercise detail, workout tracker, plan/routines in Material 3
+- [x] **Phase 2: Core Logic via QuickJS** - Bundle openGym lib JS, JsEngineService, parity script
+- [x] **Phase 3: BLoC & UI Translation** - State layer, Library, exercise detail, workout tracker, plan/routines in Material 3
 - [ ] **Phase 3.1: History, Stats, Home, Check-in & Settings** (INSERTED) - Remaining screens on the Phase 3 state layer
 - [ ] **Phase 4: Muscle Map Rendering** - SVG paths → CustomPainter with fatigue/volume shading
 - [ ] **Phase 5: Timers & Passkeys** - Background rest alerts, reminders, passkey + pairing sign-in
@@ -121,19 +121,19 @@ Plans:
 
 - [x] 03-08-PLAN.md — ExConfig + ProgressionFields, glyph picker, AddToRoutine, BarWeightEditor sheets
 - [x] 03-09-PLAN.md — Exercise media (CDN + ImageCache), custom exercise form/delete, exercise picker
-- [ ] 03-10-PLAN.md — WorkoutBloc set editing, tick/superset flow, progression reconfigure, WorkoutEntryView
-- [ ] 03-11-PLAN.md — PlanBloc + Plan screen + day/starter sheets
-- [ ] 03-12-PLAN.md — Workout session sheets: weigh-in, effort picker, notes, rename, add routine, remove/swap, finish flow
+- [x] 03-10-PLAN.md — WorkoutBloc set editing, tick/superset flow, progression reconfigure, WorkoutEntryView
+- [x] 03-11-PLAN.md — PlanBloc + Plan screen + day/starter sheets
+- [x] 03-12-PLAN.md — Workout session sheets: weigh-in, effort picker, notes, rename, add routine, remove/swap, finish flow
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 03-13-PLAN.md — Exercise detail + history (LineChart) + Library screen [device check]
-- [ ] 03-14-PLAN.md — RoutineEdit (ReorderableListView, Dismissible) [device check incl. restart persistence]
-- [ ] 03-15-PLAN.md — ExerciseBlock + set rows (all set types)
+- [x] 03-13-PLAN.md — Exercise detail + history (LineChart) + Library screen [device check]
+- [x] 03-14-PLAN.md — RoutineEdit (ReorderableListView, Dismissible) [device check incl. restart persistence]
+- [x] 03-15-PLAN.md — ExerciseBlock + set rows (all set types)
 
 **Wave 5** *(blocked on Wave 4 completion)*
 
-- [ ] 03-16-PLAN.md — Start chooser, ActiveWorkout (cards/list/compact), tab Start, UI-07 checklist [device check]
+- [x] 03-16-PLAN.md — Start chooser, ActiveWorkout (cards/list/compact), tab Start, UI-07 checklist [device check]
 
 **UI hint**: yes
 
@@ -229,8 +229,9 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Models | 7/7 | Complete    | 2026-09-25 |
-| 2. Core Logic via QuickJS | 0/TBD | Not started | - |
-| 3. BLoC & UI Translation | 0/TBD | Not started | - |
+| 2. Core Logic via QuickJS | 8/8 | Complete | 2026-09-28 |
+| 3. BLoC & UI Translation | 16/16 | Complete | 2026-09-29 |
+| 3.1. History, Stats, Home, Check-in & Settings | 0/TBD | Not started | - |
 | 4. Muscle Map Rendering | 0/TBD | Not started | - |
 | 5. Timers & Passkeys | 0/TBD | Not started | - |
 | 6. Server Sync | 0/TBD | Not started | - |
