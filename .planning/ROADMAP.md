@@ -163,7 +163,7 @@ Plans:
 - [x] 03.1-04-PLAN.md — EffortJs extensions + viewAgg shim / ViewAggregatesJs facade (stats, heatmap, calendar, Home summary) + parity
 - [x] 03.1-05-PLAN.md — Log a past workout: WorkoutBackfillStarted, completeBackfill finish branch, LogPastWorkout/SameDayChoice sheets
 - [x] 03.1-06-PLAN.md — Check-in: qr_flutter (legitimacy gate), CheckInBloc, reorder/rename/delete, card rail [checkpoint]
-- [ ] 03.1-07-PLAN.md — SettingsBloc, unit switch (bridged convert), Your data / General / During a workout sections
+- [x] 03.1-07-PLAN.md — SettingsBloc, unit switch (bridged convert), Your data / General / During a workout sections
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
