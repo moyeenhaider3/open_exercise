@@ -39,6 +39,27 @@ final class WorkoutStartRequested extends WorkoutEvent {
   List<Object?> get props => <Object?>[routineIds, bw];
 }
 
+/// Dispatched to log a past workout session (backfill).
+/// Ported from `../openGym/frontend/src/sheets.jsx`:1890-1907 beginBackfill.
+final class WorkoutBackfillStarted extends WorkoutEvent {
+  const WorkoutBackfillStarted({
+    required this.iso,
+    required this.time,
+    required this.durationMin,
+    this.routineId,
+    this.replaceId,
+  });
+
+  final String iso;
+  final String time;
+  final int durationMin;
+  final String? routineId;
+  final String? replaceId;
+
+  @override
+  List<Object?> get props => <Object?>[iso, time, durationMin, routineId, replaceId];
+}
+
 /// Dispatched when the user taps Finish in the workout header to trigger completion checks.
 /// Ported from `../openGym/frontend/src/sheets.jsx`:2179 finishWorkout.
 final class WorkoutFinishRequested extends WorkoutEvent {

@@ -13,6 +13,7 @@ import '../../../core/js/js_engine_service.dart';
 import '../../../core/js/models/history_models.dart';
 import '../../../core/js/models/phase3_models.dart';
 import '../../../core/js/models/progression_models.dart';
+import '../../../core/js/modules/backfill_js.dart';
 import '../../../core/js/modules/finish_workout_js.dart';
 import '../../../core/js/modules/history_js.dart';
 import '../../../core/js/modules/progression_js.dart';
@@ -195,6 +196,8 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
         _onGymStateChanged(state, emit);
       case WorkoutStartRequested():
         await _onStartRequested(event, emit);
+      case WorkoutBackfillStarted():
+        await _onBackfillStarted(event, emit);
       case WorkoutFinishRequested():
         _onFinishRequested(emit);
       case WorkoutFinishConfirmed():
@@ -303,25 +306,18 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
         nextBw.sort((BodyweightEntry a, BodyweightEntry b) => (a.d ?? '').compareTo(b.d ?? ''));
       }
 
-      final CombinedSession combined =
-          _engine.sessionMerge.buildCombinedEntries(s, event.routineIds);
-      final List<String> names = (combined.routines ?? const <Routine>[])
-          .map((Routine r) => r.name ?? '')
-          .where((String n) => n.isNotEmpty)
-          .toList();
-      final String sessionName = event.routineIds.isEmpty
-          ? t('Freestyle')
-          : (_engine.sessionMerge.deriveSessionName(names) ?? t('Freestyle'));
+      final (List<WorkoutEntry> entries, List<String> resolvedRoutineIds, String sessionName) =
+          _buildSessionEntries(s, event.routineIds);
 
       final Workout active = Workout(
         id: uid(),
         d: today,
         start: now,
-        routineIds: event.routineIds,
+        routineIds: resolvedRoutineIds,
         name: sessionName,
         bw: loggedBw,
         cur: 0,
-        entries: combined.entries ?? const <WorkoutEntry>[],
+        entries: entries,
       ).withExtraFields(<String, Object?>{
         'workoutView': s.workoutView ?? 'cards',
       });
@@ -335,6 +331,65 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
     _emitSignal(const WorkoutStartedSignal(), emit);
   }
 
+  /// Begins a backfilled workout session for a past day.
+  /// Ported from ../openGym/frontend/src/sheets.jsx:1890-1907 beginBackfill.
+  Future<void> _onBackfillStarted(
+    WorkoutBackfillStarted event,
+    Emitter<WorkoutState> emit,
+  ) async {
+    _progressHighWater = <int>[];
+    final int startEpoch = _engine.backfill.backfillStart(event.iso, event.time);
+    final List<String> rids =
+        event.routineId != null ? <String>[event.routineId!] : const <String>[];
+
+    await _gymState.mutate((GymState s) {
+      final (List<WorkoutEntry> entries, List<String> resolvedRoutineIds, String sessionName) =
+          _buildSessionEntries(s, rids);
+
+      final Workout active = Workout(
+        id: uid(),
+        d: event.iso,
+        start: startEpoch,
+        routineIds: resolvedRoutineIds,
+        name: sessionName,
+        bw: null,
+        cur: 0,
+        entries: entries,
+      ).withExtraFields(<String, Object?>{
+        'backfill': <String, Object?>{
+          'durationMin': event.durationMin,
+          'replaceId': event.replaceId,
+        },
+        'workoutView': s.workoutView ?? 'cards',
+      });
+
+      return s.copyWith(active: active);
+    });
+
+    _emitSignal(const WorkoutStartedSignal(), emit);
+  }
+
+  /// Helper to combine routine entries and derive session name.
+  (List<WorkoutEntry>, List<String>, String) _buildSessionEntries(
+    GymState s,
+    List<String> routineIds,
+  ) {
+    final CombinedSession combined =
+        _engine.sessionMerge.buildCombinedEntries(s, routineIds);
+    final List<String> names = (combined.routines ?? const <Routine>[])
+        .map((Routine r) => r.name ?? '')
+        .where((String n) => n.isNotEmpty)
+        .toList();
+    final String sessionName = routineIds.isEmpty
+        ? t('Freestyle')
+        : (_engine.sessionMerge.deriveSessionName(names) ?? t('Freestyle'));
+    return (
+      combined.entries ?? const <WorkoutEntry>[],
+      combined.routineIds ?? routineIds,
+      sessionName,
+    );
+  }
+
   /// Triggers verification check before finishing workout.
   /// Ported from ../openGym/frontend/src/sheets.jsx:2179 finishWorkout.
   void _onFinishRequested(Emitter<WorkoutState> emit) {
@@ -346,7 +401,8 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
   }
 
   /// Commits workout completion through openGym's JS bridge.
-  /// Ported from ../openGym/frontend/src/sheets.jsx:2200-2228 doFinishWorkout.
+  /// Ported from ../openGym/frontend/src/sheets.jsx:2200-2228 doFinishWorkout
+  /// and lines 2188-2227 (live and backfill finish branches).
   /// Note: autoBackupNow is deferred to Phase 8 and audio beeps to Phase 5 (D-02).
   Future<void> _onFinishConfirmed(Emitter<WorkoutState> emit) async {
     final GymState s = _gymState.state;
@@ -356,13 +412,25 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
     _progressHighWater = <int>[];
 
     await _gymState.mutate((GymState st) {
-      final List<Workout> nextWorkouts = List<Workout>.from(st.workouts ?? const <Workout>[]);
-      nextWorkouts.add(result.workout);
-      return st.copyWith(
-        workouts: nextWorkouts,
-        exWeights: result.exWeights,
-        active: null,
-      );
+      if (result.past) {
+        final List<Workout> nextWorkouts = _engine.backfill.completeBackfill(
+          st.workouts ?? const <Workout>[],
+          st.active!,
+          result.workout,
+        );
+        return st.copyWith(
+          workouts: nextWorkouts,
+          active: null,
+        );
+      } else {
+        final List<Workout> nextWorkouts = List<Workout>.from(st.workouts ?? const <Workout>[]);
+        nextWorkouts.add(result.workout);
+        return st.copyWith(
+          workouts: nextWorkouts,
+          exWeights: result.exWeights,
+          active: null,
+        );
+      }
     });
 
     _emitSignal(WorkoutFinishedSignal(result), emit);

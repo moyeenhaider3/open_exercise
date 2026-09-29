@@ -289,7 +289,13 @@ class _ActiveWorkoutViewState extends State<ActiveWorkoutView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        _Elapsed(start: active.start),
+                        if (active.isBackfill)
+                          Text(
+                            fmtDate(active.d ?? '', long: true),
+                            style: TextStyle(fontSize: 13.0, color: palette.muted),
+                          )
+                        else
+                          _Elapsed(start: active.start),
                         Text(
                           ' · ${t('{0} sets', <Object?>['$done/$total'])}',
                           style: TextStyle(fontSize: 13.0, color: palette.muted),
@@ -335,6 +341,18 @@ class _ActiveWorkoutViewState extends State<ActiveWorkoutView> {
         child: Column(
           children: <Widget>[
             header,
+            if (active.isBackfill)
+              Padding(
+                padding: const EdgeInsets.only(top: 6.0, bottom: 2.0),
+                child: Text(
+                  t('Logging a past workout — no rest timers.'),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    color: palette.muted,
+                  ),
+                ),
+              ),
             Expanded(
               child: entries.isEmpty
                   ? Center(

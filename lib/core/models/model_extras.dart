@@ -90,9 +90,24 @@ extension WorkoutExtras on Workout {
   /// Mirrors `../openGym/frontend/src/views/Workout.jsx` lines 517-560: `active.workoutView`.
   String? get workoutView => extra['workoutView'] as String?;
 
+  /// Backfill metadata map (`{durationMin, replaceId}`), or null if live.
+  /// Mirrors `../openGym/frontend/src/sheets.jsx`: `active.backfill`.
+  Map<String, Object?>? get backfill {
+    final Object? val = extra['backfill'];
+    if (val is Map) {
+      return Map<String, Object?>.from(val);
+    }
+    return null;
+  }
+
   /// Whether this is a backfilled workout.
-  /// Mirrors `../openGym/frontend/src/lib/finish-workout.js`: `active.backfill`.
-  bool get backfill => extra['backfill'] == true;
+  bool get isBackfill => backfill != null;
+
+  /// Backfill duration in minutes if this is a backfilled workout.
+  num? get backfillDurationMin => backfill?['durationMin'] as num?;
+
+  /// ID of workout being replaced if backfill is replacing a same-day workout.
+  String? get backfillReplaceId => backfill?['replaceId'] as String?;
 
   /// Workout-level note.
   /// Mirrors `../openGym/frontend/src/lib/finish-workout.js`: `active.note`.
