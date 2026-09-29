@@ -4,12 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/format/format.dart';
 import '../../../core/i18n/t.dart';
+import '../../../core/js/js_engine_service.dart';
+import '../../../core/js/modules/history_js.dart';
 import '../../../core/models/gym_state.dart';
+import '../../../core/models/routine.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/state/gym_state_cubit.dart';
 import '../../../core/theme/app_palette.dart';
 import '../../../core/ui_kit/icons/app_icon.dart';
+import '../../workout/bloc/workout_bloc.dart';
+import '../../workout/bloc/workout_state.dart';
+import '../../workout/view/start_flow.dart';
 
 /// Bottom navigation bar ported from openGym `../openGym/frontend/src/components/TabBar.jsx`.
 ///
@@ -70,60 +77,67 @@ class _AppTabBarState extends State<AppTabBar> with SingleTickerProviderStateMix
     final double bottomPadding = MediaQuery.of(context).padding.bottom;
     final String cur = _currentTab(widget.location);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor.withValues(alpha: 0.95),
-        border: Border(
-          top: BorderSide(
-            color: palette.sep,
-            width: 0.5,
+    return BlocListener<WorkoutBloc, WorkoutState>(
+      listenWhen: (WorkoutState prev, WorkoutState curr) =>
+          curr.signal is WorkoutStartedSignal && prev.seq != curr.seq,
+      listener: (BuildContext context, WorkoutState state) {
+        context.go(AppRoutes.workout);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.scaffoldBackgroundColor.withValues(alpha: 0.95),
+          border: Border(
+            top: BorderSide(
+              color: palette.sep,
+              width: 0.5,
+            ),
           ),
         ),
-      ),
-      padding: EdgeInsets.only(bottom: bottomPadding),
-      child: SizedBox(
-        height: 60.0,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            _buildTab(
-              context: context,
-              palette: palette,
-              iconName: 'house',
-              label: t('Home'),
-              route: AppRoutes.home,
-              isActive: _isTabActive(cur, 'home'),
-            ),
-            _buildTab(
-              context: context,
-              palette: palette,
-              iconName: 'calendar',
-              label: t('Plan'),
-              route: AppRoutes.plan,
-              isActive: _isTabActive(cur, 'plan'),
-            ),
-            _buildCenterStart(
-              context: context,
-              palette: palette,
-              cur: cur,
-            ),
-            _buildTab(
-              context: context,
-              palette: palette,
-              iconName: 'chart',
-              label: t('Stats'),
-              route: AppRoutes.stats,
-              isActive: _isTabActive(cur, 'stats'),
-            ),
-            _buildTab(
-              context: context,
-              palette: palette,
-              iconName: 'list',
-              label: t('Exercises'),
-              route: AppRoutes.library,
-              isActive: _isTabActive(cur, 'library'),
-            ),
-          ],
+        padding: EdgeInsets.only(bottom: bottomPadding),
+        child: SizedBox(
+          height: 60.0,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              _buildTab(
+                context: context,
+                palette: palette,
+                iconName: 'house',
+                label: t('Home'),
+                route: AppRoutes.home,
+                isActive: _isTabActive(cur, 'home'),
+              ),
+              _buildTab(
+                context: context,
+                palette: palette,
+                iconName: 'calendar',
+                label: t('Plan'),
+                route: AppRoutes.plan,
+                isActive: _isTabActive(cur, 'plan'),
+              ),
+              _buildCenterStart(
+                context: context,
+                palette: palette,
+                cur: cur,
+              ),
+              _buildTab(
+                context: context,
+                palette: palette,
+                iconName: 'chart',
+                label: t('Stats'),
+                route: AppRoutes.stats,
+                isActive: _isTabActive(cur, 'stats'),
+              ),
+              _buildTab(
+                context: context,
+                palette: palette,
+                iconName: 'list',
+                label: t('Exercises'),
+                route: AppRoutes.library,
+                isActive: _isTabActive(cur, 'library'),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -193,9 +207,22 @@ class _AppTabBarState extends State<AppTabBar> with SingleTickerProviderStateMix
 
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
-            // Plan 03-16 replaces this handler with direct start of today's routines
-            // (TabBar.startWorkout) once WorkoutBloc's start flow exists.
-            onTap: () => context.go(AppRoutes.workout),
+            onTap: () {
+              if (hasActive) {
+                context.go(AppRoutes.workout);
+                return;
+              }
+              final GymState s = context.read<GymStateCubit>().state;
+              final HistoryJs history = context.read<JsEngineService>().history;
+              final String today = todayIso();
+              final List<Routine> todayRoutines = history.effectiveRoutines(s, today);
+              if (todayRoutines.any((Routine r) => (r.ex ?? const <RoutineExercise>[]).isNotEmpty)) {
+                final List<String> todayIds = history.effectiveRoutineIds(s, today);
+                startFlow(context, todayIds);
+              } else {
+                context.go(AppRoutes.workout);
+              }
+            },
             child: Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.center,

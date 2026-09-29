@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../core/format/workout_controls.dart';
 import '../../../core/js/models/phase3_models.dart';
+import '../../../core/models/set_entry.dart';
 import '../../../core/models/workout.dart';
 import 'workout_entry_view.dart';
 
@@ -112,6 +113,16 @@ final class WorkoutRunning extends WorkoutState {
   final int setsTotal;
   final WorkoutControlsView wc;
   final List<WorkoutEntryView> entryViews;
+
+  /// Number of entries whose sets are all done (matching openGym Workout.jsx:1127).
+  int get exercisesDone {
+    final List<WorkoutEntry> entries = active.entries ?? const <WorkoutEntry>[];
+    if (entries.isEmpty) return 0;
+    return entries.where((WorkoutEntry e) {
+      final List<SetEntry> sets = e.sets ?? const <SetEntry>[];
+      return sets.isNotEmpty && sets.every((SetEntry s) => s.done == true);
+    }).length;
+  }
 
   WorkoutRunning withSignal(WorkoutSignal sig) => WorkoutRunning(
         active: active,

@@ -25,7 +25,7 @@ import 'sheets/starter_plan_sheet.dart';
 /// Ported from `../openGym/frontend/src/views/Plan.jsx`.
 ///
 /// Plan 03-11: PlanBloc-driven, SliverList.builder for routines (UI-08),
-/// no .mutate() calls, no direct GymStateCubit access.
+/// no mutation calls, no direct GymStateCubit access.
 class PlanScreen extends StatelessWidget {
   const PlanScreen({super.key});
 
