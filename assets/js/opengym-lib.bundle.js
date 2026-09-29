@@ -51,6 +51,7 @@ var OpenGymLib = (() => {
     sessionStart: () => session_start_exports,
     starter: () => starter_exports,
     units: () => units_exports,
+    viewAgg: () => view_aggregates_shim_exports,
     workoutModel: () => workout_model_exports
   });
 
@@ -5450,6 +5451,202 @@ var OpenGymLib = (() => {
     if (Array.isArray(S.workouts)) out.workouts = S.workouts.map(convSession);
     if (S.active) out.active = convSession(S.active);
     return out;
+  }
+
+  // tool/js/shims/view-aggregates-shim.js
+  var view_aggregates_shim_exports = {};
+  __export(view_aggregates_shim_exports, {
+    bodyweightPoints: () => bodyweightPoints,
+    bwGoal: () => bwGoal,
+    calendarMonth: () => calendarMonth,
+    exerciseProgress: () => exerciseProgress,
+    heatmapDays: () => heatmapDays,
+    homeView: () => homeView,
+    statsTiles: () => statsTiles,
+    workoutDetailGroups: () => workoutDetailGroups
+  });
+  function heatmapDays(S) {
+    const agg = {};
+    (S.workouts || []).forEach((w) => {
+      const a = agg[w.d] = agg[w.d] || { n: 0, vol: 0, min: 0 };
+      a.n++;
+      a.vol += w.vol || 0;
+      a.min += Math.max(0, Math.round(((w.end || w.start) - w.start) / 6e4));
+    });
+    const mins = Object.values(agg).map((a) => a.min).filter((v) => v > 0).sort((a, b) => a - b);
+    const q = (p) => mins.length ? mins[Math.min(mins.length - 1, Math.floor(p * mins.length))] : 0;
+    const t1 = q(0.25), t2 = q(0.5), t3 = q(0.75);
+    const level = (min) => {
+      if (min <= 0) return 0;
+      if (min <= t1) return 1;
+      if (min <= t2) return 2;
+      if (min <= t3) return 3;
+      return 4;
+    };
+    const days = {};
+    for (const [iso, a] of Object.entries(agg)) {
+      days[iso] = { n: a.n, vol: a.vol, min: a.min, level: level(a.min) };
+    }
+    return { days, t1, t2, t3 };
+  }
+  function statsTiles(S, nowMs, todayIso) {
+    const workouts = S.workouts || [];
+    const monthW = workouts.filter((w) => String(w.d || "").slice(0, 7) === todayIso.slice(0, 7)).length;
+    const bw30 = (S.bodyweight || []).filter((b) => (b.t || new Date(b.d).getTime()) > nowMs - 30 * 864e5);
+    const bwDelta30 = bw30.length > 1 ? bw30[bw30.length - 1].w - bw30[0].w : null;
+    return { workouts: workouts.length, monthW, bwDelta30 };
+  }
+  function bodyweightPoints(S, rangeDays, nowMs) {
+    return (S.bodyweight || []).filter((b) => rangeDays === 0 || (b.t || new Date(b.d).getTime()) > nowMs - rangeDays * 864e5).map((b) => ({ t: b.t || new Date(b.d).getTime(), y: b.w, d: b.d }));
+  }
+  function exerciseProgress(S, exId, kind, names) {
+    registerCustom(S.customEx || []);
+    const workouts = S.workouts || [];
+    const nameOf = (id) => names[id] || id;
+    const entryOf = (id) => workouts.flatMap((w) => w.entries || []).find((e) => e.id === id);
+    const currentOf = (id) => {
+      for (let i = workouts.length - 1; i >= 0; i--) {
+        const en = (workouts[i].entries || []).find((e) => e.id === id);
+        if (!en) continue;
+        const mode = metricModeForEntry(en) || modeOf({ id });
+        const rows = metricRowsForEntry(en, mode);
+        const mx = mode === "reps" ? bestWeightForEntry(en) : Math.max(0, ...rows.map((s) => mode === "cardio" ? s.speed || 0 : mode === "time" ? s.sec || 0 : s.w || 0));
+        if (mx > 0) {
+          const unitKind = mode === "cardio" ? "kmh" : mode === "time" ? "s" : "unit";
+          return { mx, unitKind };
+        }
+        if (mode === "reps") {
+          const reps = Math.max(0, ...rows.map((s) => Number(s.r) || 0));
+          if (reps > 0) return { mx: reps, unitKind: "reps" };
+        }
+      }
+      return { mx: 0, unitKind: "unit" };
+    };
+    const exHist = [...new Set(workouts.flatMap((w) => (w.entries || []).map((e) => e.id)))].filter((id) => EXIDX[id] || nameOf(id) !== id);
+    const exCurrent = Object.fromEntries(exHist.map((id) => [id, currentOf(id)]));
+    exHist.sort((a, b) => exCurrent[b].mx - exCurrent[a].mx || nameOf(a).localeCompare(nameOf(b)));
+    const curEx = exId && exHist.includes(exId) ? exId : exHist[0] || null;
+    const curMode = curEx ? (() => {
+      for (let i = workouts.length - 1; i >= 0; i--) {
+        const en = (workouts[i].entries || []).find((e) => e.id === curEx);
+        if (en) {
+          const mode = metricModeForEntry(en);
+          if (mode) return mode;
+        }
+      }
+      return modeOf({ id: curEx });
+    })() : "reps";
+    const curCardio = curMode === "cardio";
+    const curTimed = curMode === "time";
+    const repsOnly = curEx && curMode === "reps" && !workouts.some((w) => {
+      const en = (w.entries || []).find((e) => e.id === curEx);
+      return en && bestWeightForEntry(en) > 0;
+    });
+    const bestRepsOf = (en) => Math.max(0, ...metricRowsForEntry(en, "reps").map((s) => Number(s.r) || 0));
+    const metric = (s) => curCardio ? s.speed || 0 : curTimed ? s.sec || 0 : s.w || 0;
+    let exPts = [], exBest = 0;
+    if (curEx) {
+      workouts.forEach((w) => {
+        const en = (w.entries || []).find((e) => e.id === curEx);
+        if (en) {
+          const loggedMode = metricModeForEntry(en);
+          if (loggedMode !== curMode) return;
+          const doneSets = metricRowsForEntry(en, curMode);
+          const mx = curMode === "reps" ? repsOnly ? bestRepsOf(en) : bestWeightForEntry(en) : Math.max(0, ...doneSets.map(metric));
+          if (mx > 0) {
+            exPts.push({ t: w.start, y: mx, d: w.d, sets: doneSets, target: en.target || null });
+            const better = curMode === "reps" && !repsOnly ? betterWeight(curEx, exBest || mx, mx) : Math.max(exBest, mx);
+            exBest = exBest > 0 ? better : mx;
+          }
+        }
+      });
+    }
+    const exList = exPts.slice(-5).reverse();
+    const e1Pts = curEx && curMode === "reps" ? e1rmSeries(S, curEx) : [];
+    const e1Best = curEx && curMode === "reps" ? best1RM(S, curEx) : null;
+    const showE1 = e1Pts.length > 0;
+    const exRir = exPts.map((p) => avgRir(p.sets));
+    const showEff = exRir.filter((v) => v != null).length >= 3;
+    const effPts = exPts.map((p, i) => exRir[i] == null ? null : { t: p.t, y: toScale(kind, exRir[i]), d: p.d }).filter(Boolean);
+    const topPts = exPts.map((p, i) => {
+      const pt = { t: p.t, y: p.y, d: p.d };
+      if (exRir[i] != null) {
+        pt.m = 1 - Math.min(4, Math.max(0, exRir[i])) / 4;
+        pt.rirScale = toScale(kind, exRir[i]);
+      }
+      return pt;
+    });
+    const curUnitKind = curCardio ? "kmh" : curTimed ? "s" : repsOnly ? "reps" : "unit";
+    const exHistOptions = exHist.map((id) => ({ id, mx: exCurrent[id].mx, unitKind: exCurrent[id].unitKind }));
+    return {
+      exHist: exHistOptions,
+      curEx,
+      curMode,
+      repsOnly,
+      unitKind: curUnitKind,
+      exPts: topPts,
+      exList: exList.map((p) => ({ d: p.d, sets: p.sets, target: p.target })),
+      exBest,
+      e1Pts: e1Pts.map((p) => ({ t: p.t, y: p.y, d: p.d })),
+      e1Best,
+      effPts,
+      showE1,
+      showEff
+    };
+  }
+  function calendarMonth(S, y, mo) {
+    const prefix = y + "-" + String(mo + 1).padStart(2, "0");
+    const monthWs = (S.workouts || []).filter((w) => String(w.d || "").startsWith(prefix));
+    const vol = monthWs.reduce((a, w) => a + (w.vol || 0), 0);
+    const ms = monthWs.reduce((a, w) => a + Math.max(0, (w.end || w.start) - w.start), 0);
+    return { count: monthWs.length, vol, ms };
+  }
+  function workoutDetailGroups(w) {
+    const groups = [];
+    (w.entries || []).forEach((e, i) => {
+      const key = e.rid || "__none";
+      let g = groups.find((x) => x.key === key);
+      if (!g) {
+        g = { key, rid: e.rid || null, items: [] };
+        groups.push(g);
+      }
+      g.items.push(i);
+    });
+    const grouped = !!(groups.length > 1 || groups[0] && groups[0].rid && (w.routineIds || []).length > 1);
+    const result = groups.map((g) => {
+      const entries = g.items.map((i) => (w.entries || [])[i]);
+      const setN = entries.reduce((n, e) => {
+        return n + (e.sets || []).filter((s) => s.done && !isWarmupRow(s)).length;
+      }, 0);
+      const vol = workoutVolume({ entries });
+      return { key: g.key, rid: g.rid, items: g.items, setN, vol };
+    });
+    return { grouped, groups: result };
+  }
+  function bwGoal(S) {
+    if (S.targetW == null) return null;
+    const bw = lastBW(S);
+    if (!bw) return null;
+    const gap = Math.abs(S.targetW - bw.w);
+    const reached = gap < 0.05;
+    const gain = S.targetW > bw.w;
+    return { gap, reached, gain };
+  }
+  function homeView(S, todayIso) {
+    const bw = lastBW(S);
+    const prevBW = (S.bodyweight || []).length > 1 ? S.bodyweight[S.bodyweight.length - 2] : null;
+    const delta = bw && prevBW ? bw.w - prevBW.w : null;
+    const deltaAbs = delta != null ? Math.abs(delta) : null;
+    const ws = weekStartOf(S);
+    const wThisWeek = (S.workouts || []).filter((w) => weekKey(w.d, ws) === weekKey(todayIso, ws)).length;
+    const plannedPerWeek = Object.values(S.week || {}).filter((ids) => ids == null ? void 0 : ids.length).length;
+    const bwPoints = (S.bodyweight || []).slice(-30).map((b) => ({
+      t: b.t || new Date(b.d).getTime(),
+      y: b.w,
+      d: b.d
+    }));
+    const goal = bwGoal(S);
+    return { delta, deltaAbs, wThisWeek, plannedPerWeek, bwPoints, goal };
   }
   return __toCommonJS(entry_exports);
 })();

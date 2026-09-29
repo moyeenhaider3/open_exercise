@@ -13,6 +13,7 @@ export 'js_engine_service.dart';
 export 'models/history_models.dart';
 export 'models/onerm_models.dart';
 export 'models/phase3_models.dart';
+export 'models/phase31_models.dart';
 export 'models/progression_models.dart';
 export 'models/recovery_models.dart';
 
@@ -32,4 +33,5 @@ export 'modules/rep_range_js.dart';
 export 'modules/session_js.dart';
 export 'modules/starter_js.dart';
 export 'modules/units_js.dart';
+export 'modules/view_aggregates_js.dart';
 export 'modules/workout_model_js.dart';

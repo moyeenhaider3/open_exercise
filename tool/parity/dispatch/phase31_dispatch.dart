@@ -3,6 +3,7 @@
 import 'package:open_exercise/core/js/js_engine_service.dart';
 import 'package:open_exercise/core/js/modules/backfill_js.dart';
 import 'package:open_exercise/core/js/modules/units_js.dart';
+import 'package:open_exercise/core/js/modules/view_aggregates_js.dart';
 import 'package:open_exercise/core/models/gym_state.dart';
 import 'package:open_exercise/core/models/workout.dart';
 
@@ -11,6 +12,7 @@ import '../parity_types.dart';
 Map<String, ParityCall> phase31Dispatch(JsEngineService engine) {
   final BackfillJs backfill = engine.backfill;
   final UnitsJs units = engine.units;
+  final ViewAggregatesJs viewAgg = engine.viewAgg;
 
   return <String, ParityCall>{
     // Backfill
@@ -72,5 +74,53 @@ Map<String, ParityCall> phase31Dispatch(JsEngineService engine) {
       final String to = argAt(args, 1) as String;
       return toPlainJson(units.convertStateUnit(s, to));
     },
+
+    // ViewAgg
+    'viewAgg.heatmapDays': (List<Object?> args) {
+      final GymState s = GymState.fromJson(jsonMapArg(args, 0));
+      return toPlainJson(viewAgg.heatmapDays(s).toJson());
+    },
+    'viewAgg.statsTiles': (List<Object?> args) {
+      final GymState s = GymState.fromJson(jsonMapArg(args, 0));
+      final int nowMs = (argAt(args, 1) as num).toInt();
+      final String todayIso = argAt(args, 2) as String;
+      return toPlainJson(viewAgg.statsTiles(s, nowMs: nowMs, todayIso: todayIso).toJson());
+    },
+    'viewAgg.bodyweightPoints': (List<Object?> args) {
+      final GymState s = GymState.fromJson(jsonMapArg(args, 0));
+      final int rangeDays = (argAt(args, 1) as num).toInt();
+      final int nowMs = (argAt(args, 2) as num).toInt();
+      return toPlainJson(viewAgg.bodyweightPoints(s, rangeDays, nowMs).map((p) => p.toJson()).toList());
+    },
+    'viewAgg.exerciseProgress': (List<Object?> args) {
+      final GymState s = GymState.fromJson(jsonMapArg(args, 0));
+      final String? exId = hasArg(args, 1) ? argAt(args, 1) as String? : null;
+      final String kind = argAt(args, 2) as String;
+      final Map<String, Object?> rawNames = jsonMapArg(args, 3);
+      final Map<String, String> names = rawNames.map(
+        (String k, Object? v) => MapEntry<String, String>(k, v as String),
+      );
+      return toPlainJson(viewAgg.exerciseProgress(s, exId, kind, names).toJson());
+    },
+    'viewAgg.calendarMonth': (List<Object?> args) {
+      final GymState s = GymState.fromJson(jsonMapArg(args, 0));
+      final int year = (argAt(args, 1) as num).toInt();
+      final int month0 = (argAt(args, 2) as num).toInt();
+      return toPlainJson(viewAgg.calendarMonth(s, year, month0).toJson());
+    },
+    'viewAgg.workoutDetailGroups': (List<Object?> args) {
+      final Workout w = Workout.fromJson(jsonMapArg(args, 0));
+      return toPlainJson(viewAgg.workoutDetailGroups(w).toJson());
+    },
+    'viewAgg.bwGoal': (List<Object?> args) {
+      final GymState s = GymState.fromJson(jsonMapArg(args, 0));
+      return toPlainJson(viewAgg.bwGoal(s)?.toJson());
+    },
+    'viewAgg.homeView': (List<Object?> args) {
+      final GymState s = GymState.fromJson(jsonMapArg(args, 0));
+      final String todayIso = argAt(args, 1) as String;
+      return toPlainJson(viewAgg.homeView(s, todayIso).toJson());
+    },
   };
 }
+

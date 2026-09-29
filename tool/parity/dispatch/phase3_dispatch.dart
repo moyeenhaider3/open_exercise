@@ -58,6 +58,46 @@ Map<String, ParityCall> phase3Dispatch(JsEngineService engine) {
       final num? rir = hasArg(args, 0) ? argAt(args, 0) as num? : null;
       return toPlainJson(effort.effortColor(rir));
     },
+    'effort.hasEffort': (List<Object?> args) {
+      final GymState s = GymState.fromJson(jsonMapArg(args, 0));
+      return toPlainJson(effort.hasEffort(s));
+    },
+    'effort.displayScale': (List<Object?> args) {
+      final GymState s = GymState.fromJson(jsonMapArg(args, 0));
+      return toPlainJson(effort.displayScale(s));
+    },
+    'effort.scaleName': (List<Object?> args) {
+      final String kind = argAt(args, 0) as String;
+      return toPlainJson(effort.scaleName(kind));
+    },
+    'effort.avgRir': (List<Object?> args) {
+      final List<Object?> rawList = jsonListArg(args, 0);
+      final List<SetEntry> sets = rawList
+          .whereType<Map<Object?, Object?>>()
+          .map((Map<Object?, Object?> m) => SetEntry.fromJson(m.cast<String, Object?>()))
+          .toList();
+      return toPlainJson(effort.avgRir(sets));
+    },
+    'effort.effortSummary': (List<Object?> args) {
+      final GymState s = GymState.fromJson(jsonMapArg(args, 0));
+      final int days = (argAt(args, 1) as num).toInt();
+      return toPlainJson(effort.effortSummary(s, days).toJson());
+    },
+    'effort.effortWeeks': (List<Object?> args) {
+      final GymState s = GymState.fromJson(jsonMapArg(args, 0));
+      final int days = (argAt(args, 1) as num).toInt();
+      return toPlainJson(effort.effortWeeks(s, days).map((e) => e.toJson()).toList());
+    },
+    'effort.effortHistogram': (List<Object?> args) {
+      final GymState s = GymState.fromJson(jsonMapArg(args, 0));
+      final int days = (argAt(args, 1) as num).toInt();
+      return toPlainJson(effort.effortHistogram(s, days).map((e) => e.toJson()).toList());
+    },
+    'effort.isHardSet': (List<Object?> args) {
+      final Map<String, Object?> rawSet = jsonMapArg(args, 0);
+      final SetEntry s = SetEntry.fromJson(rawSet);
+      return toPlainJson(effort.isHardSet(s));
+    },
 
     // Starter
     'starter.starterPlanOptions': (List<Object?> args) {

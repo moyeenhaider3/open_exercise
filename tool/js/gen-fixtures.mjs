@@ -27,6 +27,7 @@ import * as progressionCopy from '../../third_party/opengym/lib/progression-copy
 import * as finish from './shims/finish-workout-shim.js';
 import * as backfill from '../../third_party/opengym/lib/backfill.js';
 import * as units from '../../third_party/opengym/lib/units.js';
+import * as viewAgg from './shims/view-aggregates-shim.js';
 
 const MODULES = {
   onerm,
@@ -47,6 +48,7 @@ const MODULES = {
   finish,
   backfill,
   units,
+  viewAgg,
 };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -102,6 +104,7 @@ const MODULE_FILES = [
 const BANNED = {
   'history.streakWeeks': 'history.streakWeeks is banned from fixtures (wall-clock dependency)',
   'backfill.backfillStart': 'backfill.backfillStart is banned from fixtures (local wall-clock zone, breaks the TZ diff)',
+  'effort.effortWeeks': 'effort.effortWeeks is banned from fixtures (startOfWeek returns a local-midnight epoch; wall-clock TZ breaks the two-TZ diff)',
 };
 
 function serializeArgs(args) {

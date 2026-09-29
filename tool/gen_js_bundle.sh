@@ -161,6 +161,7 @@ node -e "
   const allowed = new Set([
     'tool/js/entry.js',
     'tool/js/shims/finish-workout-shim.js',
+    'tool/js/shims/view-aggregates-shim.js',
     ...[
       'backfill.js',
       'bar.js', 'effort.js', 'exercise-history.js',

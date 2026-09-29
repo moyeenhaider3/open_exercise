@@ -169,8 +169,8 @@ export const INVENTORY = {
     keys: [],
   },
   effort: {
-    functions: ['rirOf', 'toScale', 'effortColor'],
-    constants: ['EFFORT_PRESETS', 'HARD_RIR'],
+    functions: ['rirOf', 'toScale', 'effortColor', 'hasEffort', 'displayScale', 'scaleName', 'avgRir', 'effortSummary', 'effortWeeks', 'effortHistogram', 'isHardSet'],
+    constants: ['EFFORT_PRESETS', 'HARD_RIR', 'MIN_RATED', 'BUCKETS'],
     keys: [],
   },
   starter: {
@@ -208,6 +208,11 @@ export const INVENTORY = {
     constants: [],
     keys: [],
   },
+  viewAgg: {
+    functions: ['heatmapDays', 'statsTiles', 'bodyweightPoints', 'exerciseProgress', 'calendarMonth', 'workoutDetailGroups', 'bwGoal', 'homeView'],
+    constants: [],
+    keys: [],
+  },
 };
 
 export const NOT_BRIDGED = {
@@ -215,4 +220,5 @@ export const NOT_BRIDGED = {
   'history.exLine': 'Localized presentation string; English fallback only in JS engine, owned by Dart i18n',
   'history.fmtSec': 'Localized presentation string; English fallback only in JS engine, owned by Dart i18n',
   'history.streakWeeks': 'Reads new Date() directly; banned from fixtures due to wall-clock dependency',
+  'effort.effortWeeks': 'startOfWeek() returns a local-midnight epoch (wall-clock TZ); banned from fixtures — would fail the two-TZ diff check',
 };

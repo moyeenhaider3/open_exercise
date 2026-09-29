@@ -1268,6 +1268,2747 @@
         "past": true,
         "replaceId": null
       }
+    },
+    {
+      "id": "p31-effort-001",
+      "fn": "effort.hasEffort",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [
+            {
+              "id": "w1",
+              "d": "2026-01-01",
+              "start": 1735689600000,
+              "end": 1735693200000,
+              "vol": 200,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 75,
+                      "r": 8,
+                      "done": true,
+                      "rir": 3
+                    },
+                    {
+                      "w": 70,
+                      "r": 10,
+                      "done": true,
+                      "rir": 5
+                    },
+                    {
+                      "w": 60,
+                      "r": 12,
+                      "done": true,
+                      "warmup": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w2",
+              "d": "2026-01-08",
+              "start": 1736294400000,
+              "end": 1736298600000,
+              "vol": 300,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 85,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 85,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 85,
+                      "r": 4,
+                      "done": true,
+                      "rir": 0
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 3
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 4
+                    },
+                    {
+                      "w": 80,
+                      "r": 6,
+                      "done": true,
+                      "rir": 6
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w3",
+              "d": "2026-01-15",
+              "start": 1736899200000,
+              "end": 1736902200000,
+              "vol": 150,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 82.5,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 82.5,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 82.5,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": "rir",
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        }
+      ],
+      "expected": true,
+      "from": "effort.js > hasEffort > true when rated sets exist",
+      "vitest": true
+    },
+    {
+      "id": "p31-effort-002",
+      "fn": "effort.hasEffort",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        }
+      ],
+      "expected": false,
+      "from": "effort.js > hasEffort > false when no workouts",
+      "vitest": false
+    },
+    {
+      "id": "p31-effort-003",
+      "fn": "effort.displayScale",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [
+            {
+              "id": "w1",
+              "d": "2026-01-01",
+              "start": 1735689600000,
+              "end": 1735693200000,
+              "vol": 200,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 75,
+                      "r": 8,
+                      "done": true,
+                      "rir": 3
+                    },
+                    {
+                      "w": 70,
+                      "r": 10,
+                      "done": true,
+                      "rir": 5
+                    },
+                    {
+                      "w": 60,
+                      "r": 12,
+                      "done": true,
+                      "warmup": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w2",
+              "d": "2026-01-08",
+              "start": 1736294400000,
+              "end": 1736298600000,
+              "vol": 300,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 85,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 85,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 85,
+                      "r": 4,
+                      "done": true,
+                      "rir": 0
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 3
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 4
+                    },
+                    {
+                      "w": 80,
+                      "r": 6,
+                      "done": true,
+                      "rir": 6
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w3",
+              "d": "2026-01-15",
+              "start": 1736899200000,
+              "end": 1736902200000,
+              "vol": 150,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 82.5,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 82.5,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 82.5,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": "rir",
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        }
+      ],
+      "expected": "rir",
+      "from": "effort.js > displayScale > profile effort rir → rir",
+      "vitest": "rir"
+    },
+    {
+      "id": "p31-effort-004",
+      "fn": "effort.displayScale",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [
+            {
+              "id": "w_rpe",
+              "d": "2026-01-01",
+              "start": 1735689600000,
+              "end": 1735693200000,
+              "vol": 100,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rpe": 8
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rpe": 8.5
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rpe": 9
+                    },
+                    {
+                      "w": 75,
+                      "r": 8,
+                      "done": true,
+                      "rpe": 7
+                    },
+                    {
+                      "w": 70,
+                      "r": 10,
+                      "done": true,
+                      "rpe": 7
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        }
+      ],
+      "expected": "rpe",
+      "from": "effort.js > displayScale > no profile setting but RPE-heavy history → rpe",
+      "vitest": "rpe"
+    },
+    {
+      "id": "p31-effort-005",
+      "fn": "effort.scaleName",
+      "args": [
+        "rir"
+      ],
+      "expected": "RIR",
+      "from": "effort.js > scaleName > rir heading string"
+    },
+    {
+      "id": "p31-effort-006",
+      "fn": "effort.scaleName",
+      "args": [
+        "rpe"
+      ],
+      "expected": "RPE",
+      "from": "effort.js > scaleName > rpe heading string"
+    },
+    {
+      "id": "p31-effort-007",
+      "fn": "effort.avgRir",
+      "args": [
+        [
+          {
+            "rir": 2
+          },
+          {
+            "rir": 4
+          },
+          {
+            "rpe": 8
+          }
+        ]
+      ],
+      "expected": 2.6666666666666665,
+      "from": "effort.js > avgRir > mixed rir and rpe sets",
+      "vitest": 2.6666666666666665
+    },
+    {
+      "id": "p31-effort-008",
+      "fn": "effort.avgRir",
+      "args": [
+        [
+          {
+            "w": 80,
+            "r": 5
+          }
+        ]
+      ],
+      "expected": null,
+      "from": "effort.js > avgRir > empty/unrated → null",
+      "vitest": null
+    },
+    {
+      "id": "p31-effort-009",
+      "fn": "effort.effortSummary",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [
+            {
+              "id": "w1",
+              "d": "2026-01-01",
+              "start": 1735689600000,
+              "end": 1735693200000,
+              "vol": 200,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 75,
+                      "r": 8,
+                      "done": true,
+                      "rir": 3
+                    },
+                    {
+                      "w": 70,
+                      "r": 10,
+                      "done": true,
+                      "rir": 5
+                    },
+                    {
+                      "w": 60,
+                      "r": 12,
+                      "done": true,
+                      "warmup": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w2",
+              "d": "2026-01-08",
+              "start": 1736294400000,
+              "end": 1736298600000,
+              "vol": 300,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 85,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 85,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 85,
+                      "r": 4,
+                      "done": true,
+                      "rir": 0
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 3
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 4
+                    },
+                    {
+                      "w": 80,
+                      "r": 6,
+                      "done": true,
+                      "rir": 6
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w3",
+              "d": "2026-01-15",
+              "start": 1736899200000,
+              "end": 1736902200000,
+              "vol": 150,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 82.5,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 82.5,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 82.5,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": "rir",
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        0
+      ],
+      "expected": {
+        "done": 15,
+        "rated": 15,
+        "hard": 12,
+        "avg": 2.4,
+        "hardPct": 0.8
+      },
+      "from": "effort.js > effortSummary > rated sets above MIN_RATED threshold"
+    },
+    {
+      "id": "p31-effort-010",
+      "fn": "effort.effortSummary",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [
+            {
+              "id": "w",
+              "d": "2026-01-01",
+              "start": 1735689600000,
+              "vol": 0,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        0
+      ],
+      "expected": {
+        "done": 2,
+        "rated": 2,
+        "hard": 2,
+        "avg": null,
+        "hardPct": null
+      },
+      "from": "effort.js > effortSummary > below MIN_RATED → avg null"
+    },
+    {
+      "id": "p31-effort-011",
+      "fn": "effort.effortHistogram",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [
+            {
+              "id": "w1",
+              "d": "2026-01-01",
+              "start": 1735689600000,
+              "end": 1735693200000,
+              "vol": 200,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 75,
+                      "r": 8,
+                      "done": true,
+                      "rir": 3
+                    },
+                    {
+                      "w": 70,
+                      "r": 10,
+                      "done": true,
+                      "rir": 5
+                    },
+                    {
+                      "w": 60,
+                      "r": 12,
+                      "done": true,
+                      "warmup": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w2",
+              "d": "2026-01-08",
+              "start": 1736294400000,
+              "end": 1736298600000,
+              "vol": 300,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 85,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 85,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 85,
+                      "r": 4,
+                      "done": true,
+                      "rir": 0
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 3
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 4
+                    },
+                    {
+                      "w": 80,
+                      "r": 6,
+                      "done": true,
+                      "rir": 6
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w3",
+              "d": "2026-01-15",
+              "start": 1736899200000,
+              "end": 1736902200000,
+              "vol": 150,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 82.5,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 82.5,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 82.5,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": "rir",
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        0
+      ],
+      "expected": [
+        {
+          "rir": 0,
+          "tail": false,
+          "n": 1,
+          "pct": 0.06666666666666667
+        },
+        {
+          "rir": 1,
+          "tail": false,
+          "n": 4,
+          "pct": 0.26666666666666666
+        },
+        {
+          "rir": 2,
+          "tail": false,
+          "n": 4,
+          "pct": 0.26666666666666666
+        },
+        {
+          "rir": 3,
+          "tail": false,
+          "n": 3,
+          "pct": 0.2
+        },
+        {
+          "rir": 4,
+          "tail": true,
+          "n": 3,
+          "pct": 0.2
+        }
+      ],
+      "from": "effort.js > effortHistogram > histogram with 4+ tail bucket populated"
+    },
+    {
+      "id": "p31-effort-012",
+      "fn": "effort.isHardSet",
+      "args": [
+        {
+          "rir": 3
+        }
+      ],
+      "expected": true,
+      "from": "effort.js > isHardSet > rir at HARD_RIR threshold → true",
+      "vitest": true
+    },
+    {
+      "id": "p31-effort-013",
+      "fn": "effort.isHardSet",
+      "args": [
+        {
+          "rir": 4
+        }
+      ],
+      "expected": false,
+      "from": "effort.js > isHardSet > rir above HARD_RIR → false",
+      "vitest": false
+    },
+    {
+      "id": "p31-effort-014",
+      "fn": "effort.isHardSet",
+      "args": [
+        {
+          "w": 80,
+          "r": 5
+        }
+      ],
+      "expected": false,
+      "from": "effort.js > isHardSet > no rir/rpe → false",
+      "vitest": false
+    },
+    {
+      "id": "p31-viewagg-001",
+      "fn": "viewAgg.heatmapDays",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [
+            {
+              "id": "wa",
+              "d": "2026-01-01",
+              "start": 1735689600000,
+              "end": 1735693200000,
+              "vol": 200
+            },
+            {
+              "id": "wb",
+              "d": "2026-01-08",
+              "start": 1736294400000,
+              "end": 1736298600000,
+              "vol": 300
+            },
+            {
+              "id": "wc",
+              "d": "2026-01-08",
+              "start": 1736299400000,
+              "end": 1736301200000,
+              "vol": 150
+            },
+            {
+              "id": "wd",
+              "d": "2026-01-15",
+              "start": 1736899200000,
+              "end": 1736899200000,
+              "vol": 0
+            }
+          ],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        }
+      ],
+      "expected": {
+        "days": {
+          "2026-01-01": {
+            "n": 1,
+            "vol": 200,
+            "min": 60,
+            "level": 1
+          },
+          "2026-01-08": {
+            "n": 2,
+            "vol": 450,
+            "min": 100,
+            "level": 2
+          },
+          "2026-01-15": {
+            "n": 1,
+            "vol": 0,
+            "min": 0,
+            "level": 0
+          }
+        },
+        "t1": 60,
+        "t2": 100,
+        "t3": 100
+      },
+      "from": "components/Heatmap.jsx:11-19 > heatmapDays > multi-workout day and 0-minute day"
+    },
+    {
+      "id": "p31-viewagg-002",
+      "fn": "viewAgg.statsTiles",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2025-12-02",
+              "w": 82,
+              "t": 1733097600000
+            },
+            {
+              "d": "2026-01-01",
+              "w": 81,
+              "t": 1735689600000
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [
+            {
+              "id": "wa",
+              "d": "2026-01-01",
+              "start": 1735689600000,
+              "vol": 200
+            },
+            {
+              "id": "wb",
+              "d": "2026-01-08",
+              "start": 1736294400000,
+              "vol": 300
+            }
+          ],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        1736899200000,
+        "2026-01-15"
+      ],
+      "expected": {
+        "workouts": 2,
+        "monthW": 2,
+        "bwDelta30": null
+      },
+      "from": "views/Stats.jsx:297-302 > statsTiles > two workouts this month, positive bwDelta30"
+    },
+    {
+      "id": "p31-viewagg-003",
+      "fn": "viewAgg.statsTiles",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2026-01-01",
+              "w": 80,
+              "t": 1735689600000
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        1736899200000,
+        "2026-01-15"
+      ],
+      "expected": {
+        "workouts": 0,
+        "monthW": 0,
+        "bwDelta30": null
+      },
+      "from": "views/Stats.jsx:297-302 > statsTiles > single bw entry → bwDelta30 null",
+      "vitest": {
+        "workouts": 0,
+        "monthW": 0,
+        "bwDelta30": null
+      }
+    },
+    {
+      "id": "p31-viewagg-004",
+      "fn": "viewAgg.bodyweightPoints",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2025-12-01",
+              "w": 83,
+              "t": 1732924800000
+            },
+            {
+              "d": "2026-01-01",
+              "w": 82,
+              "t": 1735689600000
+            },
+            {
+              "d": "2026-01-08",
+              "w": 81.5,
+              "t": 1736294400000
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        30,
+        1736899200000
+      ],
+      "expected": [
+        {
+          "t": 1735689600000,
+          "y": 82,
+          "d": "2026-01-01"
+        },
+        {
+          "t": 1736294400000,
+          "y": 81.5,
+          "d": "2026-01-08"
+        }
+      ],
+      "from": "views/Stats.jsx:297-298 > bodyweightPoints > range 30 excludes old entry"
+    },
+    {
+      "id": "p31-viewagg-005",
+      "fn": "viewAgg.bodyweightPoints",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2025-12-01",
+              "w": 83,
+              "t": 1732924800000
+            },
+            {
+              "d": "2026-01-01",
+              "w": 82,
+              "t": 1735689600000
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        0,
+        1736899200000
+      ],
+      "expected": [
+        {
+          "t": 1732924800000,
+          "y": 83,
+          "d": "2025-12-01"
+        },
+        {
+          "t": 1735689600000,
+          "y": 82,
+          "d": "2026-01-01"
+        }
+      ],
+      "from": "views/Stats.jsx:297-298 > bodyweightPoints > range 0 returns all entries"
+    },
+    {
+      "id": "p31-viewagg-006",
+      "fn": "viewAgg.exerciseProgress",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [
+            {
+              "id": "wp1",
+              "d": "2026-01-01",
+              "start": 1735689600000,
+              "vol": 400,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "wp2",
+              "d": "2026-01-08",
+              "start": 1736294400000,
+              "vol": 500,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 85,
+                      "r": 5,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "w": 85,
+                      "r": 4,
+                      "done": true,
+                      "rir": 0
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        "0025",
+        "rir",
+        {
+          "0025": "Barbell Back Squat"
+        }
+      ],
+      "expected": {
+        "exHist": [
+          {
+            "id": "0025",
+            "mx": 85,
+            "unitKind": "unit"
+          }
+        ],
+        "curEx": "0025",
+        "curMode": "reps",
+        "repsOnly": false,
+        "unitKind": "unit",
+        "exPts": [
+          {
+            "t": 1735689600000,
+            "y": 80,
+            "d": "2026-01-01",
+            "m": 0.625,
+            "rirScale": 1.5
+          },
+          {
+            "t": 1736294400000,
+            "y": 85,
+            "d": "2026-01-08",
+            "m": 0.875,
+            "rirScale": 0.5
+          }
+        ],
+        "exList": [
+          {
+            "d": "2026-01-08",
+            "sets": [
+              {
+                "w": 85,
+                "r": 5,
+                "done": true,
+                "rir": 1
+              },
+              {
+                "w": 85,
+                "r": 4,
+                "done": true,
+                "rir": 0
+              }
+            ],
+            "target": null
+          },
+          {
+            "d": "2026-01-01",
+            "sets": [
+              {
+                "w": 80,
+                "r": 5,
+                "done": true,
+                "rir": 2
+              },
+              {
+                "w": 80,
+                "r": 5,
+                "done": true,
+                "rir": 1
+              }
+            ],
+            "target": null
+          }
+        ],
+        "exBest": 85,
+        "e1Pts": [
+          {
+            "t": 1735689600000,
+            "y": 93.3,
+            "d": "2026-01-01"
+          },
+          {
+            "t": 1736294400000,
+            "y": 99.2,
+            "d": "2026-01-08"
+          }
+        ],
+        "e1Best": {
+          "est": 99.2,
+          "w": 85,
+          "r": 5,
+          "d": "2026-01-08",
+          "t": 1736294400000
+        },
+        "effPts": [
+          {
+            "t": 1735689600000,
+            "y": 1.5,
+            "d": "2026-01-01"
+          },
+          {
+            "t": 1736294400000,
+            "y": 0.5,
+            "d": "2026-01-08"
+          }
+        ],
+        "showE1": true,
+        "showEff": false
+      },
+      "from": "views/Stats.jsx:305-435 > exerciseProgress > loaded lift with rir effort"
+    },
+    {
+      "id": "p31-viewagg-007",
+      "fn": "viewAgg.exerciseProgress",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [
+            {
+              "id": "wp_bw",
+              "d": "2026-01-01",
+              "start": 1735689600000,
+              "vol": 0,
+              "entries": [
+                {
+                  "id": "pushup",
+                  "sets": [
+                    {
+                      "r": 20,
+                      "done": true
+                    },
+                    {
+                      "r": 18,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        "pushup",
+        "rir",
+        {
+          "pushup": "Push-up"
+        }
+      ],
+      "expected": {
+        "exHist": [
+          {
+            "id": "pushup",
+            "mx": 20,
+            "unitKind": "reps"
+          }
+        ],
+        "curEx": "pushup",
+        "curMode": "reps",
+        "repsOnly": true,
+        "unitKind": "reps",
+        "exPts": [
+          {
+            "t": 1735689600000,
+            "y": 20,
+            "d": "2026-01-01"
+          }
+        ],
+        "exList": [
+          {
+            "d": "2026-01-01",
+            "sets": [
+              {
+                "r": 20,
+                "done": true
+              },
+              {
+                "r": 18,
+                "done": true
+              }
+            ],
+            "target": null
+          }
+        ],
+        "exBest": 20,
+        "e1Pts": [],
+        "e1Best": null,
+        "effPts": [],
+        "showE1": false,
+        "showEff": false
+      },
+      "from": "views/Stats.jsx:375-380 > exerciseProgress > reps-only exercise (no weight history)"
+    },
+    {
+      "id": "p31-viewagg-008",
+      "fn": "viewAgg.exerciseProgress",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [
+            {
+              "id": "wp3",
+              "d": "2026-01-01",
+              "start": 1735689600000,
+              "vol": 300,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "w": 80,
+                      "r": 5,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        null,
+        "rir",
+        {
+          "0025": "Barbell Back Squat"
+        }
+      ],
+      "expected": {
+        "exHist": [
+          {
+            "id": "0025",
+            "mx": 80,
+            "unitKind": "unit"
+          }
+        ],
+        "curEx": "0025",
+        "curMode": "reps",
+        "repsOnly": false,
+        "unitKind": "unit",
+        "exPts": [
+          {
+            "t": 1735689600000,
+            "y": 80,
+            "d": "2026-01-01"
+          }
+        ],
+        "exList": [
+          {
+            "d": "2026-01-01",
+            "sets": [
+              {
+                "w": 80,
+                "r": 5,
+                "done": true
+              }
+            ],
+            "target": null
+          }
+        ],
+        "exBest": 80,
+        "e1Pts": [
+          {
+            "t": 1735689600000,
+            "y": 93.3,
+            "d": "2026-01-01"
+          }
+        ],
+        "e1Best": {
+          "est": 93.3,
+          "w": 80,
+          "r": 5,
+          "d": "2026-01-01",
+          "t": 1735689600000
+        },
+        "effPts": [],
+        "showE1": true,
+        "showEff": false
+      },
+      "from": "views/Stats.jsx:355-357 > exerciseProgress > null exId falls back to first of exHist"
+    },
+    {
+      "id": "p31-viewagg-009",
+      "fn": "viewAgg.calendarMonth",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [
+            {
+              "id": "wm1",
+              "d": "2026-01-05",
+              "start": 1736035200000,
+              "end": 1736038800000,
+              "vol": 200
+            },
+            {
+              "id": "wm2",
+              "d": "2026-01-12",
+              "start": 1736640000000,
+              "end": 1736644200000,
+              "vol": 300
+            },
+            {
+              "id": "wm3",
+              "d": "2026-02-01",
+              "start": 1738368000000,
+              "vol": 100
+            }
+          ],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        2026,
+        0
+      ],
+      "expected": {
+        "count": 2,
+        "vol": 500,
+        "ms": 7800000
+      },
+      "from": "sheets.jsx:Calendar:1773-1775 > calendarMonth > two January workouts, one February excluded"
+    },
+    {
+      "id": "p31-viewagg-010",
+      "fn": "viewAgg.calendarMonth",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        2026,
+        0
+      ],
+      "expected": {
+        "count": 0,
+        "vol": 0,
+        "ms": 0
+      },
+      "from": "sheets.jsx:Calendar > calendarMonth > empty workouts",
+      "vitest": {
+        "count": 0,
+        "vol": 0,
+        "ms": 0
+      }
+    },
+    {
+      "id": "p31-viewagg-011",
+      "fn": "viewAgg.workoutDetailGroups",
+      "args": [
+        {
+          "id": "wcomb",
+          "d": "2026-01-01",
+          "start": 1735689600000,
+          "vol": 500,
+          "routineIds": [
+            "rA",
+            "rB"
+          ],
+          "entries": [
+            {
+              "id": "0025",
+              "rid": "rA",
+              "sets": [
+                {
+                  "w": 80,
+                  "r": 5,
+                  "done": true
+                },
+                {
+                  "w": 80,
+                  "r": 5,
+                  "done": true
+                }
+              ]
+            },
+            {
+              "id": "deadlift",
+              "rid": "rA",
+              "sets": [
+                {
+                  "w": 100,
+                  "r": 3,
+                  "done": true
+                }
+              ]
+            },
+            {
+              "id": "bench",
+              "rid": "rB",
+              "sets": [
+                {
+                  "w": 60,
+                  "r": 8,
+                  "done": true,
+                  "warmup": true
+                },
+                {
+                  "w": 70,
+                  "r": 5,
+                  "done": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "grouped": true,
+        "groups": [
+          {
+            "key": "rA",
+            "rid": "rA",
+            "items": [
+              0,
+              1
+            ],
+            "setN": 3,
+            "vol": 1100
+          },
+          {
+            "key": "rB",
+            "rid": "rB",
+            "items": [
+              2
+            ],
+            "setN": 1,
+            "vol": 350
+          }
+        ]
+      },
+      "from": "sheets.jsx:WorkoutDetail:1688-1720 > workoutDetailGroups > two-routine combined session"
+    },
+    {
+      "id": "p31-viewagg-012",
+      "fn": "viewAgg.workoutDetailGroups",
+      "args": [
+        {
+          "id": "wflat",
+          "d": "2026-01-01",
+          "start": 1735689600000,
+          "vol": 200,
+          "entries": [
+            {
+              "id": "0025",
+              "sets": [
+                {
+                  "w": 80,
+                  "r": 5,
+                  "done": true
+                }
+              ]
+            },
+            {
+              "id": "bench",
+              "sets": [
+                {
+                  "w": 60,
+                  "r": 8,
+                  "done": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "grouped": false,
+        "groups": [
+          {
+            "key": "__none",
+            "rid": null,
+            "items": [
+              0,
+              1
+            ],
+            "setN": 2,
+            "vol": 880
+          }
+        ]
+      },
+      "from": "sheets.jsx:WorkoutDetail > workoutDetailGroups > legacy flat session (no rid)"
+    },
+    {
+      "id": "p31-viewagg-013",
+      "fn": "viewAgg.bwGoal",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": 80,
+          "bodyweight": [
+            {
+              "d": "2026-01-01",
+              "w": 82,
+              "t": 1735689600000
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        }
+      ],
+      "expected": {
+        "gap": 2,
+        "reached": false,
+        "gain": false
+      },
+      "from": "views/Home.jsx:162-165 > bwGoal > losing toward goal",
+      "vitest": {
+        "gap": 2,
+        "reached": false,
+        "gain": false
+      }
+    },
+    {
+      "id": "p31-viewagg-014",
+      "fn": "viewAgg.bwGoal",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": 85,
+          "bodyweight": [
+            {
+              "d": "2026-01-01",
+              "w": 82,
+              "t": 1735689600000
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        }
+      ],
+      "expected": {
+        "gap": 3,
+        "reached": false,
+        "gain": true
+      },
+      "from": "views/Home.jsx:162-165 > bwGoal > gaining toward goal",
+      "vitest": {
+        "gap": 3,
+        "reached": false,
+        "gain": true
+      }
+    },
+    {
+      "id": "p31-viewagg-015",
+      "fn": "viewAgg.bwGoal",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": 80,
+          "bodyweight": [
+            {
+              "d": "2026-01-01",
+              "w": 80.02,
+              "t": 1735689600000
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        }
+      ],
+      "expected": {
+        "gap": 0.01999999999999602,
+        "reached": true,
+        "gain": false
+      },
+      "from": "views/Home.jsx:164 > bwGoal > reached (gap < 0.05)"
+    },
+    {
+      "id": "p31-viewagg-016",
+      "fn": "viewAgg.bwGoal",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        }
+      ],
+      "expected": null,
+      "from": "views/Home.jsx > bwGoal > no target → null",
+      "vitest": null
+    },
+    {
+      "id": "p31-viewagg-017",
+      "fn": "viewAgg.homeView",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2025-12-31",
+              "w": 82,
+              "t": 1735603200000
+            },
+            {
+              "d": "2026-01-01",
+              "w": 81.5,
+              "t": 1735689600000
+            }
+          ],
+          "routines": [],
+          "week": {
+            "1": [
+              "rA"
+            ],
+            "3": [
+              "rB"
+            ],
+            "5": [
+              "rC"
+            ]
+          },
+          "dayPlan": {},
+          "exWeights": {},
+          "workouts": [
+            {
+              "id": "hw1",
+              "d": "2026-01-01",
+              "start": 1735689600000,
+              "vol": 200
+            },
+            {
+              "id": "hw2",
+              "d": "2026-01-12",
+              "start": 1736640000000,
+              "vol": 300
+            }
+          ],
+          "active": null,
+          "customEx": [],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        "2026-01-12"
+      ],
+      "expected": {
+        "delta": -0.5,
+        "deltaAbs": 0.5,
+        "wThisWeek": 1,
+        "plannedPerWeek": 3,
+        "bwPoints": [
+          {
+            "t": 1735603200000,
+            "y": 82,
+            "d": "2025-12-31"
+          },
+          {
+            "t": 1735689600000,
+            "y": 81.5,
+            "d": "2026-01-01"
+          }
+        ],
+        "goal": null
+      },
+      "from": "views/Home.jsx:30-58 > homeView > delta, wThisWeek, plannedPerWeek, bwPoints"
     }
   ]
 }
