@@ -332,6 +332,8 @@ class FinishResult extends Equatable {
     required this.prs,
     required this.e1prs,
     required this.exWeights,
+    this.past = false,
+    this.replaceId,
   });
 
   factory FinishResult.fromJson(Map<String, Object?> json) {
@@ -355,6 +357,8 @@ class FinishResult extends Equatable {
           .map(E1rmRecordSummary.fromJson)
           .toList(),
       exWeights: exWeights,
+      past: json['past'] == true,
+      replaceId: json['replaceId'] as String?,
     );
   }
 
@@ -362,14 +366,18 @@ class FinishResult extends Equatable {
   final List<String> prs;
   final List<E1rmRecordSummary> e1prs;
   final Map<String, ExWeight> exWeights;
+  final bool past;
+  final String? replaceId;
 
   Map<String, Object?> toJson() => <String, Object?>{
         'workout': workout.toJson(),
         'prs': prs,
         'e1prs': e1prs.map((E1rmRecordSummary e) => e.toJson()).toList(),
         'exWeights': exWeights.map((String k, ExWeight v) => MapEntry<String, Object?>(k, v.toJson())),
+        'past': past,
+        'replaceId': replaceId,
       };
 
   @override
-  List<Object?> get props => <Object?>[workout, prs, e1prs, exWeights];
+  List<Object?> get props => <Object?>[workout, prs, e1prs, exWeights, past, replaceId];
 }

@@ -26,6 +26,7 @@ ESBUILD_BIN="tool/js/node_modules/.bin/esbuild"
 EXPECTED_ESBUILD_VERSION="0.28.2"
 
 FILES=(
+  "backfill.js"
   "bar.js"
   "effort.js"
   "exercise-history.js"
@@ -49,6 +50,7 @@ FILES=(
   "session-merge.js"
   "session-start.js"
   "starter.js"
+  "units.js"
   "workout-model.js"
 )
 
@@ -160,13 +162,14 @@ node -e "
     'tool/js/entry.js',
     'tool/js/shims/finish-workout-shim.js',
     ...[
+      'backfill.js',
       'bar.js', 'effort.js', 'exercise-history.js',
       'exercise-muscle-batch-1.js', 'exercise-muscle-batch-1.json',
       'exercise-muscle-batch-2.js', 'exercise-muscle-batch-2.json',
       'exercise-muscle-olympic.json', 'exercises-data.js', 'exercises.js',
       'finish-workout.js', 'format.js', 'history.js', 'i18n-core.js', 'muscles.js', 'onerm.js',
       'progression-copy.js', 'progression.js', 'recovery.js', 'rep-range.js', 'session-merge.js',
-      'session-start.js', 'starter.js', 'workout-model.js'
+      'session-start.js', 'starter.js', 'units.js', 'workout-model.js'
     ].map(f => 'third_party/opengym/lib/' + f)
   ]);
   const inputs = Object.keys(meta.inputs);

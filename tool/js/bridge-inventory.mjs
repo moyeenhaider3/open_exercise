@@ -198,6 +198,16 @@ export const INVENTORY = {
     constants: [],
     keys: [],
   },
+  backfill: {
+    functions: ['workoutsOn', 'backfillStart', 'backfillEnd', 'insertChronological', 'completeBackfill'],
+    constants: [],
+    keys: [],
+  },
+  units: {
+    functions: ['convertWeight', 'convertBodyWeight', 'convertStateUnit'],
+    constants: [],
+    keys: [],
+  },
 };
 
 export const NOT_BRIDGED = {

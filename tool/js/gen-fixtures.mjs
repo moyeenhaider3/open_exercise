@@ -25,6 +25,8 @@ import * as exerciseHistory from '../../third_party/opengym/lib/exercise-history
 import * as repRange from '../../third_party/opengym/lib/rep-range.js';
 import * as progressionCopy from '../../third_party/opengym/lib/progression-copy.js';
 import * as finish from './shims/finish-workout-shim.js';
+import * as backfill from '../../third_party/opengym/lib/backfill.js';
+import * as units from '../../third_party/opengym/lib/units.js';
 
 const MODULES = {
   onerm,
@@ -43,6 +45,8 @@ const MODULES = {
   repRange,
   progressionCopy,
   finish,
+  backfill,
+  units,
 };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -92,7 +96,13 @@ const MODULE_FILES = [
   { name: 'session', file: './fixture-cases/session.mjs' },
   { name: 'exercises', file: './fixture-cases/exercises.mjs' },
   { name: 'phase3', file: './fixture-cases/phase3.mjs' },
+  { name: 'phase31', file: './fixture-cases/phase31.mjs' },
 ];
+
+const BANNED = {
+  'history.streakWeeks': 'history.streakWeeks is banned from fixtures (wall-clock dependency)',
+  'backfill.backfillStart': 'backfill.backfillStart is banned from fixtures (local wall-clock zone, breaks the TZ diff)',
+};
 
 function serializeArgs(args) {
   return JSON.parse(
@@ -124,8 +134,8 @@ for (const { name, file } of MODULE_FILES) {
     }
     seenIds.add(c.id);
 
-    if (c.fn === 'history.streakWeeks') {
-      throw new Error(`history.streakWeeks is banned from fixtures (wall-clock dependency)`);
+    if (BANNED[c.fn]) {
+      throw new Error(BANNED[c.fn]);
     }
 
     if (!ALL_FUNCTIONS.has(c.fn)) {

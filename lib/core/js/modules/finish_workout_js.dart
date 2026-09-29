@@ -5,7 +5,7 @@ import '../js_codec.dart';
 import '../js_engine_service.dart';
 import '../models/phase3_models.dart';
 
-/// Facade for openGym `doFinishWorkout` non-backfill completion via JS shim.
+/// Facade for openGym `doFinishWorkout` completion (both live and backfill branches) via JS shim.
 final class FinishWorkoutJs {
   const FinishWorkoutJs(this._engine);
 

@@ -17,3 +17,5 @@ export * as exerciseHistory from '../../third_party/opengym/lib/exercise-history
 export * as repRange from '../../third_party/opengym/lib/rep-range.js';
 export * as progressionCopy from '../../third_party/opengym/lib/progression-copy.js';
 export * as finish from './shims/finish-workout-shim.js';
+export * as backfill from '../../third_party/opengym/lib/backfill.js';
+export * as units from '../../third_party/opengym/lib/units.js';

@@ -154,7 +154,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 03.1-01-PLAN.md — Vendor backfill.js + units.js, finish-shim backfill branch, BackfillJs/UnitsJs facades + fixtures + parity
+- [x] 03.1-01-PLAN.md — Vendor backfill.js + units.js, finish-shim backfill branch, BackfillJs/UnitsJs facades + fixtures + parity
 - [ ] 03.1-02-PLAN.md — Device recheck of the "Volume (0 kg)" finish summary; fix WorkoutBloc if it is a real bug [device check]
 - [ ] 03.1-03-PLAN.md — Routes (/history, /settings, /checkin), provider files, setWeightDecimals wiring, WorkoutRowTile, Heatmap widget
 

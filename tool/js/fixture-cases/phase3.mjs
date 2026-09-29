@@ -250,6 +250,8 @@ export const cases = [
           d: '2026-09-28',
         },
       },
+      past: false,
+      replaceId: null,
     },
   },
 ];

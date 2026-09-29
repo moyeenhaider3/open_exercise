@@ -1,9 +1,9 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later
- * Bundled from openGym frontend v1.3.8 (sourceSha256: 7238ac9d42c47af1e25d4dd1a146321feb6994d7e9c6a9e1993d399540ee9dcb)
+ * Bundled from openGym frontend v1.3.8 (sourceSha256: 4ab1f63fbca36569e0bf7c929e94feb5e84c06c5cfbc4018b73d3d93e5445e32)
  * bundled by tool/gen_js_bundle.sh, esbuild 0.28.2
  * See NOTICE.md and third_party/opengym/README.md.
  */
-var __openGymLibMeta = {"openGymVersion":"1.3.8","sourceSha256":"7238ac9d42c47af1e25d4dd1a146321feb6994d7e9c6a9e1993d399540ee9dcb","esbuild":"0.28.2","target":"es2019"};
+var __openGymLibMeta = {"openGymVersion":"1.3.8","sourceSha256":"4ab1f63fbca36569e0bf7c929e94feb5e84c06c5cfbc4018b73d3d93e5445e32","esbuild":"0.28.2","target":"es2019"};
 if (typeof String.prototype.replaceAll !== 'function') {
   String.prototype.replaceAll = function(searchValue, replaceValue) {
     if (typeof searchValue !== 'string') {
@@ -34,6 +34,7 @@ var OpenGymLib = (() => {
   // tool/js/entry.js
   var entry_exports = {};
   __export(entry_exports, {
+    backfill: () => backfill_exports,
     bar: () => bar_exports,
     effort: () => effort_exports,
     exerciseHistory: () => exercise_history_exports,
@@ -49,6 +50,7 @@ var OpenGymLib = (() => {
     sessionMerge: () => session_merge_exports,
     sessionStart: () => session_start_exports,
     starter: () => starter_exports,
+    units: () => units_exports,
     workoutModel: () => workout_model_exports
   });
 
@@ -5291,52 +5293,163 @@ var OpenGymLib = (() => {
     };
   }
 
+  // third_party/opengym/lib/backfill.js
+  var backfill_exports = {};
+  __export(backfill_exports, {
+    backfillEnd: () => backfillEnd,
+    backfillStart: () => backfillStart,
+    completeBackfill: () => completeBackfill,
+    insertChronological: () => insertChronological,
+    workoutsOn: () => workoutsOn
+  });
+  var workoutsOn = (S, iso) => (S.workouts || []).filter((w) => w.d === iso);
+  var backfillStart = (iso, time = "18:00") => {
+    const [h, m] = String(time || "18:00").split(":").map(Number);
+    const d = /* @__PURE__ */ new Date(iso + "T12:00:00");
+    d.setHours(h || 0, m || 0, 0, 0);
+    return d.getTime();
+  };
+  var backfillEnd = (active) => {
+    var _a;
+    return active.start + Math.max(1, ((_a = active.backfill) == null ? void 0 : _a.durationMin) || 60) * 6e4;
+  };
+  function insertChronological(workouts, w) {
+    const key = (x) => [x.d || "", x.start || 0];
+    const [d, s] = key(w);
+    let i = workouts.length;
+    while (i > 0) {
+      const [pd, ps] = key(workouts[i - 1]);
+      if (pd < d || pd === d && ps <= s) break;
+      i--;
+    }
+    return [...workouts.slice(0, i), w, ...workouts.slice(i)];
+  }
+  function completeBackfill(workouts, active, w) {
+    var _a;
+    const replaceId = (_a = active.backfill) == null ? void 0 : _a.replaceId;
+    const kept = replaceId ? workouts.filter((x) => x.id !== replaceId) : workouts;
+    return insertChronological(kept, w);
+  }
+
   // tool/js/shims/finish-workout-shim.js
   function completeWorkout(st, end) {
     const A = st && st.active;
     if (!A) {
       throw new Error("completeWorkout: no active workout in state");
     }
-    if (A.backfill) {
-      throw new Error("backfill finish is Phase 3.1");
-    }
+    const past = !!A.backfill;
     registerCustom(st.customEx || []);
     const prs = [];
     const e1prs = [];
-    (A.entries || []).forEach((e) => {
-      const loads = (e.sets || []).filter((s) => s.done && !isWarmupRow(s)).map((s) => s.w).filter((w2) => w2 > 0);
-      const mx = loads.length ? loads.reduce((a, b) => betterWeight(e.id, a, b)) : 0;
-      if (beatsWeight(e.id, mx, bestWeightFor(st, e.id))) {
-        prs.push(e.id);
-      }
-      const rec = is1RMRecord(st, e.id, e);
-      if (rec && !prs.includes(e.id)) {
-        e1prs.push({ id: e.id, ...rec });
-      }
-    });
+    if (!past) {
+      (A.entries || []).forEach((e) => {
+        const loads = (e.sets || []).filter((s) => s.done && !isWarmupRow(s)).map((s) => s.w).filter((w2) => w2 > 0);
+        const mx = loads.length ? loads.reduce((a, b) => betterWeight(e.id, a, b)) : 0;
+        if (beatsWeight(e.id, mx, bestWeightFor(st, e.id))) {
+          prs.push(e.id);
+        }
+        const rec = is1RMRecord(st, e.id, e);
+        if (rec && !prs.includes(e.id)) {
+          e1prs.push({ id: e.id, ...rec });
+        }
+      });
+    }
     const snapshotFor = (e) => {
       var _a;
       return ((_a = EXIDX[e.id]) == null ? void 0 : _a.custom) ? exerciseMuscleSnapshot(EXIDX[e.id]) : null;
     };
     const w = buildCompletedWorkout(A, {
-      end: end != null ? end : Date.now(),
+      end: past ? backfillEnd(A) : end != null ? end : Date.now(),
       prs,
       snapshotFor
     });
     w.vol = workoutVolume(w);
     const exWeights = Object.assign({}, st.exWeights || {});
-    (w.entries || []).forEach((e) => {
-      const mx = bestWeightForEntry(e);
-      if (mx > 0 && beatsWeight(e.id, mx, (exWeights[e.id] || {}).w || 0)) {
-        exWeights[e.id] = { w: mx, d: w.d };
-      }
-    });
+    if (!past) {
+      (w.entries || []).forEach((e) => {
+        const mx = bestWeightForEntry(e);
+        if (mx > 0 && beatsWeight(e.id, mx, (exWeights[e.id] || {}).w || 0)) {
+          exWeights[e.id] = { w: mx, d: w.d };
+        }
+      });
+    }
     return {
       workout: w,
       prs,
       e1prs,
-      exWeights
+      exWeights,
+      past,
+      replaceId: past ? A.backfill.replaceId || null : null
     };
+  }
+
+  // third_party/opengym/lib/units.js
+  var units_exports = {};
+  __export(units_exports, {
+    convertBodyWeight: () => convertBodyWeight,
+    convertStateUnit: () => convertStateUnit,
+    convertWeight: () => convertWeight
+  });
+  var LB_PER_KG = 2.2046226218;
+  function convertWeight(value, from, to) {
+    if (from === to || value == null || value === "" || !Number.isFinite(Number(value))) return value;
+    const v = Number(value);
+    if (to === "lb") return Math.round(v * LB_PER_KG * 2) / 2;
+    return Math.round(v / LB_PER_KG * 4) / 4;
+  }
+  function convertBodyWeight(value, from, to) {
+    if (from === to || value == null || value === "" || !Number.isFinite(Number(value))) return value;
+    const v = Number(value);
+    return Math.round((to === "lb" ? v * LB_PER_KG : v / LB_PER_KG) * 10) / 10;
+  }
+  var convSet = (set, from, to) => {
+    if (!set || typeof set !== "object") return set;
+    const out = { ...set };
+    if (isSideSet(set)) return syncSideAggregate({ ...set, sides: {
+      L: convSet(set.sides.L, from, to),
+      R: convSet(set.sides.R, from, to)
+    } });
+    if (out.w != null) out.w = convertWeight(out.w, from, to);
+    if (Array.isArray(out.drops)) out.drops = out.drops.map((d) => ({ ...d, w: convertWeight(d.w, from, to) }));
+    return out;
+  };
+  var convTarget = (cfg, from, to) => {
+    if (!cfg || typeof cfg !== "object") return cfg;
+    const out = { ...cfg };
+    if (out.weight != null) out.weight = convertWeight(out.weight, from, to);
+    if (out.inc > 0 && (out.mode == null || out.mode === "reps")) out.inc = convertWeight(out.inc, from, to);
+    if (Array.isArray(out.warmup)) out.warmup = out.warmup.map((w) => w && w.weight != null ? { ...w, weight: convertWeight(w.weight, from, to) } : w);
+    return out;
+  };
+  var convEntry = (e, from, to) => {
+    if (!e || typeof e !== "object") return e;
+    return {
+      ...e,
+      ...e.topW != null ? { topW: convertWeight(e.topW, from, to) } : {},
+      ...e.target ? { target: convTarget(e.target, from, to) } : {},
+      ...Array.isArray(e.sets) ? { sets: e.sets.map((s) => convSet(s, from, to)) } : {}
+    };
+  };
+  function convertStateUnit(S, to) {
+    const from = S.unit || "kg";
+    if (from === to) return S;
+    const c = (v) => convertWeight(v, from, to);
+    const bw = (v) => convertBodyWeight(v, from, to);
+    const convSession = (s) => {
+      const out2 = { ...s, entries: (s.entries || []).map((e) => convEntry(e, from, to)) };
+      if (out2.bw != null) out2.bw = bw(out2.bw);
+      if (Number.isFinite(out2.vol)) out2.vol = workoutVolume({ entries: out2.entries.filter((e) => Array.isArray(e == null ? void 0 : e.sets)) });
+      return out2;
+    };
+    const out = { ...S, unit: to };
+    if (Array.isArray(S.bodyweight)) out.bodyweight = S.bodyweight.map((b) => ({ ...b, w: bw(b.w) }));
+    if (S.targetW != null) out.targetW = bw(S.targetW);
+    if (S.exWeights) out.exWeights = Object.fromEntries(Object.entries(S.exWeights).map(([k, v]) => [k, v && typeof v === "object" ? { ...v, w: c(v.w) } : c(v)]));
+    if (S.barWeights) out.barWeights = Object.fromEntries(Object.entries(S.barWeights).map(([k, v]) => [k, c(v)]));
+    if (Array.isArray(S.routines)) out.routines = S.routines.map((r) => ({ ...r, ex: (r.ex || []).map((cfg) => convTarget(cfg, from, to)) }));
+    if (Array.isArray(S.workouts)) out.workouts = S.workouts.map(convSession);
+    if (S.active) out.active = convSession(S.active);
+    return out;
   }
   return __toCommonJS(entry_exports);
 })();

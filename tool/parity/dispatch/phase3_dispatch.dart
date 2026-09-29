@@ -108,7 +108,7 @@ Map<String, ParityCall> phase3Dispatch(JsEngineService engine) {
     // Finish Workout
     'finish.completeWorkout': (List<Object?> args) {
       final GymState st = GymState.fromJson(jsonMapArg(args, 0));
-      final int endMs = (argAt(args, 1) as num).toInt();
+      final int endMs = hasArg(args, 1) ? (argAt(args, 1) as num).toInt() : 0;
       return toPlainJson(finish.completeWorkout(st, endMs).toJson());
     },
   };

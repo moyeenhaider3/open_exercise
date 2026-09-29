@@ -21,6 +21,7 @@ import 'dispatch/exercises_dispatch.dart';
 import 'dispatch/history_dispatch.dart';
 import 'dispatch/onerm_dispatch.dart';
 import 'dispatch/phase3_dispatch.dart';
+import 'dispatch/phase31_dispatch.dart';
 import 'dispatch/progression_dispatch.dart';
 import 'dispatch/recovery_dispatch.dart';
 import 'dispatch/session_dispatch.dart';
@@ -82,6 +83,7 @@ Future<void> main() async {
     ...sessionMergeDispatch(engine),
     ...exercisesDispatch(engine),
     ...phase3Dispatch(engine),
+    ...phase31Dispatch(engine),
   };
 
   final Set<String> inventorySet = kBridgeInventory.toSet();

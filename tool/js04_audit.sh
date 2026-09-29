@@ -67,7 +67,7 @@ if [ -n "$(echo -n "$B_HITS" | tr -d '[:space:]')" ]; then
 fi
 
 # (c) Formula and constant fingerprints from openGym math
-C_PATTERN='/ 30\b|36 / \(37|pow\(|0\.45359237|129600000|1209600000|2419200000|\* 0\.9\b'
+C_PATTERN='/ 30\b|36 / \(37|pow\(|0\.45359237|129600000|1209600000|2419200000|\* 0\.9\b|2\.2046'
 C_HITS=$(find_dart_files "lib" | xargs grep -nE "$C_PATTERN" 2>/dev/null || true)
 if [ -n "$C_HITS" ]; then
   fail "Math formula/constant fingerprint found in Dart files:"
