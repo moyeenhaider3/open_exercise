@@ -149,7 +149,36 @@ Plans:
   3. Settings changes persist across restarts
   4. The UI-07 Zustand-to-Bloc checklist is complete across Phase 3 + 3.1
 
-**Plans**: TBD
+**Plans**: 13 plans in 5 waves
+
+Plans:
+**Wave 1**
+
+- [ ] 03.1-01-PLAN.md — Vendor backfill.js + units.js, finish-shim backfill branch, BackfillJs/UnitsJs facades + fixtures + parity
+- [ ] 03.1-02-PLAN.md — Device recheck of the "Volume (0 kg)" finish summary; fix WorkoutBloc if it is a real bug [device check]
+- [ ] 03.1-03-PLAN.md — Routes (/history, /settings, /checkin), provider files, setWeightDecimals wiring, WorkoutRowTile, Heatmap widget
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 03.1-04-PLAN.md — EffortJs extensions + viewAgg shim / ViewAggregatesJs facade (stats, heatmap, calendar, Home summary) + parity
+- [ ] 03.1-05-PLAN.md — Log a past workout: WorkoutBackfillStarted, completeBackfill finish branch, LogPastWorkout/SameDayChoice sheets
+- [ ] 03.1-06-PLAN.md — Check-in: qr_flutter (legitimacy gate), CheckInBloc, reorder/rename/delete, card rail [checkpoint]
+- [ ] 03.1-07-PLAN.md — SettingsBloc, unit switch (bridged convert), Your data / General / During a workout sections
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 03.1-08-PLAN.md — History screen, WorkoutDetail, Calendar, DayOverride sheets, HistoryBloc
+- [ ] 03.1-09-PLAN.md — BodyweightBloc, body-weight sheet, goal sheet
+- [ ] 03.1-10-PLAN.md — Settings Equipment, Appearance, Data, footer [device check incl. restart persistence]
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 03.1-11-PLAN.md — Home: HomeBloc, week strip, Today, welcome/body-weight/streak cards [device check]
+- [ ] 03.1-12-PLAN.md — Stats: StatsBloc, tiles, heatmap, EffortCard, body-weight chart, exercise progress [device check]
+
+**Wave 5** *(blocked on Wave 4 completion)*
+
+- [ ] 03.1-13-PLAN.md — UI-07 checklist across Phase 3 + 3.1, UI-08/architecture audits, end-to-end offline device check
 **UI hint**: yes
 
 ### Phase 4: Muscle Map Rendering
