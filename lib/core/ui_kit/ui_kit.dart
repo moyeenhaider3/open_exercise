@@ -6,6 +6,7 @@ library;
 export 'buttons.dart';
 export 'chips.dart';
 export 'controls.dart';
+export 'heatmap.dart';
 export 'icons/app_icon.dart';
 export 'icons/app_icon_data.g.dart';
 export 'modals.dart';

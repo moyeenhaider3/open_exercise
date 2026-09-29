@@ -156,7 +156,7 @@ Plans:
 
 - [x] 03.1-01-PLAN.md — Vendor backfill.js + units.js, finish-shim backfill branch, BackfillJs/UnitsJs facades + fixtures + parity
 - [x] 03.1-02-PLAN.md — Device recheck of the "Volume (0 kg)" finish summary; fix WorkoutBloc if it is a real bug [device check]
-- [ ] 03.1-03-PLAN.md — Routes (/history, /settings, /checkin), provider files, setWeightDecimals wiring, WorkoutRowTile, Heatmap widget
+- [x] 03.1-03-PLAN.md — Routes (/history, /settings, /checkin), provider files, setWeightDecimals wiring, WorkoutRowTile, Heatmap widget
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -260,7 +260,7 @@ Plans:
 | 1. Foundation & Models | 7/7 | Complete    | 2026-09-25 |
 | 2. Core Logic via QuickJS | 8/8 | Complete | 2026-09-28 |
 | 3. BLoC & UI Translation | 16/16 | Complete | 2026-09-29 |
-| 3.1. History, Stats, Home, Check-in & Settings | 2/13 | In progress | - |
+| 3.1. History, Stats, Home, Check-in & Settings | 3/13 | In progress | - |
 | 4. Muscle Map Rendering | 0/TBD | Not started | - |
 | 5. Timers & Passkeys | 0/TBD | Not started | - |
 | 6. Server Sync | 0/TBD | Not started | - |

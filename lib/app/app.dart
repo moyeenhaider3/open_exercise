@@ -12,14 +12,22 @@ import '../core/data/gym_state_repository.dart';
 import '../core/js/js_engine_service.dart';
 import '../core/router/app_router.dart';
 import '../core/state/gym_state_cubit.dart';
+import '../core/format/format.dart';
+import '../core/models/gym_state.dart';
 import '../core/theme/app_theme.dart';
 import '../features/shell/bloc/shell_bloc.dart';
 import '../features/shell/bloc/shell_event.dart';
 import '../features/shell/bloc/shell_state.dart';
 import '../features/shell/data/theme_settings.dart';
 import 'dependencies.dart';
+import 'providers/bodyweight_providers.dart';
+import 'providers/checkin_providers.dart';
+import 'providers/history_providers.dart';
+import 'providers/home_providers.dart';
 import 'providers/library_providers.dart';
 import 'providers/plan_providers.dart';
+import 'providers/settings_providers.dart';
+import 'providers/stats_providers.dart';
 import 'providers/workout_providers.dart';
 
 /// The app's composition root: DI ([AppDependencies] via
@@ -55,6 +63,7 @@ class _OpenExerciseAppState extends State<OpenExerciseApp> {
   @override
   void initState() {
     super.initState();
+    setWeightDecimals(widget.gymStateCubit.state.wdec == 2 ? 2 : 1);
     _lifecycleListener = AppLifecycleListener(
       onPause: () => unawaited(widget.gymStateCubit.flush()),
       onHide: () => unawaited(widget.gymStateCubit.flush()),
@@ -96,29 +105,41 @@ class _OpenExerciseAppState extends State<OpenExerciseApp> {
           ...libraryBlocProviders(widget.dependencies),
           ...workoutBlocProviders(widget.dependencies),
           ...planBlocProviders(widget.dependencies),
+          ...historyBlocProviders(widget.dependencies),
+          ...bodyweightBlocProviders(widget.dependencies),
+          ...homeBlocProviders(widget.dependencies),
+          ...statsBlocProviders(widget.dependencies),
+          ...checkinBlocProviders(widget.dependencies),
+          ...settingsBlocProviders(widget.dependencies),
         ],
-        child: BlocBuilder<ShellBloc, ShellState>(
-          builder: (context, state) {
-            switch (state) {
-              case ShellInitial():
-                const ThemeSettings settings = ThemeSettings.defaults();
-                return MaterialApp.router(
-                  title: 'openGym',
-                  theme: buildAppTheme(Brightness.light, settings.accent),
-                  darkTheme: buildAppTheme(Brightness.dark, settings.accent),
-                  themeMode: settings.themeMode,
-                  routerConfig: _router,
-                );
-              case ShellReady(:final settings):
-                return MaterialApp.router(
-                  title: 'openGym',
-                  theme: buildAppTheme(Brightness.light, settings.accent),
-                  darkTheme: buildAppTheme(Brightness.dark, settings.accent),
-                  themeMode: settings.themeMode,
-                  routerConfig: _router,
-                );
-            }
+        child: BlocListener<GymStateCubit, GymState>(
+          listenWhen: (GymState a, GymState b) => a.wdec != b.wdec,
+          listener: (BuildContext context, GymState state) {
+            setWeightDecimals(state.wdec == 2 ? 2 : 1);
           },
+          child: BlocBuilder<ShellBloc, ShellState>(
+            builder: (context, state) {
+              switch (state) {
+                case ShellInitial():
+                  const ThemeSettings settings = ThemeSettings.defaults();
+                  return MaterialApp.router(
+                    title: 'openGym',
+                    theme: buildAppTheme(Brightness.light, settings.accent),
+                    darkTheme: buildAppTheme(Brightness.dark, settings.accent),
+                    themeMode: settings.themeMode,
+                    routerConfig: _router,
+                  );
+                case ShellReady(:final settings):
+                  return MaterialApp.router(
+                    title: 'openGym',
+                    theme: buildAppTheme(Brightness.light, settings.accent),
+                    darkTheme: buildAppTheme(Brightness.dark, settings.accent),
+                    themeMode: settings.themeMode,
+                    routerConfig: _router,
+                  );
+              }
+            },
+          ),
         ),
       ),
     );
