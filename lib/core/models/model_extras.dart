@@ -48,6 +48,9 @@ extension WorkoutEntryExtras on WorkoutEntry {
   /// Mirrors `../openGym/frontend/src/lib/finish-workout.js` / `Workout.jsx`: `entry.note`.
   String? get note => extra['note'] as String?;
 
+  /// Historical workout date when entry was fetched via lastEntryFor.
+  String? get d => extra['d'] as String?;
+
   /// Whether the note is pinned across workouts.
   /// Mirrors `../openGym/frontend/src/lib/finish-workout.js`: `entry.notePin`.
   bool get notePin => extra['notePin'] == true;

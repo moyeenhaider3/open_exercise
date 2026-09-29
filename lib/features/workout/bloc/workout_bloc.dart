@@ -821,6 +821,21 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
           entries[event.entryIdx] = curEntry.copyWith(sets: sets);
           return s.copyWith(active: act.copyWith(entries: entries));
         });
+      } else if (event.field == 'rir' || event.field == 'rpe') {
+        final String kind = _engine.history.effortOf(state);
+        final num? rawCur = sideRow?.toJson()[event.field] as num?;
+        final double? nextV = _engine.history.stepEffort(kind, rawCur, event.direction);
+        await _gymState.mutate((GymState s) {
+          final Workout? act = s.active;
+          if (act == null || act.entries == null || event.entryIdx >= act.entries!.length) return s;
+          final List<WorkoutEntry> entries = List<WorkoutEntry>.from(act.entries!);
+          final WorkoutEntry curEntry = entries[event.entryIdx];
+          if (curEntry.sets == null || event.setIdx >= curEntry.sets!.length) return s;
+          final List<SetEntry> sets = List<SetEntry>.from(curEntry.sets!);
+          sets[event.setIdx] = _engine.workoutModel.setSideField(sets[event.setIdx], event.side!, event.field, nextV);
+          entries[event.entryIdx] = curEntry.copyWith(sets: sets);
+          return s.copyWith(active: act.copyWith(entries: entries));
+        });
       } else {
         final num effectiveStep = event.field == 'r' ? 1 : event.step;
         // UI stepper rounding (Workout.jsx:293)
@@ -845,6 +860,10 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
       final num? cur = row.toJson()[event.field] as num?;
       if (mode == 'reps' && event.field == 'w') {
         final num nextV = _engine.progression.stepWeight(cur, event.step, event.direction);
+        await _onSetFieldChanged(WorkoutSetFieldChanged(event.entryIdx, event.setIdx, event.field, nextV));
+      } else if (event.field == 'rir' || event.field == 'rpe') {
+        final String kind = _engine.history.effortOf(state);
+        final double? nextV = _engine.history.stepEffort(kind, cur, event.direction);
         await _onSetFieldChanged(WorkoutSetFieldChanged(event.entryIdx, event.setIdx, event.field, nextV));
       } else {
         // UI stepper rounding (Workout.jsx:179)

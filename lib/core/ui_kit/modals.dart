@@ -151,6 +151,7 @@ class MenuItemSpec {
     required this.label,
     this.sub,
     this.danger = false,
+    this.disabled = false,
     required this.onTap,
   });
 
@@ -158,6 +159,7 @@ class MenuItemSpec {
   final String label;
   final String? sub;
   final bool danger;
+  final bool disabled;
   final VoidCallback onTap;
 }
 
@@ -200,28 +202,33 @@ Future<void> showMenuSheet(
             itemCount: items.length,
             itemBuilder: (BuildContext context, int index) {
               final MenuItemSpec item = items[index];
-              return ListItem(
-                leading: item.icon != null
-                    ? AppIcon(
-                        item.icon!,
-                        size: 20.0,
-                        color: item.danger ? palette.red : palette.muted,
-                      )
-                    : null,
-                title: Text(
-                  item.label,
-                  style: TextStyle(
-                    color: item.danger
-                        ? palette.red
-                        : Theme.of(context).colorScheme.onSurface,
+              return Opacity(
+                opacity: item.disabled ? 0.4 : 1.0,
+                child: ListItem(
+                  leading: item.icon != null
+                      ? AppIcon(
+                          item.icon!,
+                          size: 20.0,
+                          color: item.danger ? palette.red : palette.muted,
+                        )
+                      : null,
+                  title: Text(
+                    item.label,
+                    style: TextStyle(
+                      color: item.danger
+                          ? palette.red
+                          : Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
+                  subtitle: item.sub != null ? Text(item.sub!) : null,
+                  onTap: item.disabled
+                      ? null
+                      : () {
+                          // Close sheet first, then execute onTap (matching openGym order).
+                          Navigator.of(ctx).pop();
+                          item.onTap();
+                        },
                 ),
-                subtitle: item.sub != null ? Text(item.sub!) : null,
-                onTap: () {
-                  // Close sheet first, then execute onTap (matching openGym order).
-                  Navigator.of(ctx).pop();
-                  item.onTap();
-                },
               );
             },
           ),

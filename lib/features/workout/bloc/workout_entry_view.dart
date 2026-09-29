@@ -75,13 +75,15 @@ class ProgressionGuidance extends Equatable {
   const ProgressionGuidance({
     required this.policyLabel,
     this.why,
+    this.kind,
   });
 
   final String policyLabel;
   final Object? why;
+  final String? kind;
 
   @override
-  List<Object?> get props => <Object?>[policyLabel, why];
+  List<Object?> get props => <Object?>[policyLabel, why, kind];
 }
 
 /// Pre-calculated view model for a single exercise block in the active workout session.
@@ -181,7 +183,7 @@ class WorkoutEntryView extends Equatable {
     final ({String policyLabel, Object? why})? rawGuidance =
         engine.progressionCopy.progressionGuidance(plan);
     final ProgressionGuidance? guidance = rawGuidance != null
-        ? ProgressionGuidance(policyLabel: rawGuidance.policyLabel, why: rawGuidance.why)
+        ? ProgressionGuidance(policyLabel: rawGuidance.policyLabel, why: rawGuidance.why, kind: plan?.kind)
         : null;
 
     final bool bw = !cardio && engine.history.isBw(cfg);
