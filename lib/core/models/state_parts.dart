@@ -117,6 +117,20 @@ class EquipProfile extends Equatable {
         'equipment': equipment,
       });
 
+  EquipProfile copyWith({
+    String? id,
+    String? name,
+    List<String>? equipment,
+    Map<String, Object?>? extra,
+  }) {
+    return EquipProfile(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      equipment: equipment ?? this.equipment,
+      extra: extra ?? this.extra,
+    );
+  }
+
   @override
   List<Object?> get props => <Object?>[id, name, equipment, extra];
 }
