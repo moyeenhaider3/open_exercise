@@ -159,6 +159,22 @@ class GymCard extends Equatable {
         'fmt': fmt,
       });
 
+  GymCard copyWith({
+    String? id,
+    String? label,
+    String? value,
+    String? fmt,
+    Map<String, Object?>? extra,
+  }) {
+    return GymCard(
+      id: id ?? this.id,
+      label: label ?? this.label,
+      value: value ?? this.value,
+      fmt: fmt ?? this.fmt,
+      extra: extra ?? this.extra,
+    );
+  }
+
   @override
   List<Object?> get props => <Object?>[id, label, value, fmt, extra];
 }
