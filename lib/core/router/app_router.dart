@@ -57,7 +57,7 @@ GoRouter createAppRouter() {
             name: 'routine',
             builder: (BuildContext context, GoRouterState state) {
               final String id = state.pathParameters['id'] ?? '';
-              return RoutineEditScreen(routineId: id);
+              return RoutineEditScreen(key: ValueKey<String>(id), routineId: id);
             },
           ),
           GoRoute(

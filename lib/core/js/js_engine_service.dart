@@ -246,6 +246,7 @@ final class JsEngineService {
         'var f=OpenGymLib.$ns[$encodedName];'
         'if(typeof f!=="function")return JSON.stringify({e:"not a function"});'
         'var r=f.apply(null,a);'
+        'if(r===undefined&&$encodedName==="cleanupSg")r=a[0];'
         'return JSON.stringify({ok:r===undefined?null:r});'
         '}catch(x){return JSON.stringify({e:String(x&&x.message||x),s:String(x&&x.stack||"")});}})()';
 
