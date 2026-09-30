@@ -492,7 +492,7 @@ methods, new screen), not a rename/refactor/migration.*
 | A2 | The intended MAP-01 design is "generate real SVG assets, then parse at runtime with `xml`" rather than "generate a `.g.dart` file directly" | Summary, Architecture Patterns, Pitfall 1 | Medium — this is inferred from the requirement wording + the CLAUDE.md note that `xml` is reserved for a later phase, not directly confirmed by a CONTEXT.md decision (none exists for this phase). If wrong, the generator step still produces correct geometry, just via a different file format; replanning cost is one task, not a redesign. |
 | A3 | `loadOfWorkouts`'s `pick` (predicate) parameter needs a small shim (non-JSON-serializable function argument) rather than being callable directly over the JSON bridge | Code Examples | Medium — if the existing bridge call protocol already supports passing a named-predicate string/flag some other way (unconfirmed — not verified against `JsEngineService.call`'s actual argument marshalling this session), the shim may be unnecessary. Planner/executor must check `lib/core/js/js_engine_service.dart`'s call protocol before writing the shim. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Exact viewBox scaling behavior for hit-testing when front/back are shown side-by-side vs stacked**
    - What we know: `.bodymap` in openGym CSS renders two `<svg class="bm-v">` (front, back), and
@@ -504,6 +504,8 @@ methods, new screen), not a rename/refactor/migration.*
    - Recommendation: Planner should have the executor re-read the `.bodymap`/`.bm-v` CSS rules in
      full (`index.css` around line 1197-1230) during Wave 2 and pick `Row(children: [Expanded(front), Expanded(back)])`
      with `AspectRatio(aspectRatio: viewBox.width/viewBox.height)` per view, matching CSS behavior.
+   - RESOLVED: 04-04 Task 2 uses a front/back row (6 px gap), each view's height = width × viewBox aspect,
+     capped at min(46% screen height, 340 px), uniform "meet" fit centred; paint and hit-test share `BodyMapFit`.
 
 2. **Whether `loadOfWorkouts`'s `pick` predicate is reachable over the existing JSON call bridge**
    - What we know: `RecoveryJs.fatigueOf`/`strengthOf` pass whole `Workout` lists and an `opts`
@@ -515,6 +517,8 @@ methods, new screen), not a rename/refactor/migration.*
      (`isHardSet`) and exposes a boolean-flag API instead."
    - Recommendation: Follow the shim pattern (confirmed precedent, safe default) rather than
      attempting to marshal a function across the bridge.
+   - RESOLVED: 04-01's `muscle-view-shim.js` `muscleBalance(S, win, hard, nowMs, todayIso)` takes a `hard`
+     boolean and passes `isHardSet` itself; Dart `MusclesJs.loadOfWorkouts` always sends `jsUndefined` for `pick` (04-02).
 
 ## Environment Availability
 
