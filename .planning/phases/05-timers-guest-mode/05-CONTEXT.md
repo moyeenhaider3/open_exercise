@@ -22,21 +22,21 @@ Those parts (AUTH-01..04, SYNC-01..03) were removed from v1 by the user on 2026-
 ## Implementation Decisions
 
 ### Guest mode (locked)
-- Guest mode is the ONLY mode. There is no sign-in screen, no server URL field, no account section,
+- **D-01:** Guest mode is the ONLY mode. There is no sign-in screen, no server URL field, no account section,
   and no logout. Where openGym shows server/account/sync UI (Login, SyncBanner, Settings account
   rows, server-only buttons), the port hides it or replaces it with a local equivalent.
-- No user data leaves the device. No network calls for user data (no `/api/data`, `/api/push/*`, etc.).
-- Guest behaviour follows openGym's `lib/guest.js` wherever that logic applies to a no-server app.
-- `flutter_passkey_service` is no longer used in v1. Do not add it in this phase.
+- **D-02:** No user data leaves the device. No network calls for user data (no `/api/data`, `/api/push/*`, etc.).
+- **D-03:** Guest behaviour follows openGym's `lib/guest.js` wherever that logic applies to a no-server app.
+- **D-04:** `flutter_passkey_service` is no longer used in v1. Do not add it in this phase.
 
 ### Timers & notifications (locked)
-- Keep TMR-01..03 in this phase, as on the original roadmap.
-- Use `flutter_local_notifications` (user-mandated) for the rest-end and daily reminder
+- **D-05:** Keep TMR-01..03 in this phase, as on the original roadmap.
+- **D-06:** Use `flutter_local_notifications` (user-mandated) for the rest-end and daily reminder
   notifications. openGym's web push (`push.js`, `/api/push/rest-timer`) becomes local notifications.
-- Timer numbers, sound choice and flash follow openGym (`RestTimer.jsx`, `TimerFlash.jsx`, `sound.js`).
+- **D-07:** Timer numbers, sound choice and flash follow openGym (`RestTimer.jsx`, `TimerFlash.jsx`, `sound.js`).
 
 ### Phase 6 hand-off (for awareness, not planned here)
-- Phase 6 becomes Local Backup & Restore: periodic full-state JSON backups to a user-chosen device
+- **D-08 [informational]:** Phase 6 becomes Local Backup & Restore: periodic full-state JSON backups to a user-chosen device
   folder, a manual backup in Settings, and a full restore from a backup file (the backup is the
   master copy, like signing in again after a logout). Phase 5 must not build anything that
   assumes a server, so Phase 6 can add its Settings section cleanly.
