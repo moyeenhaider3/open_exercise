@@ -35,6 +35,13 @@ Those parts (AUTH-01..04, SYNC-01..03) were removed from v1 by the user on 2026-
   notifications. openGym's web push (`push.js`, `/api/push/rest-timer`) becomes local notifications.
 - **D-07:** Timer numbers, sound choice and flash follow openGym (`RestTimer.jsx`, `TimerFlash.jsx`, `sound.js`).
 
+- **D-09:** The work/hold countdown for timed ('time'-mode) sets is in scope, ported together with the
+  rest timer (the same widget and code as in openGym). User decision 2026-09-30, after research Open Question 1.
+- **D-10:** Android exact alarms use `SCHEDULE_EXACT_ALARM` (the user grants it in system settings), with a
+  fallback to an inexact alarm when it is denied. Do NOT declare `USE_EXACT_ALARM`. User decision 2026-09-30.
+- **D-11 [informational]:** Leave the generated Dio/OpenAPI client in place (it is inert, since `ApiClientFactory.create()`
+  is never called). Pruning it is out of scope for this phase.
+
 ### Phase 6 hand-off (for awareness, not planned here)
 - **D-08 [informational]:** Phase 6 becomes Local Backup & Restore: periodic full-state JSON backups to a user-chosen device
   folder, a manual backup in Settings, and a full restore from a backup file (the backup is the
