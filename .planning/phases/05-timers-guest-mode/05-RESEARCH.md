@@ -443,7 +443,7 @@ delayed 0.25s), 1320Hz/0.4s (delayed 0.5s), plus a 660Hz/0.1s tick repeated when
 | A3 | The rest/work timer & reminder should live in Dart app logic, not be bridged through QuickJS | Architecture Patterns | Low — matches openGym's own layering (`useUI.js`/`mobile.js` are UI-store/platform glue, not `lib/*.js` domain modules subject to JS-04) |
 | A4 | The work/hold ("time"-mode set) timer is in scope for this phase, even though CONTEXT.md's Phase Boundary text only names the "rest timer" for TMR-01 | Summary / Open Questions | Medium — see Open Question 1; if the planner scopes it out, `WorkoutBloc`'s `time`-mode sets will keep firing "Hold logged" with no real countdown, an incomplete-feeling feature |
 
-## Open Questions
+## Open Questions (RESOLVED — D-09, D-10, D-11 in 05-CONTEXT.md)
 
 1. **Is the work/hold timer (timed 'time'-mode sets, e.g. planks) in scope for Phase 5?**
    - What we know: `WorkoutBloc`'s header comment says "Per D-02, work **and rest** countdown

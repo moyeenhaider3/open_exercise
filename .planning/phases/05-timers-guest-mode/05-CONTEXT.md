@@ -30,7 +30,7 @@ Those parts (AUTH-01..04, SYNC-01..03) were removed from v1 by the user on 2026-
 - **D-04:** `flutter_passkey_service` is no longer used in v1. Do not add it in this phase.
 
 ### Timers & notifications (locked)
-- **D-05:** Keep TMR-01..03 in this phase, as on the original roadmap.
+- **D-05 [informational]:** Keep TMR-01..03 in this phase, as on the original roadmap.
 - **D-06:** Use `flutter_local_notifications` (user-mandated) for the rest-end and daily reminder
   notifications. openGym's web push (`push.js`, `/api/push/rest-timer`) becomes local notifications.
 - **D-07:** Timer numbers, sound choice and flash follow openGym (`RestTimer.jsx`, `TimerFlash.jsx`, `sound.js`).
