@@ -38,8 +38,8 @@ Log a workout fully offline with **exactly** the same numbers as openGym. The sa
 - [ ] Exercise library, workout tracker, routines/plan, history, stats, settings translated to Material 3, with `ListView.builder` lists and memory-cached WebP/GIF media
 - [ ] Muscle map: SVG path strings parsed with `xml` + `path_drawing` and drawn with `CustomPainter`, keeping the fatigue/volume shading
 - [ ] Rest timer and reminders with flutter_local_notifications (exact alarm when the app is backgrounded)
-- [ ] Auth: native passkey (flutter_passkey_service) where the RP domain supports it, plus the device-pairing code flow (`/api/pair/redeem`) as a fallback
-- [ ] Local-first sync with `/api/data` + `/api/data/rev`, merged through `sync-merge.js`
+- [ ] Guest-only mode: no account, no server, all user data stays on the device
+- [ ] Local backup and restore: periodic full-state JSON backups to a user-chosen device folder, manual backup from Settings, and a full restore from a backup file
 - [ ] AI Coach (CoachChat / Setup / Intake)
 - [ ] Admin panel (users, invites, audit)
 - [ ] Import and share: Hevy/CSV import, plan share through QR, barcode scanning for gym cards
@@ -50,6 +50,7 @@ Log a workout fully offline with **exactly** the same numbers as openGym. The sa
 - Web/desktop Flutter targets — mobile only, matching openGym's Capacitor shells
 - Changes to the openGym server — the port uses the API as it is
 - The MCP server and marketing website — not part of the app
+- Server accounts (passkey, pairing code, logout) and online sync — user decision 2026-09-30: guest-only, backups stay on the device
 
 ## Context
 
@@ -70,8 +71,9 @@ Log a workout fully offline with **exactly** the same numbers as openGym. The sa
 |----------|-----------|---------|
 | Run the original JS through QuickJS instead of translating it | Keeps the math identical | — Pending |
 | Bundle `lib/*.js` with esbuild into one asset | flutter_js has no ESM import resolution | — Pending |
-| Passkeys + pairing-code fallback | Native WebAuthn depends on domain association files | — Pending |
-| Local-first + server sync | Same as openGym's model | — Pending |
+| ~~Passkeys + pairing-code fallback~~ | Dropped 2026-09-30: guest-only mode | Superseded |
+| ~~Local-first + server sync~~ | Dropped 2026-09-30 | Superseded |
+| Guest-only + local file backup/restore | User wants no data online; the backup file is the master copy | — Pending |
 | Full scope in v1 (Coach, Admin, Import/Share, i18n) | User wants a 1:1 replica | — Pending |
 
 ## Evolution

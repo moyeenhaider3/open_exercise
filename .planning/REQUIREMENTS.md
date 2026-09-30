@@ -38,17 +38,14 @@
 - [ ] **TMR-02**: If the app is backgrounded during rest, an exact local notification fires when the rest ends; returning or skipping cancels it
 - [ ] **TMR-03**: User can set a daily workout reminder (time + timezone) that fires as a local notification
 
-### Auth (AUTH)
-- [ ] **AUTH-01**: User can set a server URL and check it with `/api/health` + `/api/config`
-- [ ] **AUTH-02**: User can register and sign in with a native passkey (flutter_passkey_service → `/api/register/*`, `/api/login/*`) when the RP domain supports it
-- [ ] **AUTH-03**: User can sign in by redeeming a pairing code (`/api/pair/redeem`)
-- [ ] **AUTH-04**: The session token is kept in secure storage; user can log out, or log out of all devices
-- [ ] **AUTH-05**: User can use the app as a guest/offline with no account
+### Guest Mode (AUTH)
+- [ ] **AUTH-05**: User can use the app as a guest/offline with no account (the only mode in v1, see Out of Scope)
 
-### Sync (SYNC)
-- [ ] **SYNC-01**: While signed in, local state syncs to `/api/data`, and remote revisions are polled (`/api/data/rev`, 30 s, on resume)
-- [ ] **SYNC-02**: Conflicts are merged by openGym's `sync-merge.js` running in the JS engine
-- [ ] **SYNC-03**: A sync banner shows offline, syncing and conflict status
+### Local Backup (BAK)
+- [ ] **BAK-01**: User chooses a device folder for backups (asked on first use), and can change it any time in Settings
+- [ ] **BAK-02**: The app writes a full-state JSON backup to that folder regularly without user action
+- [ ] **BAK-03**: User can make a backup at any time from Settings
+- [ ] **BAK-04**: User can import a backup file to restore all their data (the backup is the master copy, like signing in again after a logout)
 
 ### Coach (COACH)
 - [ ] **COACH-01**: User can complete the coach setup and intake flow
@@ -64,7 +61,7 @@
 - [ ] **IMP-01**: User can import workouts from a Hevy export or CSV, with exercise matching
 - [ ] **IMP-02**: User can share a plan as a QR code and import one by scanning
 - [ ] **IMP-03**: User can store gym cards by scanning barcodes
-- [ ] **IMP-04**: User can back up and restore state to and from a file
+- [ ] **IMP-04**: User can back up and restore state to and from a file (delivered by BAK-01..04 in Phase 6)
 
 ### i18n (I18N)
 - [ ] **I18N-01**: UI text is available in all 14 openGym locales and follows the `lang` setting
@@ -81,6 +78,7 @@
 - Changes to the openGym server or API — the port uses the API as it is
 - The MCP server and marketing website — not part of the app
 - Hand-translating domain math to Dart — against the parity principle
+- Server accounts and online sync (AUTH-01..04, SYNC-01..03) — user decision 2026-09-30: guest-only, all data stays on the device
 
 ## Traceability
 
@@ -92,9 +90,9 @@
 | UI-05..06 | Phase 3.1 | Pending |
 | UI-07..08 | Phase 3 + 3.1 | Pending |
 | MAP-01..03 | Phase 4 | Pending |
-| TMR-01..03, AUTH-01..05 | Phase 5 | Pending |
-| SYNC-01..03 | Phase 6 | Pending |
+| TMR-01..03, AUTH-05 | Phase 5 | Pending |
+| BAK-01..04, IMP-04 | Phase 6 | Pending |
 | COACH-01..03, ADM-01..03 | Phase 7 | Pending |
-| IMP-01..04, I18N-01..02 | Phase 8 | Pending |
+| IMP-01..03, I18N-01..02 | Phase 8 | Pending |
 
-**Coverage:** 43/43 v1 requirements mapped ✓
+**Coverage:** 40/40 v1 requirements mapped ✓ (AUTH-01..04 and SYNC-01..03 moved to Out of Scope; BAK-01..04 added)

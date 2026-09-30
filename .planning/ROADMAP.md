@@ -11,10 +11,10 @@ Port openGym to native Flutter in horizontal layers. Build the data foundation f
 - [x] **Phase 3: BLoC & UI Translation** - State layer, Library, exercise detail, workout tracker, plan/routines in Material 3
 - [ ] **Phase 3.1: History, Stats, Home, Check-in & Settings** (INSERTED) - Remaining screens on the Phase 3 state layer
 - [ ] **Phase 4: Muscle Map Rendering** - SVG paths → CustomPainter with fatigue/volume shading
-- [ ] **Phase 5: Timers & Passkeys** - Background rest alerts, reminders, passkey + pairing sign-in
-- [ ] **Phase 6: Server Sync** - Local-first sync with rev polling and sync-merge.js
+- [ ] **Phase 5: Timers & Guest Mode** - Background rest alerts, reminders, guest-only (no account, no server)
+- [ ] **Phase 6: Local Backup & Restore** - Periodic JSON backups to a user-chosen device folder, manual backup, full restore from file
 - [ ] **Phase 7: Coach & Admin** - AI Coach flows and admin panel
-- [ ] **Phase 8: Import, Share & i18n** - Hevy/CSV import, QR/barcode, backup, 14 locales
+- [ ] **Phase 8: Import, Share & i18n** - Hevy/CSV import, QR/barcode, 14 locales
 
 ## Phase Details
 
@@ -219,33 +219,36 @@ Plans:
 
 - [ ] 04-08-PLAN.md — Phase gates, UI07 checklist closure, device walkthrough vs openGym [checkpoint]
 
-### Phase 5: Timers & Passkeys
+### Phase 5: Timers & Guest Mode
 
-**Goal**: Rest alerts fire even when the app is backgrounded, and the user can sign in to their server
+**Goal**: Rest alerts fire even when the app is backgrounded, and the app runs fully as a guest with no account and no server
 **Depends on**: Phase 4
-**Requirements**: TMR-01, TMR-02, TMR-03, AUTH-01, AUTH-02, AUTH-03, AUTH-04, AUTH-05
+**Requirements**: TMR-01, TMR-02, TMR-03, AUTH-05
+**Scope change (2026-09-30, user decision)**: guest mode only, no online sync. Server URL, passkey, pairing and logout (AUTH-01..04) are out of scope.
 **Success Criteria** (what must be TRUE):
 
   1. Backgrounding during rest gives an exact notification at the end of rest (Android + iOS)
   2. The daily reminder fires at the configured time
-  3. User can sign in with a passkey (on a correctly associated domain) or a pairing code, and log out
-  4. Guest mode works with no server
+  3. The app runs as a guest with no server: no sign-in screen, no account or server UI, and no network calls for user data
 
 **Plans**: TBD
 **UI hint**: yes
 
-### Phase 6: Server Sync
+### Phase 6: Local Backup & Restore
 
-**Goal**: Local data and server data stay in sync, with conflicts merged the same way openGym merges them
+**Goal**: The user's data is always backed up to a device folder they choose, and a backup file restores everything, with no data ever sent online
 **Depends on**: Phase 5
-**Requirements**: SYNC-01, SYNC-02, SYNC-03
+**Requirements**: BAK-01, BAK-02, BAK-03, BAK-04, IMP-04
+**Scope change (2026-09-30, user decision)**: replaces Server Sync (SYNC-01..03). The backup file is the "master" copy: importing it restores all user data, like signing in again after a logout.
 **Success Criteria** (what must be TRUE):
 
-  1. A workout logged offline appears on the server after reconnecting
-  2. Changes made in the web app appear in the Flutter app within 30 s or on resume
-  3. Concurrent edits merge through `sync-merge.js` without data loss
+  1. The user picks a backup folder on the device, and can change it any time in Settings
+  2. A full-state JSON backup is written to that folder regularly without user action
+  3. The user can make a backup at any time from Settings
+  4. Importing a backup file on a fresh install restores all user data exactly (round-trip equivalent)
 
 **Plans**: TBD
+**UI hint**: yes
 
 ### Phase 7: Coach & Admin
 
@@ -264,13 +267,12 @@ Plans:
 
 **Goal**: The user can bring data in or out of the app and use it in their own language
 **Depends on**: Phase 7
-**Requirements**: IMP-01, IMP-02, IMP-03, IMP-04, I18N-01, I18N-02
+**Requirements**: IMP-01, IMP-02, IMP-03, I18N-01, I18N-02
 **Success Criteria** (what must be TRUE):
 
   1. A Hevy/CSV export imports with correct exercise matching
   2. A plan shared as a QR code imports on another device; gym card barcodes scan
-  3. Backup and restore work
-  4. Switching to any of the 14 locales translates the UI and exercise names
+  3. Switching to any of the 14 locales translates the UI and exercise names
 
 **Plans**: TBD
 **UI hint**: yes
@@ -286,7 +288,7 @@ Plans:
 | 3. BLoC & UI Translation | 16/16 | Complete | 2026-09-29 |
 | 3.1. History, Stats, Home, Check-in & Settings | 13/13 | Complete | 2026-09-30 |
 | 4. Muscle Map Rendering | 8/8 | Complete | 2026-09-30 |
-| 5. Timers & Passkeys | 0/TBD | Not started | - |
-| 6. Server Sync | 0/TBD | Not started | - |
+| 5. Timers & Guest Mode | 0/TBD | Not started | - |
+| 6. Local Backup & Restore | 0/TBD | Not started | - |
 | 7. Coach & Admin | 0/TBD | Not started | - |
 | 8. Import, Share & i18n | 0/TBD | Not started | - |
