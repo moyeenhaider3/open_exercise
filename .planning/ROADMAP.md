@@ -231,7 +231,31 @@ Plans:
   2. The daily reminder fires at the configured time
   3. The app runs as a guest with no server: no sign-in screen, no account or server UI, and no network calls for user data
 
-**Plans**: TBD
+**Plans**: 8 plans
+
+Plans:
+**Wave 1**
+
+- [ ] 05-01-PLAN.md — Legitimacy gate + install 6 packages, Android/iOS notification config (SCHEDULE_EXACT_ALARM, no USE_EXACT_ALARM), timer tone WAVs [checkpoint]
+- [ ] 05-02-PLAN.md — Bridge supersetFlow.js rest decisions + mobile.js buildReminderNotifications shim, facades, fixtures, device parity
+- [ ] 05-03-PLAN.md — AUTH-05 guest-only audit (tool/guest_audit.sh), ApiClientFactory rule comment, UI-07 account rows N/A
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 05-04-PLAN.md — NotificationService (tz, exact/inexact), TimerSound (tones, vibration, play-on-silent), WakelockSync, DI/boot
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 05-05-PLAN.md — WorkoutTimerBloc (useUI.js rest + work slice), RestTimerBar, TimerFlash, lifecycle host, background rest notification
+- [ ] 05-06-PLAN.md — ReminderSync (mobile.js syncReminder), Settings Notifications section, During-a-workout rows
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 05-07-PLAN.md — WorkoutBloc rest/work triggers, set/finish beeps, timed-set Start button
+
+**Wave 5** *(blocked on Wave 4 completion)*
+
+- [ ] 05-08-PLAN.md — Phase gates, UI-07 timer rows, real-device walkthrough Android + iPhone [checkpoint]
 **UI hint**: yes
 
 ### Phase 6: Local Backup & Restore
