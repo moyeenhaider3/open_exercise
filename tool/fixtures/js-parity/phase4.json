@@ -1,0 +1,3762 @@
+{
+  "schema": 1,
+  "module": "phase4",
+  "openGymVersion": "1.3.8",
+  "sourceSha256": "f92e2a0a32302d9bfe67b9579b26e619dc761c4a28b68af1200f186e0bb7d551",
+  "generatedBy": "tool/gen_js_fixtures.sh",
+  "cases": [
+    {
+      "id": "p4-muscles-001",
+      "fn": "muscles.musclesOf",
+      "args": [
+        {
+          "id": "0025",
+          "n": "barbell bench press",
+          "bp": "chest",
+          "eq": "barbell",
+          "tg": "pectorals",
+          "mg": "triceps",
+          "sm": [
+            "triceps",
+            "shoulders"
+          ],
+          "st": [
+            "Lie flat on a bench with your feet flat on the ground and your back pressed against the bench.",
+            "Grasp the barbell with an overhand grip slightly wider than shoulder-width apart.",
+            "Lift the barbell off the rack and hold it directly above your chest with your arms fully extended.",
+            "Lower the barbell slowly towards your chest, keeping your elbows tucked in.",
+            "Pause for a moment when the barbell touches your chest.",
+            "Push the barbell back up to the starting position by extending your arms.",
+            "Repeat for the desired number of repetitions."
+          ],
+          "img": "0025-EIeI8Vf.jpg",
+          "gif": "0025-EIeI8Vf.gif",
+          "primaries": [
+            "chest"
+          ],
+          "secondaries": [
+            "triceps",
+            "deltoids",
+            "biceps"
+          ]
+        }
+      ],
+      "expected": {
+        "chest": 1,
+        "triceps": 0.4,
+        "deltoids": 0.4,
+        "biceps": 0.4
+      },
+      "from": "lib/muscles.js:203-241 > catalogue exercise 0025"
+    },
+    {
+      "id": "p4-muscles-002",
+      "fn": "muscles.musclesOf",
+      "args": [
+        {
+          "id": "custom-lat",
+          "muscleWeights": {
+            "upper-back": 1,
+            "biceps": 0.5
+          }
+        }
+      ],
+      "expected": {
+        "upper-back": 1,
+        "biceps": 0.5
+      },
+      "from": "lib/muscles.js:203-241 > custom exercise with muscleWeights"
+    },
+    {
+      "id": "p4-muscles-003",
+      "fn": "muscles.musclesOf",
+      "args": [
+        {
+          "primaries": [
+            "quadriceps"
+          ],
+          "secondaries": [
+            "gluteal",
+            "calves"
+          ]
+        }
+      ],
+      "expected": {
+        "quadriceps": 1,
+        "gluteal": 0.4,
+        "calves": 0.4
+      },
+      "from": "lib/muscles.js:203-241 > exercise with primaries and secondaries"
+    },
+    {
+      "id": "p4-muscles-004",
+      "fn": "muscles.loadOf",
+      "args": [
+        [
+          {
+            "id": "0025",
+            "sets": 3
+          },
+          {
+            "id": "0025",
+            "sets": 0
+          }
+        ]
+      ],
+      "expected": {
+        "chest": 3,
+        "triceps": 1.2000000000000002,
+        "deltoids": 1.2000000000000002,
+        "biceps": 1.2000000000000002
+      },
+      "from": "lib/muscles.js:249-260 > items with sets 0 skipped and sets > 0"
+    },
+    {
+      "id": "p4-muscles-005",
+      "fn": "muscles.loadOf",
+      "args": [
+        [
+          {
+            "id": "0025",
+            "sets": 4
+          },
+          {
+            "id": "custom-lat",
+            "ex": {
+              "muscleWeights": {
+                "upper-back": 1
+              }
+            },
+            "sets": 2
+          }
+        ]
+      ],
+      "expected": {
+        "chest": 4,
+        "triceps": 1.6,
+        "deltoids": 1.6,
+        "biceps": 1.6,
+        "upper-back": 2
+      },
+      "from": "lib/muscles.js:249-260 > multiple exercises including custom weights"
+    },
+    {
+      "id": "p4-muscles-006",
+      "fn": "muscles.loadOfWorkouts",
+      "args": [
+        [
+          {
+            "id": "w1",
+            "d": "2026-06-14",
+            "start": 1781438400000,
+            "end": 1781442000000,
+            "entries": [
+              {
+                "id": "0025",
+                "sets": [
+                  {
+                    "weight": 40,
+                    "reps": 10,
+                    "done": true,
+                    "warmup": true
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 8,
+                    "done": true,
+                    "rir": 1
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 7,
+                    "done": true,
+                    "rir": 2
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 6,
+                    "done": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "w2",
+            "d": "2026-06-05",
+            "start": 1780660800000,
+            "end": 1780663500000,
+            "entries": [
+              {
+                "id": "custom-lat",
+                "exercise": {
+                  "id": "custom-lat",
+                  "n": "Custom Lat Pulldown",
+                  "muscleWeights": {
+                    "upper-back": 1,
+                    "biceps": 0.5
+                  }
+                },
+                "sets": [
+                  {
+                    "weight": 50,
+                    "reps": 10,
+                    "done": true
+                  },
+                  {
+                    "weight": 55,
+                    "reps": 8,
+                    "done": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "w3",
+            "d": "2026-05-06",
+            "start": 1778068800000,
+            "end": 1778071800000,
+            "entries": [
+              {
+                "id": "0025",
+                "sets": [
+                  {
+                    "weight": 75,
+                    "reps": 10,
+                    "done": true
+                  },
+                  {
+                    "weight": 75,
+                    "reps": 8,
+                    "done": true
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        {
+          "$undefined": true
+        }
+      ],
+      "expected": {
+        "chest": 4,
+        "triceps": 1.6,
+        "deltoids": 1.6,
+        "biceps": 2.6,
+        "upper-back": 2
+      },
+      "from": "lib/muscles.js:268-270 > load of finished workouts without pick predicate"
+    },
+    {
+      "id": "p4-muscles-007",
+      "fn": "muscles.loadOfActive",
+      "args": [
+        {
+          "entries": [
+            {
+              "id": "0025",
+              "sets": [
+                {
+                  "weight": 60,
+                  "reps": 5,
+                  "done": true,
+                  "warmup": true
+                },
+                {
+                  "weight": 80,
+                  "reps": 5,
+                  "done": true
+                },
+                {
+                  "weight": 80,
+                  "reps": 5,
+                  "done": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "chest": 1,
+        "triceps": 0.4,
+        "deltoids": 0.4,
+        "biceps": 0.4
+      },
+      "from": "lib/muscles.js:291-293 > load of in-progress active workout"
+    },
+    {
+      "id": "p4-muscles-008",
+      "fn": "muscles.loadOfRoutine",
+      "args": [
+        {
+          "id": "r-chest-back",
+          "ex": [
+            {
+              "id": "0025",
+              "sets": 4
+            },
+            {
+              "id": "custom-lat",
+              "ex": {
+                "muscleWeights": {
+                  "upper-back": 1
+                }
+              },
+              "sets": 3
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "chest": 4,
+        "triceps": 1.6,
+        "deltoids": 1.6,
+        "biceps": 1.6
+      },
+      "from": "lib/muscles.js:287-288 > load a routine would produce"
+    },
+    {
+      "id": "p4-muscles-009",
+      "fn": "muscles.levelsOf",
+      "args": [
+        {
+          "chest": 8,
+          "triceps": 3.2,
+          "deltoids": 1.6,
+          "biceps": 0.8
+        },
+        {
+          "$undefined": true
+        }
+      ],
+      "expected": {
+        "trapezius": 0,
+        "deltoids": 1,
+        "chest": 4,
+        "upper-back": 0,
+        "serratus": 0,
+        "biceps": 1,
+        "triceps": 2,
+        "forearm": 0,
+        "abs": 0,
+        "obliques": 0,
+        "lower-back": 0,
+        "gluteal": 0,
+        "quadriceps": 0,
+        "hamstring": 0,
+        "adductors": 0,
+        "hip-flexors": 0,
+        "calves": 0,
+        "tibialis": 0
+      },
+      "from": "lib/muscles.js:305-327 > relative levels (no thresholds)"
+    },
+    {
+      "id": "p4-muscles-010",
+      "fn": "muscles.levelsOf",
+      "args": [
+        {
+          "chest": 0.55,
+          "triceps": 0.4,
+          "deltoids": 0.15,
+          "biceps": 0.05
+        },
+        [
+          {
+            "at": 0,
+            "level": 0
+          },
+          {
+            "at": 0.15,
+            "level": 1
+          },
+          {
+            "at": 0.25,
+            "level": 2
+          },
+          {
+            "at": 0.4,
+            "level": 3
+          },
+          {
+            "at": 0.55,
+            "level": 4,
+            "exclusive": true
+          }
+        ]
+      ],
+      "expected": {
+        "trapezius": 0,
+        "deltoids": 1,
+        "chest": 3,
+        "upper-back": 0,
+        "serratus": 0,
+        "biceps": 0,
+        "triceps": 3,
+        "forearm": 0,
+        "abs": 0,
+        "obliques": 0,
+        "lower-back": 0,
+        "gluteal": 0,
+        "quadriceps": 0,
+        "hamstring": 0,
+        "adductors": 0,
+        "hip-flexors": 0,
+        "calves": 0,
+        "tibialis": 0
+      },
+      "from": "lib/muscles.js:305-327 > absolute fatigue levels including exclusive 0.55 rule"
+    },
+    {
+      "id": "p4-muscles-011",
+      "fn": "muscles.levelsOf",
+      "args": [
+        {},
+        {
+          "$undefined": true
+        }
+      ],
+      "expected": {
+        "trapezius": 0,
+        "deltoids": 0,
+        "chest": 0,
+        "upper-back": 0,
+        "serratus": 0,
+        "biceps": 0,
+        "triceps": 0,
+        "forearm": 0,
+        "abs": 0,
+        "obliques": 0,
+        "lower-back": 0,
+        "gluteal": 0,
+        "quadriceps": 0,
+        "hamstring": 0,
+        "adductors": 0,
+        "hip-flexors": 0,
+        "calves": 0,
+        "tibialis": 0
+      },
+      "from": "lib/muscles.js:305-327 > empty load returns all zeros"
+    },
+    {
+      "id": "p4-muscles-012",
+      "fn": "muscles.rankOf",
+      "args": [
+        {
+          "chest": 2,
+          "biceps": 2,
+          "abs": 1
+        }
+      ],
+      "expected": {
+        "worked": [
+          "chest",
+          "biceps",
+          "abs"
+        ],
+        "missed": [
+          "trapezius",
+          "deltoids",
+          "upper-back",
+          "serratus",
+          "triceps",
+          "forearm",
+          "obliques",
+          "lower-back",
+          "gluteal",
+          "quadriceps",
+          "hamstring",
+          "adductors",
+          "hip-flexors",
+          "calves",
+          "tibialis"
+        ]
+      },
+      "from": "lib/muscles.js:330-335 > rankOf with ties falling back to MUSCLES order"
+    },
+    {
+      "id": "p4-muscles-013",
+      "fn": "muscles.rankOf",
+      "args": [
+        {}
+      ],
+      "expected": {
+        "worked": [],
+        "missed": [
+          "trapezius",
+          "deltoids",
+          "chest",
+          "upper-back",
+          "serratus",
+          "biceps",
+          "triceps",
+          "forearm",
+          "abs",
+          "obliques",
+          "lower-back",
+          "gluteal",
+          "quadriceps",
+          "hamstring",
+          "adductors",
+          "hip-flexors",
+          "calves",
+          "tibialis"
+        ]
+      },
+      "from": "lib/muscles.js:330-335 > rankOf with empty load"
+    },
+    {
+      "id": "p4-muscles-014",
+      "fn": "muscles.muscleBalanceWindow",
+      "args": [
+        [
+          {
+            "id": "w1",
+            "d": "2026-06-14",
+            "start": 1781438400000,
+            "end": 1781442000000,
+            "entries": [
+              {
+                "id": "0025",
+                "sets": [
+                  {
+                    "weight": 40,
+                    "reps": 10,
+                    "done": true,
+                    "warmup": true
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 8,
+                    "done": true,
+                    "rir": 1
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 7,
+                    "done": true,
+                    "rir": 2
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 6,
+                    "done": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "w2",
+            "d": "2026-06-05",
+            "start": 1780660800000,
+            "end": 1780663500000,
+            "entries": [
+              {
+                "id": "custom-lat",
+                "exercise": {
+                  "id": "custom-lat",
+                  "n": "Custom Lat Pulldown",
+                  "muscleWeights": {
+                    "upper-back": 1,
+                    "biceps": 0.5
+                  }
+                },
+                "sets": [
+                  {
+                    "weight": 50,
+                    "reps": 10,
+                    "done": true
+                  },
+                  {
+                    "weight": 55,
+                    "reps": 8,
+                    "done": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "w3",
+            "d": "2026-05-06",
+            "start": 1778068800000,
+            "end": 1778071800000,
+            "entries": [
+              {
+                "id": "0025",
+                "sets": [
+                  {
+                    "weight": 75,
+                    "reps": 10,
+                    "done": true
+                  },
+                  {
+                    "weight": 75,
+                    "reps": 8,
+                    "done": true
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        0,
+        1781524800000,
+        "2026-06-15",
+        1
+      ],
+      "expected": [
+        {
+          "id": "w1",
+          "d": "2026-06-14",
+          "start": 1781438400000,
+          "end": 1781442000000,
+          "entries": [
+            {
+              "id": "0025",
+              "sets": [
+                {
+                  "weight": 40,
+                  "reps": 10,
+                  "done": true,
+                  "warmup": true
+                },
+                {
+                  "weight": 80,
+                  "reps": 8,
+                  "done": true,
+                  "rir": 1
+                },
+                {
+                  "weight": 80,
+                  "reps": 7,
+                  "done": true,
+                  "rir": 2
+                },
+                {
+                  "weight": 80,
+                  "reps": 6,
+                  "done": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w2",
+          "d": "2026-06-05",
+          "start": 1780660800000,
+          "end": 1780663500000,
+          "entries": [
+            {
+              "id": "custom-lat",
+              "exercise": {
+                "id": "custom-lat",
+                "n": "Custom Lat Pulldown",
+                "muscleWeights": {
+                  "upper-back": 1,
+                  "biceps": 0.5
+                }
+              },
+              "sets": [
+                {
+                  "weight": 50,
+                  "reps": 10,
+                  "done": true
+                },
+                {
+                  "weight": 55,
+                  "reps": 8,
+                  "done": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w3",
+          "d": "2026-05-06",
+          "start": 1778068800000,
+          "end": 1778071800000,
+          "entries": [
+            {
+              "id": "0025",
+              "sets": [
+                {
+                  "weight": 75,
+                  "reps": 10,
+                  "done": true
+                },
+                {
+                  "weight": 75,
+                  "reps": 8,
+                  "done": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": "lib/muscles.js:278-284 > window 0 (all workouts)"
+    },
+    {
+      "id": "p4-muscles-015",
+      "fn": "muscles.muscleBalanceWindow",
+      "args": [
+        [
+          {
+            "id": "w1",
+            "d": "2026-06-14",
+            "start": 1781438400000,
+            "end": 1781442000000,
+            "entries": [
+              {
+                "id": "0025",
+                "sets": [
+                  {
+                    "weight": 40,
+                    "reps": 10,
+                    "done": true,
+                    "warmup": true
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 8,
+                    "done": true,
+                    "rir": 1
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 7,
+                    "done": true,
+                    "rir": 2
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 6,
+                    "done": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "w2",
+            "d": "2026-06-05",
+            "start": 1780660800000,
+            "end": 1780663500000,
+            "entries": [
+              {
+                "id": "custom-lat",
+                "exercise": {
+                  "id": "custom-lat",
+                  "n": "Custom Lat Pulldown",
+                  "muscleWeights": {
+                    "upper-back": 1,
+                    "biceps": 0.5
+                  }
+                },
+                "sets": [
+                  {
+                    "weight": 50,
+                    "reps": 10,
+                    "done": true
+                  },
+                  {
+                    "weight": 55,
+                    "reps": 8,
+                    "done": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "w3",
+            "d": "2026-05-06",
+            "start": 1778068800000,
+            "end": 1778071800000,
+            "entries": [
+              {
+                "id": "0025",
+                "sets": [
+                  {
+                    "weight": 75,
+                    "reps": 10,
+                    "done": true
+                  },
+                  {
+                    "weight": 75,
+                    "reps": 8,
+                    "done": true
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        7,
+        1781524800000,
+        "2026-06-15",
+        1
+      ],
+      "expected": [],
+      "from": "lib/muscles.js:278-284 > window 7 with Monday week start"
+    },
+    {
+      "id": "p4-muscles-016",
+      "fn": "muscles.muscleBalanceWindow",
+      "args": [
+        [
+          {
+            "id": "w1",
+            "d": "2026-06-14",
+            "start": 1781438400000,
+            "end": 1781442000000,
+            "entries": [
+              {
+                "id": "0025",
+                "sets": [
+                  {
+                    "weight": 40,
+                    "reps": 10,
+                    "done": true,
+                    "warmup": true
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 8,
+                    "done": true,
+                    "rir": 1
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 7,
+                    "done": true,
+                    "rir": 2
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 6,
+                    "done": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "w2",
+            "d": "2026-06-05",
+            "start": 1780660800000,
+            "end": 1780663500000,
+            "entries": [
+              {
+                "id": "custom-lat",
+                "exercise": {
+                  "id": "custom-lat",
+                  "n": "Custom Lat Pulldown",
+                  "muscleWeights": {
+                    "upper-back": 1,
+                    "biceps": 0.5
+                  }
+                },
+                "sets": [
+                  {
+                    "weight": 50,
+                    "reps": 10,
+                    "done": true
+                  },
+                  {
+                    "weight": 55,
+                    "reps": 8,
+                    "done": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "w3",
+            "d": "2026-05-06",
+            "start": 1778068800000,
+            "end": 1778071800000,
+            "entries": [
+              {
+                "id": "0025",
+                "sets": [
+                  {
+                    "weight": 75,
+                    "reps": 10,
+                    "done": true
+                  },
+                  {
+                    "weight": 75,
+                    "reps": 8,
+                    "done": true
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        7,
+        1781524800000,
+        "2026-06-15",
+        0
+      ],
+      "expected": [
+        {
+          "id": "w1",
+          "d": "2026-06-14",
+          "start": 1781438400000,
+          "end": 1781442000000,
+          "entries": [
+            {
+              "id": "0025",
+              "sets": [
+                {
+                  "weight": 40,
+                  "reps": 10,
+                  "done": true,
+                  "warmup": true
+                },
+                {
+                  "weight": 80,
+                  "reps": 8,
+                  "done": true,
+                  "rir": 1
+                },
+                {
+                  "weight": 80,
+                  "reps": 7,
+                  "done": true,
+                  "rir": 2
+                },
+                {
+                  "weight": 80,
+                  "reps": 6,
+                  "done": false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": "lib/muscles.js:278-284 > window 7 with Sunday week start"
+    },
+    {
+      "id": "p4-muscles-017",
+      "fn": "muscles.muscleBalanceWindow",
+      "args": [
+        [
+          {
+            "id": "w1",
+            "d": "2026-06-14",
+            "start": 1781438400000,
+            "end": 1781442000000,
+            "entries": [
+              {
+                "id": "0025",
+                "sets": [
+                  {
+                    "weight": 40,
+                    "reps": 10,
+                    "done": true,
+                    "warmup": true
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 8,
+                    "done": true,
+                    "rir": 1
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 7,
+                    "done": true,
+                    "rir": 2
+                  },
+                  {
+                    "weight": 80,
+                    "reps": 6,
+                    "done": false
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "w2",
+            "d": "2026-06-05",
+            "start": 1780660800000,
+            "end": 1780663500000,
+            "entries": [
+              {
+                "id": "custom-lat",
+                "exercise": {
+                  "id": "custom-lat",
+                  "n": "Custom Lat Pulldown",
+                  "muscleWeights": {
+                    "upper-back": 1,
+                    "biceps": 0.5
+                  }
+                },
+                "sets": [
+                  {
+                    "weight": 50,
+                    "reps": 10,
+                    "done": true
+                  },
+                  {
+                    "weight": 55,
+                    "reps": 8,
+                    "done": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "w3",
+            "d": "2026-05-06",
+            "start": 1778068800000,
+            "end": 1778071800000,
+            "entries": [
+              {
+                "id": "0025",
+                "sets": [
+                  {
+                    "weight": 75,
+                    "reps": 10,
+                    "done": true
+                  },
+                  {
+                    "weight": 75,
+                    "reps": 8,
+                    "done": true
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        30,
+        1781524800000,
+        "2026-06-15",
+        1
+      ],
+      "expected": [
+        {
+          "id": "w1",
+          "d": "2026-06-14",
+          "start": 1781438400000,
+          "end": 1781442000000,
+          "entries": [
+            {
+              "id": "0025",
+              "sets": [
+                {
+                  "weight": 40,
+                  "reps": 10,
+                  "done": true,
+                  "warmup": true
+                },
+                {
+                  "weight": 80,
+                  "reps": 8,
+                  "done": true,
+                  "rir": 1
+                },
+                {
+                  "weight": 80,
+                  "reps": 7,
+                  "done": true,
+                  "rir": 2
+                },
+                {
+                  "weight": 80,
+                  "reps": 6,
+                  "done": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "w2",
+          "d": "2026-06-05",
+          "start": 1780660800000,
+          "end": 1780663500000,
+          "entries": [
+            {
+              "id": "custom-lat",
+              "exercise": {
+                "id": "custom-lat",
+                "n": "Custom Lat Pulldown",
+                "muscleWeights": {
+                  "upper-back": 1,
+                  "biceps": 0.5
+                }
+              },
+              "sets": [
+                {
+                  "weight": 50,
+                  "reps": 10,
+                  "done": true
+                },
+                {
+                  "weight": 55,
+                  "reps": 8,
+                  "done": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "from": "lib/muscles.js:278-284 > window 30 (last 30 days)"
+    },
+    {
+      "id": "p4-recoveryview-001",
+      "fn": "recoveryView.fatigueStateOf",
+      "args": [
+        0.24
+      ],
+      "expected": "ready",
+      "from": "lib/recovery-view.js:11-17 > below 0.25 is ready"
+    },
+    {
+      "id": "p4-recoveryview-002",
+      "fn": "recoveryView.fatigueStateOf",
+      "args": [
+        0.25
+      ],
+      "expected": "recovering",
+      "from": "lib/recovery-view.js:11-17 > 0.25 is recovering (inclusive)"
+    },
+    {
+      "id": "p4-recoveryview-003",
+      "fn": "recoveryView.fatigueStateOf",
+      "args": [
+        0.5
+      ],
+      "expected": "recovering",
+      "from": "lib/recovery-view.js:11-17 > 0.50 is recovering (inclusive)"
+    },
+    {
+      "id": "p4-recoveryview-004",
+      "fn": "recoveryView.fatigueStateOf",
+      "args": [
+        0.51
+      ],
+      "expected": "fatigued",
+      "from": "lib/recovery-view.js:11-17 > above 0.50 is fatigued"
+    },
+    {
+      "id": "p4-muscleview-001",
+      "fn": "muscleView.muscleBalance",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2026-06-01",
+              "w": 75
+            },
+            {
+              "d": "2026-06-14",
+              "w": 75.5
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {
+            "0025": {
+              "w": 80,
+              "d": "2026-06-14"
+            }
+          },
+          "workouts": [
+            {
+              "id": "w1",
+              "d": "2026-06-14",
+              "start": 1781438400000,
+              "end": 1781442000000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 40,
+                      "reps": 10,
+                      "done": true,
+                      "warmup": true
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 8,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 7,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 6,
+                      "done": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w2",
+              "d": "2026-06-05",
+              "start": 1780660800000,
+              "end": 1780663500000,
+              "entries": [
+                {
+                  "id": "custom-lat",
+                  "exercise": {
+                    "id": "custom-lat",
+                    "n": "Custom Lat Pulldown",
+                    "muscleWeights": {
+                      "upper-back": 1,
+                      "biceps": 0.5
+                    }
+                  },
+                  "sets": [
+                    {
+                      "weight": 50,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 55,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w3",
+              "d": "2026-05-06",
+              "start": 1778068800000,
+              "end": 1778071800000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 75,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 75,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [
+            {
+              "id": "custom-lat",
+              "n": "Custom Lat Pulldown",
+              "bp": "back",
+              "eq": "cable",
+              "muscleWeights": {
+                "upper-back": 1,
+                "biceps": 0.5
+              }
+            }
+          ],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        7,
+        false,
+        1781524800000,
+        "2026-06-15"
+      ],
+      "expected": {
+        "inWinCount": 0,
+        "rated": false,
+        "on": false,
+        "load": {},
+        "levels": {
+          "trapezius": 0,
+          "deltoids": 0,
+          "chest": 0,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 0,
+          "triceps": 0,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        },
+        "worked": [],
+        "missed": [
+          "trapezius",
+          "deltoids",
+          "chest",
+          "upper-back",
+          "serratus",
+          "biceps",
+          "triceps",
+          "forearm",
+          "abs",
+          "obliques",
+          "lower-back",
+          "gluteal",
+          "quadriceps",
+          "hamstring",
+          "adductors",
+          "hip-flexors",
+          "calves",
+          "tibialis"
+        ],
+        "top": [],
+        "sets": {
+          "trapezius": 0,
+          "deltoids": 0,
+          "chest": 0,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 0,
+          "triceps": 0,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        }
+      },
+      "from": "views/Stats.jsx:124-143 > muscleBalance > hard false in week window"
+    },
+    {
+      "id": "p4-muscleview-002",
+      "fn": "muscleView.muscleBalance",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2026-06-01",
+              "w": 75
+            },
+            {
+              "d": "2026-06-14",
+              "w": 75.5
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {
+            "0025": {
+              "w": 80,
+              "d": "2026-06-14"
+            }
+          },
+          "workouts": [
+            {
+              "id": "w1",
+              "d": "2026-06-14",
+              "start": 1781438400000,
+              "end": 1781442000000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 40,
+                      "reps": 10,
+                      "done": true,
+                      "warmup": true
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 8,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 7,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 6,
+                      "done": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w2",
+              "d": "2026-06-05",
+              "start": 1780660800000,
+              "end": 1780663500000,
+              "entries": [
+                {
+                  "id": "custom-lat",
+                  "exercise": {
+                    "id": "custom-lat",
+                    "n": "Custom Lat Pulldown",
+                    "muscleWeights": {
+                      "upper-back": 1,
+                      "biceps": 0.5
+                    }
+                  },
+                  "sets": [
+                    {
+                      "weight": 50,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 55,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w3",
+              "d": "2026-05-06",
+              "start": 1778068800000,
+              "end": 1778071800000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 75,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 75,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [
+            {
+              "id": "custom-lat",
+              "n": "Custom Lat Pulldown",
+              "bp": "back",
+              "eq": "cable",
+              "muscleWeights": {
+                "upper-back": 1,
+                "biceps": 0.5
+              }
+            }
+          ],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        30,
+        true,
+        1781524800000,
+        "2026-06-15"
+      ],
+      "expected": {
+        "inWinCount": 2,
+        "rated": true,
+        "on": true,
+        "load": {
+          "chest": 2,
+          "triceps": 0.8,
+          "deltoids": 0.8,
+          "biceps": 0.8
+        },
+        "levels": {
+          "trapezius": 0,
+          "deltoids": 2,
+          "chest": 4,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 2,
+          "triceps": 2,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        },
+        "worked": [
+          "chest",
+          "deltoids",
+          "biceps",
+          "triceps"
+        ],
+        "missed": [
+          "trapezius",
+          "upper-back",
+          "serratus",
+          "forearm",
+          "abs",
+          "obliques",
+          "lower-back",
+          "gluteal",
+          "quadriceps",
+          "hamstring",
+          "adductors",
+          "hip-flexors",
+          "calves",
+          "tibialis"
+        ],
+        "top": [
+          {
+            "slug": "chest",
+            "pct": 100
+          },
+          {
+            "slug": "deltoids",
+            "pct": 40
+          },
+          {
+            "slug": "biceps",
+            "pct": 40
+          },
+          {
+            "slug": "triceps",
+            "pct": 40
+          }
+        ],
+        "sets": {
+          "trapezius": 0,
+          "deltoids": 0.8,
+          "chest": 2,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 0.8,
+          "triceps": 0.8,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        }
+      },
+      "from": "views/Stats.jsx:124-143 > muscleBalance > hard true with rated sets (on=true)"
+    },
+    {
+      "id": "p4-muscleview-003",
+      "fn": "muscleView.muscleBalance",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2026-06-01",
+              "w": 75
+            },
+            {
+              "d": "2026-06-14",
+              "w": 75.5
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {
+            "0025": {
+              "w": 80,
+              "d": "2026-06-14"
+            }
+          },
+          "workouts": [
+            {
+              "id": "w2",
+              "d": "2026-06-05",
+              "start": 1780660800000,
+              "end": 1780663500000,
+              "entries": [
+                {
+                  "id": "custom-lat",
+                  "exercise": {
+                    "id": "custom-lat",
+                    "n": "Custom Lat Pulldown",
+                    "muscleWeights": {
+                      "upper-back": 1,
+                      "biceps": 0.5
+                    }
+                  },
+                  "sets": [
+                    {
+                      "weight": 50,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 55,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [
+            {
+              "id": "custom-lat",
+              "n": "Custom Lat Pulldown",
+              "bp": "back",
+              "eq": "cable",
+              "muscleWeights": {
+                "upper-back": 1,
+                "biceps": 0.5
+              }
+            }
+          ],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        7,
+        true,
+        1781524800000,
+        "2026-06-15"
+      ],
+      "expected": {
+        "inWinCount": 0,
+        "rated": false,
+        "on": false,
+        "load": {},
+        "levels": {
+          "trapezius": 0,
+          "deltoids": 0,
+          "chest": 0,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 0,
+          "triceps": 0,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        },
+        "worked": [],
+        "missed": [
+          "trapezius",
+          "deltoids",
+          "chest",
+          "upper-back",
+          "serratus",
+          "biceps",
+          "triceps",
+          "forearm",
+          "abs",
+          "obliques",
+          "lower-back",
+          "gluteal",
+          "quadriceps",
+          "hamstring",
+          "adductors",
+          "hip-flexors",
+          "calves",
+          "tibialis"
+        ],
+        "top": [],
+        "sets": {
+          "trapezius": 0,
+          "deltoids": 0,
+          "chest": 0,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 0,
+          "triceps": 0,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        }
+      },
+      "from": "views/Stats.jsx:124-143 > muscleBalance > hard true without rated sets (on=false)"
+    },
+    {
+      "id": "p4-muscleview-004",
+      "fn": "muscleView.muscleBalance",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2026-06-01",
+              "w": 75
+            },
+            {
+              "d": "2026-06-14",
+              "w": 75.5
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {
+            "0025": {
+              "w": 80,
+              "d": "2026-06-14"
+            }
+          },
+          "workouts": [],
+          "active": null,
+          "customEx": [
+            {
+              "id": "custom-lat",
+              "n": "Custom Lat Pulldown",
+              "bp": "back",
+              "eq": "cable",
+              "muscleWeights": {
+                "upper-back": 1,
+                "biceps": 0.5
+              }
+            }
+          ],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        7,
+        false,
+        1781524800000,
+        "2026-06-15"
+      ],
+      "expected": {
+        "inWinCount": 0,
+        "rated": false,
+        "on": false,
+        "load": {},
+        "levels": {
+          "trapezius": 0,
+          "deltoids": 0,
+          "chest": 0,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 0,
+          "triceps": 0,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        },
+        "worked": [],
+        "missed": [
+          "trapezius",
+          "deltoids",
+          "chest",
+          "upper-back",
+          "serratus",
+          "biceps",
+          "triceps",
+          "forearm",
+          "abs",
+          "obliques",
+          "lower-back",
+          "gluteal",
+          "quadriceps",
+          "hamstring",
+          "adductors",
+          "hip-flexors",
+          "calves",
+          "tibialis"
+        ],
+        "top": [],
+        "sets": {
+          "trapezius": 0,
+          "deltoids": 0,
+          "chest": 0,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 0,
+          "triceps": 0,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        }
+      },
+      "from": "views/Stats.jsx:124-143 > muscleBalance > empty window"
+    },
+    {
+      "id": "p4-muscleview-005",
+      "fn": "muscleView.fatigueView",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2026-06-01",
+              "w": 75
+            },
+            {
+              "d": "2026-06-14",
+              "w": 75.5
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {
+            "0025": {
+              "w": 80,
+              "d": "2026-06-14"
+            }
+          },
+          "workouts": [
+            {
+              "id": "w1",
+              "d": "2026-06-14",
+              "start": 1781438400000,
+              "end": 1781442000000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 40,
+                      "reps": 10,
+                      "done": true,
+                      "warmup": true
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 8,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 7,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 6,
+                      "done": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w2",
+              "d": "2026-06-05",
+              "start": 1780660800000,
+              "end": 1780663500000,
+              "entries": [
+                {
+                  "id": "custom-lat",
+                  "exercise": {
+                    "id": "custom-lat",
+                    "n": "Custom Lat Pulldown",
+                    "muscleWeights": {
+                      "upper-back": 1,
+                      "biceps": 0.5
+                    }
+                  },
+                  "sets": [
+                    {
+                      "weight": 50,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 55,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w3",
+              "d": "2026-05-06",
+              "start": 1778068800000,
+              "end": 1778071800000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 75,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 75,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [
+            {
+              "id": "custom-lat",
+              "n": "Custom Lat Pulldown",
+              "bp": "back",
+              "eq": "cable",
+              "muscleWeights": {
+                "upper-back": 1,
+                "biceps": 0.5
+              }
+            }
+          ],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        1781524800000
+      ],
+      "expected": {
+        "fatigue": {
+          "trapezius": 0,
+          "deltoids": 0.22274298912340418,
+          "chest": 0.4673871744887943,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 0.22274298912340418,
+          "triceps": 0.22274298912340418,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        },
+        "levels": {
+          "trapezius": 0,
+          "deltoids": 1,
+          "chest": 3,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 1,
+          "triceps": 1,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        },
+        "states": {
+          "trapezius": "ready",
+          "deltoids": "ready",
+          "chest": "recovering",
+          "upper-back": "ready",
+          "serratus": "ready",
+          "biceps": "ready",
+          "triceps": "ready",
+          "forearm": "ready",
+          "abs": "ready",
+          "obliques": "ready",
+          "lower-back": "ready",
+          "gluteal": "ready",
+          "quadriceps": "ready",
+          "hamstring": "ready",
+          "adductors": "ready",
+          "hip-flexors": "ready",
+          "calves": "ready",
+          "tibialis": "ready"
+        }
+      },
+      "from": "views/Stats.jsx:114-118 > fatigueView with workouts"
+    },
+    {
+      "id": "p4-muscleview-006",
+      "fn": "muscleView.fatigueView",
+      "args": [
+        {
+          "unit": "lb",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2026-06-01",
+              "w": 165
+            },
+            {
+              "d": "2026-06-14",
+              "w": 166
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {
+            "0025": {
+              "w": 80,
+              "d": "2026-06-14"
+            }
+          },
+          "workouts": [
+            {
+              "id": "w1",
+              "d": "2026-06-14",
+              "start": 1781438400000,
+              "end": 1781442000000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 40,
+                      "reps": 10,
+                      "done": true,
+                      "warmup": true
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 8,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 7,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 6,
+                      "done": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w2",
+              "d": "2026-06-05",
+              "start": 1780660800000,
+              "end": 1780663500000,
+              "entries": [
+                {
+                  "id": "custom-lat",
+                  "exercise": {
+                    "id": "custom-lat",
+                    "n": "Custom Lat Pulldown",
+                    "muscleWeights": {
+                      "upper-back": 1,
+                      "biceps": 0.5
+                    }
+                  },
+                  "sets": [
+                    {
+                      "weight": 50,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 55,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w3",
+              "d": "2026-05-06",
+              "start": 1778068800000,
+              "end": 1778071800000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 75,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 75,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [
+            {
+              "id": "custom-lat",
+              "n": "Custom Lat Pulldown",
+              "bp": "back",
+              "eq": "cable",
+              "muscleWeights": {
+                "upper-back": 1,
+                "biceps": 0.5
+              }
+            }
+          ],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        1781524800000
+      ],
+      "expected": {
+        "fatigue": {
+          "trapezius": 0,
+          "deltoids": 0.22274298912340418,
+          "chest": 0.4673871744887943,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 0.22274298912340418,
+          "triceps": 0.22274298912340418,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        },
+        "levels": {
+          "trapezius": 0,
+          "deltoids": 1,
+          "chest": 3,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 1,
+          "triceps": 1,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        },
+        "states": {
+          "trapezius": "ready",
+          "deltoids": "ready",
+          "chest": "recovering",
+          "upper-back": "ready",
+          "serratus": "ready",
+          "biceps": "ready",
+          "triceps": "ready",
+          "forearm": "ready",
+          "abs": "ready",
+          "obliques": "ready",
+          "lower-back": "ready",
+          "gluteal": "ready",
+          "quadriceps": "ready",
+          "hamstring": "ready",
+          "adductors": "ready",
+          "hip-flexors": "ready",
+          "calves": "ready",
+          "tibialis": "ready"
+        }
+      },
+      "from": "views/Stats.jsx:114-118 > fatigueView in lb unit with bodyweight"
+    },
+    {
+      "id": "p4-muscleview-007",
+      "fn": "muscleView.strengthView",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2026-06-01",
+              "w": 75
+            },
+            {
+              "d": "2026-06-14",
+              "w": 75.5
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {
+            "0025": {
+              "w": 80,
+              "d": "2026-06-14"
+            }
+          },
+          "workouts": [
+            {
+              "id": "w1",
+              "d": "2026-06-14",
+              "start": 1781438400000,
+              "end": 1781442000000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 40,
+                      "reps": 10,
+                      "done": true,
+                      "warmup": true
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 8,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 7,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 6,
+                      "done": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w2",
+              "d": "2026-06-05",
+              "start": 1780660800000,
+              "end": 1780663500000,
+              "entries": [
+                {
+                  "id": "custom-lat",
+                  "exercise": {
+                    "id": "custom-lat",
+                    "n": "Custom Lat Pulldown",
+                    "muscleWeights": {
+                      "upper-back": 1,
+                      "biceps": 0.5
+                    }
+                  },
+                  "sets": [
+                    {
+                      "weight": 50,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 55,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w3",
+              "d": "2026-05-06",
+              "start": 1778068800000,
+              "end": 1778071800000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 75,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 75,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [
+            {
+              "id": "custom-lat",
+              "n": "Custom Lat Pulldown",
+              "bp": "back",
+              "eq": "cable",
+              "muscleWeights": {
+                "upper-back": 1,
+                "biceps": 0.5
+              }
+            }
+          ],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        1781524800000,
+        null
+      ],
+      "expected": {
+        "strength": {
+          "trapezius": 0.5,
+          "deltoids": 1,
+          "chest": 1,
+          "upper-back": 0.5,
+          "serratus": 0.5,
+          "biceps": 1,
+          "triceps": 1,
+          "forearm": 0.5,
+          "abs": 0.5,
+          "obliques": 0.5,
+          "lower-back": 0.5,
+          "gluteal": 0.5,
+          "quadriceps": 0.5,
+          "hamstring": 0.5,
+          "adductors": 0.5,
+          "hip-flexors": 0.5,
+          "calves": 0.5,
+          "tibialis": 0.5
+        },
+        "levels": {
+          "trapezius": 0,
+          "deltoids": 4,
+          "chest": 4,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 4,
+          "triceps": 4,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        },
+        "strengthFloor": 0.5,
+        "detrained": [
+          {
+            "slug": "trapezius",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "upper-back",
+            "pct": 50,
+            "sets90": 2,
+            "weeks": 1
+          },
+          {
+            "slug": "serratus",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "forearm",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "abs",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "obliques",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "lower-back",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "gluteal",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "quadriceps",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "hamstring",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "adductors",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "hip-flexors",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "calves",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "tibialis",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          }
+        ],
+        "exercises": []
+      },
+      "from": "views/Stats.jsx:115,134-138 > strengthView without selection"
+    },
+    {
+      "id": "p4-muscleview-008",
+      "fn": "muscleView.strengthView",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2026-06-01",
+              "w": 75
+            },
+            {
+              "d": "2026-06-14",
+              "w": 75.5
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {
+            "0025": {
+              "w": 80,
+              "d": "2026-06-14"
+            }
+          },
+          "workouts": [
+            {
+              "id": "w1",
+              "d": "2026-06-14",
+              "start": 1781438400000,
+              "end": 1781442000000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 40,
+                      "reps": 10,
+                      "done": true,
+                      "warmup": true
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 8,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 7,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 6,
+                      "done": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w2",
+              "d": "2026-06-05",
+              "start": 1780660800000,
+              "end": 1780663500000,
+              "entries": [
+                {
+                  "id": "custom-lat",
+                  "exercise": {
+                    "id": "custom-lat",
+                    "n": "Custom Lat Pulldown",
+                    "muscleWeights": {
+                      "upper-back": 1,
+                      "biceps": 0.5
+                    }
+                  },
+                  "sets": [
+                    {
+                      "weight": 50,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 55,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w3",
+              "d": "2026-05-06",
+              "start": 1778068800000,
+              "end": 1778071800000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 75,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 75,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [
+            {
+              "id": "custom-lat",
+              "n": "Custom Lat Pulldown",
+              "bp": "back",
+              "eq": "cable",
+              "muscleWeights": {
+                "upper-back": 1,
+                "biceps": 0.5
+              }
+            }
+          ],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        1781524800000,
+        "chest"
+      ],
+      "expected": {
+        "strength": {
+          "trapezius": 0.5,
+          "deltoids": 1,
+          "chest": 1,
+          "upper-back": 0.5,
+          "serratus": 0.5,
+          "biceps": 1,
+          "triceps": 1,
+          "forearm": 0.5,
+          "abs": 0.5,
+          "obliques": 0.5,
+          "lower-back": 0.5,
+          "gluteal": 0.5,
+          "quadriceps": 0.5,
+          "hamstring": 0.5,
+          "adductors": 0.5,
+          "hip-flexors": 0.5,
+          "calves": 0.5,
+          "tibialis": 0.5
+        },
+        "levels": {
+          "trapezius": 0,
+          "deltoids": 4,
+          "chest": 4,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 4,
+          "triceps": 4,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        },
+        "strengthFloor": 0.5,
+        "detrained": [
+          {
+            "slug": "trapezius",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "upper-back",
+            "pct": 50,
+            "sets90": 2,
+            "weeks": 1
+          },
+          {
+            "slug": "serratus",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "forearm",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "abs",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "obliques",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "lower-back",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "gluteal",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "quadriceps",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "hamstring",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "adductors",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "hip-flexors",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "calves",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "tibialis",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          }
+        ],
+        "exercises": []
+      },
+      "from": "views/Stats.jsx:115,134-138 > strengthView with selected muscle chest"
+    },
+    {
+      "id": "p4-muscleview-009",
+      "fn": "muscleView.strengthView",
+      "args": [
+        {
+          "unit": "lb",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2026-06-01",
+              "w": 165
+            },
+            {
+              "d": "2026-06-14",
+              "w": 166
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {
+            "0025": {
+              "w": 80,
+              "d": "2026-06-14"
+            }
+          },
+          "workouts": [
+            {
+              "id": "w1",
+              "d": "2026-06-14",
+              "start": 1781438400000,
+              "end": 1781442000000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 40,
+                      "reps": 10,
+                      "done": true,
+                      "warmup": true
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 8,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 7,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 6,
+                      "done": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w2",
+              "d": "2026-06-05",
+              "start": 1780660800000,
+              "end": 1780663500000,
+              "entries": [
+                {
+                  "id": "custom-lat",
+                  "exercise": {
+                    "id": "custom-lat",
+                    "n": "Custom Lat Pulldown",
+                    "muscleWeights": {
+                      "upper-back": 1,
+                      "biceps": 0.5
+                    }
+                  },
+                  "sets": [
+                    {
+                      "weight": 50,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 55,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w3",
+              "d": "2026-05-06",
+              "start": 1778068800000,
+              "end": 1778071800000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 75,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 75,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [
+            {
+              "id": "custom-lat",
+              "n": "Custom Lat Pulldown",
+              "bp": "back",
+              "eq": "cable",
+              "muscleWeights": {
+                "upper-back": 1,
+                "biceps": 0.5
+              }
+            }
+          ],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        1781524800000,
+        "chest"
+      ],
+      "expected": {
+        "strength": {
+          "trapezius": 0.5,
+          "deltoids": 1,
+          "chest": 1,
+          "upper-back": 0.5,
+          "serratus": 0.5,
+          "biceps": 1,
+          "triceps": 1,
+          "forearm": 0.5,
+          "abs": 0.5,
+          "obliques": 0.5,
+          "lower-back": 0.5,
+          "gluteal": 0.5,
+          "quadriceps": 0.5,
+          "hamstring": 0.5,
+          "adductors": 0.5,
+          "hip-flexors": 0.5,
+          "calves": 0.5,
+          "tibialis": 0.5
+        },
+        "levels": {
+          "trapezius": 0,
+          "deltoids": 4,
+          "chest": 4,
+          "upper-back": 0,
+          "serratus": 0,
+          "biceps": 4,
+          "triceps": 4,
+          "forearm": 0,
+          "abs": 0,
+          "obliques": 0,
+          "lower-back": 0,
+          "gluteal": 0,
+          "quadriceps": 0,
+          "hamstring": 0,
+          "adductors": 0,
+          "hip-flexors": 0,
+          "calves": 0,
+          "tibialis": 0
+        },
+        "strengthFloor": 0.5,
+        "detrained": [
+          {
+            "slug": "trapezius",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "upper-back",
+            "pct": 50,
+            "sets90": 2,
+            "weeks": 1
+          },
+          {
+            "slug": "serratus",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "forearm",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "abs",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "obliques",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "lower-back",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "gluteal",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "quadriceps",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "hamstring",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "adductors",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "hip-flexors",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "calves",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          },
+          {
+            "slug": "tibialis",
+            "pct": 50,
+            "sets90": 0,
+            "weeks": null
+          }
+        ],
+        "exercises": []
+      },
+      "from": "views/Stats.jsx:115,134-138 > strengthView in lb unit with selected muscle"
+    },
+    {
+      "id": "p4-muscleview-010",
+      "fn": "muscleView.muscleIndex",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2026-06-01",
+              "w": 75
+            },
+            {
+              "d": "2026-06-14",
+              "w": 75.5
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {
+            "0025": {
+              "w": 80,
+              "d": "2026-06-14"
+            }
+          },
+          "workouts": [
+            {
+              "id": "w1",
+              "d": "2026-06-14",
+              "start": 1781438400000,
+              "end": 1781442000000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 40,
+                      "reps": 10,
+                      "done": true,
+                      "warmup": true
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 8,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 7,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 6,
+                      "done": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w2",
+              "d": "2026-06-05",
+              "start": 1780660800000,
+              "end": 1780663500000,
+              "entries": [
+                {
+                  "id": "custom-lat",
+                  "exercise": {
+                    "id": "custom-lat",
+                    "n": "Custom Lat Pulldown",
+                    "muscleWeights": {
+                      "upper-back": 1,
+                      "biceps": 0.5
+                    }
+                  },
+                  "sets": [
+                    {
+                      "weight": 50,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 55,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w3",
+              "d": "2026-05-06",
+              "start": 1778068800000,
+              "end": 1778071800000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 75,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 75,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [
+            {
+              "id": "custom-lat",
+              "n": "Custom Lat Pulldown",
+              "bp": "back",
+              "eq": "cable",
+              "muscleWeights": {
+                "upper-back": 1,
+                "biceps": 0.5
+              }
+            }
+          ],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        [
+          "0025",
+          "custom-lat"
+        ]
+      ],
+      "expected": {
+        "custom-lat": {
+          "upper-back": 1,
+          "biceps": 0.5
+        },
+        "0025": {
+          "chest": 1,
+          "triceps": 0.4,
+          "deltoids": 0.4,
+          "biceps": 0.4
+        }
+      },
+      "from": "components/MuscleExplorer.jsx:34-37 > muscleIndex for catalogue and custom ids"
+    },
+    {
+      "id": "p4-muscleview-011",
+      "fn": "muscleView.muscleIndex",
+      "args": [
+        {
+          "unit": "kg",
+          "restSec": 90,
+          "restPauseSec": 15,
+          "sound": true,
+          "soundOnSilent": false,
+          "timerFlash": false,
+          "keepAwake": true,
+          "lang": "en",
+          "theme": "dark",
+          "accent": "lime",
+          "body": "male",
+          "targetW": null,
+          "bodyweight": [
+            {
+              "d": "2026-06-01",
+              "w": 75
+            },
+            {
+              "d": "2026-06-14",
+              "w": 75.5
+            }
+          ],
+          "routines": [],
+          "week": {},
+          "dayPlan": {},
+          "exWeights": {
+            "0025": {
+              "w": 80,
+              "d": "2026-06-14"
+            }
+          },
+          "workouts": [
+            {
+              "id": "w1",
+              "d": "2026-06-14",
+              "start": 1781438400000,
+              "end": 1781442000000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 40,
+                      "reps": 10,
+                      "done": true,
+                      "warmup": true
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 8,
+                      "done": true,
+                      "rir": 1
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 7,
+                      "done": true,
+                      "rir": 2
+                    },
+                    {
+                      "weight": 80,
+                      "reps": 6,
+                      "done": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w2",
+              "d": "2026-06-05",
+              "start": 1780660800000,
+              "end": 1780663500000,
+              "entries": [
+                {
+                  "id": "custom-lat",
+                  "exercise": {
+                    "id": "custom-lat",
+                    "n": "Custom Lat Pulldown",
+                    "muscleWeights": {
+                      "upper-back": 1,
+                      "biceps": 0.5
+                    }
+                  },
+                  "sets": [
+                    {
+                      "weight": 50,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 55,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "w3",
+              "d": "2026-05-06",
+              "start": 1778068800000,
+              "end": 1778071800000,
+              "entries": [
+                {
+                  "id": "0025",
+                  "sets": [
+                    {
+                      "weight": 75,
+                      "reps": 10,
+                      "done": true
+                    },
+                    {
+                      "weight": 75,
+                      "reps": 8,
+                      "done": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": null,
+          "customEx": [
+            {
+              "id": "custom-lat",
+              "n": "Custom Lat Pulldown",
+              "bp": "back",
+              "eq": "cable",
+              "muscleWeights": {
+                "upper-back": 1,
+                "biceps": 0.5
+              }
+            }
+          ],
+          "gifSize": "full",
+          "workoutView": "cards",
+          "wc": {
+            "steppers": true,
+            "setShortcuts": false,
+            "pairButtons": false,
+            "exerciseButtons": false
+          },
+          "reminder": {
+            "on": false,
+            "time": "08:00",
+            "tz": null
+          },
+          "effort": null,
+          "autoBackup": false,
+          "equipProfiles": [],
+          "activeEquipId": null,
+          "equipFilterOn": false,
+          "exNotes": {},
+          "favEx": [],
+          "weekStart": 1,
+          "wdec": 1,
+          "barWeights": {},
+          "gymCards": [],
+          "lastGymCardId": null,
+          "checkIn": false,
+          "weighIn": true
+        },
+        [
+          "0025"
+        ]
+      ],
+      "expected": {
+        "0025": {
+          "chest": 1,
+          "triceps": 0.4,
+          "deltoids": 0.4,
+          "biceps": 0.4
+        }
+      },
+      "from": "components/MuscleExplorer.jsx:34-37 > muscleIndex for single exercise"
+    }
+  ]
+}

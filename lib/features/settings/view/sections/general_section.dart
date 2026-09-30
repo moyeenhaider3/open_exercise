@@ -37,7 +37,6 @@ class GeneralSection extends StatelessWidget {
           icon: 'shuffle',
           label: t('Convert the numbers'),
           onTap: () {
-            Navigator.of(context).pop();
             context.read<SettingsBloc>().add(
                   SettingsUnitSwitched(newUnit, convert: true),
                 );
@@ -47,7 +46,6 @@ class GeneralSection extends StatelessWidget {
           icon: 'pencil',
           label: t('Keep the numbers, change the label'),
           onTap: () {
-            Navigator.of(context).pop();
             context.read<SettingsBloc>().add(
                   SettingsUnitSwitched(newUnit, convert: false),
                 );

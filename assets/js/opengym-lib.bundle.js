@@ -1,15 +1,23 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later
- * Bundled from openGym frontend v1.3.8 (sourceSha256: 4ab1f63fbca36569e0bf7c929e94feb5e84c06c5cfbc4018b73d3d93e5445e32)
+ * Bundled from openGym frontend v1.3.8 (sourceSha256: f92e2a0a32302d9bfe67b9579b26e619dc761c4a28b68af1200f186e0bb7d551)
  * bundled by tool/gen_js_bundle.sh, esbuild 0.28.2
  * See NOTICE.md and third_party/opengym/README.md.
  */
-var __openGymLibMeta = {"openGymVersion":"1.3.8","sourceSha256":"4ab1f63fbca36569e0bf7c929e94feb5e84c06c5cfbc4018b73d3d93e5445e32","esbuild":"0.28.2","target":"es2019"};
+var __openGymLibMeta = {"openGymVersion":"1.3.8","sourceSha256":"f92e2a0a32302d9bfe67b9579b26e619dc761c4a28b68af1200f186e0bb7d551","esbuild":"0.28.2","target":"es2019"};
 if (typeof String.prototype.replaceAll !== 'function') {
   String.prototype.replaceAll = function(searchValue, replaceValue) {
     if (typeof searchValue !== 'string') {
       throw new TypeError('searchValue must be a string in this polyfill');
     }
     return this.split(searchValue).join(replaceValue);
+  };
+}
+if (typeof Array.prototype.at !== 'function') {
+  Array.prototype.at = function(n) {
+    n = Math.trunc(n) || 0;
+    if (n < 0) n += this.length;
+    if (n < 0 || n >= this.length) return undefined;
+    return this[n];
   };
 }
 var OpenGymLib = (() => {
@@ -41,11 +49,13 @@ var OpenGymLib = (() => {
     exercises: () => exercises_exports,
     finish: () => finish_workout_shim_exports,
     history: () => history_exports,
+    muscleView: () => muscle_view_shim_exports,
     muscles: () => muscles_exports,
     onerm: () => onerm_exports,
     progression: () => progression_exports,
     progressionCopy: () => progression_copy_exports,
     recovery: () => recovery_exports,
+    recoveryView: () => recovery_view_exports,
     repRange: () => rep_range_exports,
     sessionMerge: () => session_merge_exports,
     sessionStart: () => session_start_exports,
@@ -3109,6 +3119,11 @@ var OpenGymLib = (() => {
     for (let i = 0; i < args.length; i++) v = v.replaceAll("{" + i + "}", args[i]);
     return v;
   }
+  var exerciseNameFor = (ex) => {
+    const translated = exerciseNames && ex && exerciseNames[ex.id];
+    if (!translated) return (ex == null ? void 0 : ex.n) || "";
+    return translated.toLocaleLowerCase(lang) === ex.n.toLocaleLowerCase("en") ? translated : `${translated} (${ex.n})`;
+  };
   var exerciseNameSearchText = (ex) => {
     const translated = exerciseNames && ex && exerciseNames[ex.id];
     return translated ? `${translated} ${ex.n}` : (ex == null ? void 0 : ex.n) || "";
@@ -5647,6 +5662,208 @@ var OpenGymLib = (() => {
     }));
     const goal = bwGoal(S);
     return { delta, deltaAbs, wThisWeek, plannedPerWeek, bwPoints, goal };
+  }
+
+  // third_party/opengym/lib/recovery-view.js
+  var recovery_view_exports = {};
+  __export(recovery_view_exports, {
+    fatigueStateOf: () => fatigueStateOf
+  });
+  function fatigueStateOf(value) {
+    return value < 0.25 ? FATIGUE_STATES.READY : value <= 0.5 ? FATIGUE_STATES.RECOVERING : FATIGUE_STATES.FATIGUED;
+  }
+
+  // tool/js/shims/muscle-view-shim.js
+  var muscle_view_shim_exports = {};
+  __export(muscle_view_shim_exports, {
+    FATIGUE_LEVELS: () => FATIGUE_LEVELS,
+    STRENGTH_LEVELS: () => STRENGTH_LEVELS,
+    fatigueView: () => fatigueView,
+    muscleBalance: () => muscleBalance,
+    muscleIndex: () => muscleIndex,
+    strengthView: () => strengthView
+  });
+
+  // third_party/opengym/lib/strength-exercises.js
+  var round12 = (value) => Math.round(value * 10) / 10;
+  function strengthFromAge(ageMs) {
+    if (!Number.isFinite(ageMs) || ageMs < 0) return STRENGTH_FLOOR;
+    if (ageMs <= STRENGTH_FULL_MS) return 1;
+    return Math.max(STRENGTH_FLOOR, halfLifeDecay(ageMs - STRENGTH_FULL_MS, STRENGTH_HALF_LIFE_MS));
+  }
+  function lastWorkSetAt(S, id) {
+    let latest = -Infinity;
+    for (const workout of (S == null ? void 0 : S.workouts) || []) {
+      const ts = workout.start || new Date(workout.d).getTime();
+      if (!Number.isFinite(ts) || ts <= latest) continue;
+      const entry = (workout.entries || []).find((e) => e.id === id);
+      if (!entry) continue;
+      if ((entry.sets || []).some((s) => s.done === true && !isWarmupRow(s))) latest = ts;
+    }
+    return Number.isFinite(latest) ? latest : null;
+  }
+  function snapshotWeights(entry) {
+    var _a;
+    const catalogue = entry && typeof entry === "object" ? EXIDX[entry.id] : null;
+    if (catalogue) {
+      const weights = musclesOf(catalogue);
+      if (Object.keys(weights).length) return weights;
+    }
+    const direct = entry && typeof entry === "object" ? entry.muscleWeights || ((_a = entry.muscleSnapshot) == null ? void 0 : _a.muscleWeights) : null;
+    if (direct && typeof direct === "object" && !Array.isArray(direct) && Object.keys(direct).length) {
+      return direct;
+    }
+    return musclesOf(entry);
+  }
+  function primaryMuscleOf(entry) {
+    const weights = snapshotWeights(entry);
+    let best = null;
+    for (const [slug, weight] of Object.entries(weights)) {
+      if (!best || weight > best.weight) best = { slug, weight };
+    }
+    return best;
+  }
+  function resolvedExerciseName(entry) {
+    var _a;
+    const ex = entry && typeof entry === "object" ? EXIDX[entry.id] : null;
+    if (ex == null ? void 0 : ex.n) return exerciseNameFor(ex);
+    if ((_a = entry == null ? void 0 : entry.muscleSnapshot) == null ? void 0 : _a.n) return entry.muscleSnapshot.n;
+    return entry && typeof entry === "object" && entry.n ? entry.n : null;
+  }
+  function strengthExerciseRowsForMuscle(S, now, slug) {
+    const workouts = (S == null ? void 0 : S.workouts) || [];
+    const seen = /* @__PURE__ */ new Map();
+    for (const workout of workouts) {
+      for (const entry of workout.entries || []) {
+        if (seen.has(entry.id)) continue;
+        const weights = snapshotWeights(entry);
+        const weight = weights[slug];
+        if (!weight) continue;
+        const best = best1RM(S, entry.id);
+        if (!best) continue;
+        const lastAt = lastWorkSetAt(S, entry.id);
+        const decay = lastAt == null ? STRENGTH_FLOOR : strengthFromAge(Number(now) - lastAt);
+        const primary = primaryMuscleOf(entry);
+        seen.set(entry.id, {
+          id: entry.id,
+          name: resolvedExerciseName(entry) || entry.id,
+          weight,
+          primary: primary ? primary.slug : null,
+          est: best.est,
+          estDate: best.d,
+          decay,
+          current: round12(best.est * decay)
+        });
+      }
+    }
+    return [...seen.values()].sort((a, b) => b.current - a.current || String(a.name).localeCompare(String(b.name)));
+  }
+
+  // tool/js/shims/muscle-view-shim.js
+  var FATIGUE_LEVELS = [
+    { at: 0, level: 0 },
+    { at: 0.15, level: 1 },
+    { at: 0.25, level: 2 },
+    { at: 0.4, level: 3 },
+    { at: 0.55, level: 4, exclusive: true }
+  ];
+  var STRENGTH_LEVELS = [
+    { at: STRENGTH_FLOOR, level: 0 },
+    { at: 0.625, level: 1 },
+    { at: 0.75, level: 2 },
+    { at: 0.875, level: 3 },
+    { at: 1, level: 4 }
+  ];
+  function bodyweightKgOf(S) {
+    const entries = (S == null ? void 0 : S.bodyweight) || [];
+    if (!entries.length) return null;
+    const sorted = entries.slice().sort((a, b) => String(a.d).localeCompare(String(b.d)));
+    const last = sorted.length ? sorted[sorted.length - 1] : null;
+    if (!last || !(last.w > 0)) return null;
+    return S.unit === "lb" ? last.w * LB_TO_KG : last.w;
+  }
+  function latestMuscleTraining(workouts) {
+    const latest = {};
+    for (const workout of workouts || []) {
+      const timestamp = Number((workout == null ? void 0 : workout.start) || new Date(workout == null ? void 0 : workout.d).getTime());
+      if (!Number.isFinite(timestamp)) continue;
+      for (const entry of workout.entries || []) {
+        if (!(entry.sets || []).some((set) => (set == null ? void 0 : set.done) === true && !isWarmupRow(set))) continue;
+        const exercise = EXIDX[entry.id] || entry.exercise || entry;
+        for (const slug of Object.keys(musclesOf(exercise))) {
+          if (latest[slug] == null || timestamp > latest[slug]) latest[slug] = timestamp;
+        }
+      }
+    }
+    return latest;
+  }
+  function weeksSinceTraining(now, lastTrained) {
+    return Math.max(0, Math.floor((now - lastTrained) / 864e5 / 7));
+  }
+  function muscleBalance(S, win, hard, nowMs, todayIso) {
+    const workouts = (S == null ? void 0 : S.workouts) || [];
+    const inWin = muscleBalanceWindow(workouts, win, nowMs, todayIso, weekStartOf(S));
+    const rated = inWin.some((w) => (w.entries || []).some((e) => (e.sets || []).some((s) => s.done && isHardSet(s))));
+    const on = hard && rated;
+    const load = loadOfWorkouts(inWin, on ? isHardSet : null);
+    const { worked, missed } = rankOf(load);
+    const top = worked.slice(0, 4);
+    const max = worked.length ? load[worked[0]] : 0;
+    return {
+      inWinCount: inWin.length,
+      rated,
+      on,
+      load,
+      levels: levelsOf(load),
+      worked,
+      missed,
+      top: top.map((m) => ({ slug: m, pct: max > 0 ? Math.round(load[m] / max * 100) : 0 })),
+      sets: Object.fromEntries(MUSCLES.map((m) => [m, Math.round((load[m] || 0) * 10) / 10]))
+    };
+  }
+  function fatigueView(S, nowMs) {
+    const workouts = (S == null ? void 0 : S.workouts) || [];
+    const bodyweightKg = bodyweightKgOf(S);
+    const fatigue = fatigueOf(workouts, nowMs, { bodyweightKg, unit: S == null ? void 0 : S.unit });
+    return {
+      fatigue,
+      levels: levelsOf(fatigue, FATIGUE_LEVELS),
+      states: Object.fromEntries(MUSCLES.map((m) => [m, fatigueStateOf(fatigue[m])]))
+    };
+  }
+  function strengthView(S, nowMs, sel) {
+    const workouts = (S == null ? void 0 : S.workouts) || [];
+    const bodyweightKg = bodyweightKgOf(S);
+    const strength = strengthOf(workouts, nowMs, { bodyweightKg, unit: S == null ? void 0 : S.unit });
+    const volWin = workouts.filter((w) => (w.start || new Date(w.d).getTime()) > nowMs - 90 * 864e5);
+    const vol90 = loadOfWorkouts(volWin, null);
+    const lastTrained = latestMuscleTraining(workouts);
+    const detrained = rankOf(strength).worked.filter((slug) => strength[slug] < 1);
+    return {
+      strength,
+      levels: levelsOf(strength, STRENGTH_LEVELS),
+      strengthFloor: STRENGTH_FLOOR,
+      detrained: detrained.map((slug) => ({
+        slug,
+        pct: Math.round(strength[slug] * 100),
+        sets90: Math.round((vol90[slug] || 0) * 10) / 10,
+        weeks: lastTrained[slug] == null ? null : weeksSinceTraining(nowMs, lastTrained[slug])
+      })),
+      exercises: sel ? strengthExerciseRowsForMuscle(S, nowMs, sel).map((r) => ({
+        ...r,
+        decayPct: Math.round(r.decay * 100)
+      })) : []
+    };
+  }
+  function muscleIndex(S, ids) {
+    registerCustom((S == null ? void 0 : S.customEx) || []);
+    const all = allExercises(S);
+    const target = Array.isArray(ids) ? all.filter((e) => ids.includes(e.id)) : all;
+    const index = {};
+    for (const e of target) {
+      index[e.id] = musclesOf(e);
+    }
+    return index;
   }
   return __toCommonJS(entry_exports);
 })();

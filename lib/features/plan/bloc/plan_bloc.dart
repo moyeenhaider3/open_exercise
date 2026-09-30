@@ -92,7 +92,24 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
         await _onStarterLoadRequested(planId, emit);
       case PlanStarterLoaded(:final String planId):
         await _onStarterLoaded(planId, emit);
+      case PlanDayOverrideSet(:final String iso, :final String value):
+        await _onDayOverrideSet(iso, value);
     }
+  }
+
+  /// Sets or clears a date override in dayPlan.
+  /// Ported from `../openGym/frontend/src/sheets.jsx` DayOverride.set.
+  Future<void> _onDayOverrideSet(String iso, String value) async {
+    await _gymState.mutate((GymState s) {
+      final Map<String, String> next =
+          Map<String, String>.from(s.dayPlan ?? const <String, String>{});
+      if (value.isEmpty) {
+        next.remove(iso);
+      } else {
+        next[iso] = value;
+      }
+      return s.copyWith(dayPlan: next);
+    });
   }
 
   /// Adds a new empty routine and signals navigation to it.

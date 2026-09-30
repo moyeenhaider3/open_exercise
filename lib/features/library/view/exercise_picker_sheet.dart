@@ -9,6 +9,7 @@ import '../../../core/catalogue/exercise_catalogue.dart';
 import '../../../core/catalogue/exercise_def.dart';
 import '../../../core/format/format.dart';
 import '../../../core/i18n/t.dart';
+import '../../../core/js/js_engine_service.dart';
 import '../../../core/state/gym_state_cubit.dart';
 import '../../../core/theme/app_palette.dart';
 import '../../../core/ui_kit/buttons.dart';
@@ -17,6 +18,8 @@ import '../../../core/ui_kit/controls.dart';
 import '../../../core/ui_kit/icons/app_icon.dart';
 import '../../../core/ui_kit/modals.dart';
 import '../../../core/ui_kit/rows.dart';
+import '../../muscles/bloc/muscles_bloc.dart';
+import '../../muscles/view/muscle_explorer.dart';
 import '../bloc/exercise_picker_cubit.dart';
 import 'custom_exercise_sheet.dart';
 import 'exercise_media.dart';
@@ -110,20 +113,56 @@ class _ExercisePickerSheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              // Title
+              // Title and mode toggle
               Padding(
                 padding: const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 12.0),
-                child: Text(
-                  t('Choose exercise'),
-                  style: const TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      t('Add exercise'),
+                      style: const TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (state.byMuscle)
+                      AppButton(
+                        label: Text(t('All')),
+                        variant: AppButtonVariant.ghost,
+                        small: true,
+                        onPressed: () => cubit.byMuscleChanged(false),
+                      )
+                    else
+                      AppButton(
+                        label: Text(t('By muscle')),
+                        variant: AppButtonVariant.tinted,
+                        small: true,
+                        icon: 'target',
+                        onPressed: () => cubit.byMuscleChanged(true),
+                      ),
+                  ],
                 ),
               ),
 
-              // Search bar
-              Padding(
+              if (state.byMuscle)
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: BlocProvider<MusclesBloc>(
+                      create: (BuildContext c) => MusclesBloc(
+                        gymState: c.read<GymStateCubit>(),
+                        catalogue: c.read<ExerciseCatalogue>(),
+                        engine: c.read<JsEngineService>(),
+                      ),
+                      child: MuscleExplorer(
+                        onPick: (ExerciseDef ex) => onPick(ex, false, handle),
+                      ),
+                    ),
+                  ),
+                )
+              else ...<Widget>[
+                // Search bar
+                Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
                 child: SearchField(
                   value: state.q,
@@ -243,6 +282,7 @@ class _ExercisePickerSheet extends StatelessWidget {
                       ),
               ),
             ],
+          ],
           ),
         );
       },

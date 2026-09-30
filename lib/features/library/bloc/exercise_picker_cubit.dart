@@ -25,6 +25,7 @@ class ExercisePickerState extends Equatable {
     this.usageMap = const <String, int>{},
     this.favCount = 0,
     this.equipmentOptions = const <String>[],
+    this.byMuscle = false,
   });
 
   final String q;
@@ -35,6 +36,7 @@ class ExercisePickerState extends Equatable {
   final Map<String, int> usageMap;
   final int favCount;
   final List<String> equipmentOptions;
+  final bool byMuscle;
 
   ExercisePickerState copyWith({
     String? q,
@@ -45,6 +47,7 @@ class ExercisePickerState extends Equatable {
     Map<String, int>? usageMap,
     int? favCount,
     List<String>? equipmentOptions,
+    bool? byMuscle,
   }) {
     return ExercisePickerState(
       q: q ?? this.q,
@@ -55,6 +58,7 @@ class ExercisePickerState extends Equatable {
       usageMap: usageMap ?? this.usageMap,
       favCount: favCount ?? this.favCount,
       equipmentOptions: equipmentOptions ?? this.equipmentOptions,
+      byMuscle: byMuscle ?? this.byMuscle,
     );
   }
 
@@ -68,6 +72,7 @@ class ExercisePickerState extends Equatable {
         usageMap,
         favCount,
         equipmentOptions,
+        byMuscle,
       ];
 }
 
@@ -142,6 +147,8 @@ class ExercisePickerCubit extends Cubit<ExercisePickerState> {
     ));
   }
 
+  void byMuscleChanged(bool v) => emit(state.copyWith(byMuscle: v));
+
   void showMore() {
     emit(_computeState(
       gymState: _gymState.state,
@@ -214,6 +221,7 @@ class ExercisePickerCubit extends Cubit<ExercisePickerState> {
       usageMap: usage,
       favCount: favCount,
       equipmentOptions: eqOpts,
+      byMuscle: state.byMuscle,
     );
   }
 }

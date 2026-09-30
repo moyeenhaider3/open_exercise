@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/body_map/body_map.dart';
 import '../../../core/catalogue/exercise_catalogue.dart';
 import '../../../core/catalogue/exercise_def.dart';
 import '../../../core/format/glyphs.dart';
 import '../../../core/i18n/t.dart';
 import '../../../core/js/js_engine_service.dart';
 import '../../../core/js/modules/history_js.dart';
+import '../../../core/js/modules/muscles_js.dart';
 import '../../../core/js/modules/progression_js.dart';
 import '../../../core/models/gym_state.dart';
 import '../../../core/models/model_extras.dart';
@@ -295,6 +297,53 @@ class _RoutineEditViewState extends State<RoutineEditView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              // What this session hits
+              if ((routine.ex ?? const <RoutineExercise>[]).isNotEmpty) ...<Widget>[
+                Builder(
+                  builder: (BuildContext bCtx) {
+                    final Map<String, double> load = engine.muscles.loadOfRoutine(routine);
+                    final Map<String, int> levels = engine.muscles.levelsOf(load);
+                    final List<String> topMuscles =
+                        engine.muscles.rankOf(load).worked.take(6).toList();
+                    final Map<String, String> muscleNames = engine.muscles.muscleName;
+                    final String? body = bCtx.read<GymStateCubit>().state.body;
+
+                    return AppCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Text(
+                            t('What this session hits'),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: -0.015,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          BodyMap(
+                            body: body,
+                            levels: levels,
+                          ),
+                          if (topMuscles.isNotEmpty) ...<Widget>[
+                            const SizedBox(height: 8),
+                            Wrap(
+                              spacing: 6,
+                              runSpacing: 6,
+                              children: <Widget>[
+                                for (final String slug in topMuscles)
+                                  _MuscleChip(label: muscleNames[slug] ?? slug),
+                              ],
+                            ),
+                          ],
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 12),
+              ],
+
               // Tip Line
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -690,6 +739,32 @@ class _RoutineEditViewState extends State<RoutineEditView> {
           ),
         );
       },
+    );
+  }
+}
+
+class _MuscleChip extends StatelessWidget {
+  const _MuscleChip({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppPalette palette = AppPalette.of(context);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+      decoration: BoxDecoration(
+        color: palette.surface2,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 12,
+          color: palette.muted,
+        ),
+      ),
     );
   }
 }

@@ -97,3 +97,16 @@ final class PlanStarterLoaded extends PlanEvent {
   @override
   List<Object?> get props => <Object?>[planId];
 }
+
+/// Dispatched to set or clear a date override in dayPlan.
+/// Ported from `../openGym/frontend/src/sheets.jsx` DayOverride.set.
+final class PlanDayOverrideSet extends PlanEvent {
+  const PlanDayOverrideSet(this.iso, this.value);
+
+  final String iso;
+  final String value;
+
+  @override
+  List<Object?> get props => <Object?>[iso, value];
+}
+

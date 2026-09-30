@@ -1,6 +1,6 @@
 # UI-07 Translation Checklist: Zustand to BLoC & Native APIs
 
-This document satisfies the **UI-07** requirement for Phase 3 ("BLoC & UI Translation"). It tracks every action in `useStore.js` and `useUI.js`, and every in-scope `update()` mutation closure from openGym (`../openGym/frontend/src/`) mapped to its Flutter BLoC event, native Flutter platform API, or deferred future phase.
+This document satisfies the **UI-07** requirement for Phase 3 ("BLoC & UI Translation") and Phase 3.1 ("History, Stats, Home, Check-in & Settings"). It tracks every action in `useStore.js` and `useUI.js`, and every in-scope `update()` mutation closure from openGym (`../openGym/frontend/src/`) mapped to its Flutter BLoC event, native Flutter platform API, or deferred future phase.
 
 ---
 
@@ -68,6 +68,8 @@ This document satisfies the **UI-07** requirement for Phase 3 ("BLoC & UI Transl
 | `sheets.jsx:210` | Add library exercise to routine | `ExerciseAddedToRoutine` |
 | `sheets.jsx:240` | Change barbell base weight | `ExerciseBarWeightChanged` |
 | `sheets.jsx:255` | Toggle bodyweight / no bar flag | `ExerciseNoBarChanged` |
+| `views/Library.jsx:39`, `views/Muscles.jsx:1-20`, `components/MuscleExplorer.jsx:1-110` | Explore muscles view, muscle selection, filtering and search | `MusclesBloc` (`MusclesQueryChanged`, `MusclesBodyPartSelected`, `MusclesEquipmentSelected`, `MusclesShowAllToggled`, `MusclesShowMoreRequested`, `muscle_explorer.dart`, `muscles_screen.dart`, route `/muscles`) |
+| `sheets.jsx:941-951` | Toggle By muscle mode in exercise picker | `ExercisePickerCubit.byMuscleChanged` (hosts `MuscleExplorer` in `exercise_picker_sheet.dart`) |
 
 ### Plan & Routine Configuration (`views/Plan.jsx`, `views/RoutineEdit.jsx`, `sheets.jsx`)
 
@@ -92,6 +94,7 @@ This document satisfies the **UI-07** requirement for Phase 3 ("BLoC & UI Transl
 | `views/RoutineEdit.jsx:290`| Toggle superset link between items | `RoutineLinkToggled` |
 | `views/RoutineEdit.jsx:320`| Copy routine | `RoutineCopied` |
 | `views/RoutineEdit.jsx:340`| Delete routine | `RoutineDeleted` |
+| `views/RoutineEdit.jsx:418-429` | Anatomy hit map and worked muscles for routine | `BodyMap` with `loadOfRoutine` in `routine_edit_screen.dart` |
 
 ### Active Workout Session (`views/Workout.jsx`, `sheets.jsx`)
 
@@ -133,6 +136,78 @@ This document satisfies the **UI-07** requirement for Phase 3 ("BLoC & UI Transl
 | `views/Workout.jsx:810`| Pick RPE / RIR effort rating | `WorkoutEffortPicked` |
 | `views/Workout.jsx:840`| Save progression configuration | `WorkoutProgressionConfigured` |
 
+### History & Workout Detail (`views/History.jsx`, `sheets.jsx`)
+
+| Source Location | Trigger / Action | Flutter BLoC Event / Native API |
+|---|---|---|
+| `sheets.jsx:1674` | Save session note on blur | `HistoryWorkoutNoteSaved` |
+| `sheets.jsx:1690` | Flush session note on sheet unmount | `HistoryWorkoutNoteSaved` |
+| `sheets.jsx:1739` | Delete workout from history with confirm | `HistoryWorkoutDeleted` |
+| `views/History.jsx:14` | Tap "Log a past workout" button | `WorkoutBackfillStarted` |
+| `sheets.jsx:1846` | Save past workout form in backfill sheet | `WorkoutBackfillStarted` |
+| `sheets.jsx:2188` | Complete past session finish branch | `WorkoutFinishConfirmed` via `FinishResult.past` |
+| `sheets.jsx:2173-2174` | Post-workout muscle volume breakdown anatomy map | `BodyMap` with `loadOfWorkouts` in `finish_flow.dart` |
+
+### Calendar & Day Override (`sheets.jsx`)
+
+| Source Location | Trigger / Action | Flutter BLoC Event / Native API |
+|---|---|---|
+| `sheets.jsx:1603` | Assign routine, rest, or reset override | `PlanDayOverrideSet` |
+| `sheets.jsx:1772,1774` | Calendar previous / next month navigation | Screen-local `State` |
+
+### Home Dashboard (`views/Home.jsx`)
+
+| Source Location | Trigger / Action | Flutter BLoC Event / Native API |
+|---|---|---|
+| `views/Home.jsx:71,73` | Prev/next week navigation buttons | `HomeWeekOffsetChanged` |
+| `views/Home.jsx:61,81` | Tap today session card | `WorkoutStartRequested` via `startFlow` / `go('/workout')` / `showDayOverrideSheet` |
+
+### Body Weight & Goal Tracking (`sheets.jsx`)
+
+| Source Location | Trigger / Action | Flutter BLoC Event / Native API |
+|---|---|---|
+| `sheets.jsx:208` | Save bodyweight entry in BwSheet | `BodyweightLogged` |
+| `sheets.jsx:218` | Delete bodyweight weigh-in history row | `BodyweightEntryDeleted` |
+| `sheets.jsx:568` | Save target body weight goal | `BodyweightGoalSet` |
+| `sheets.jsx:571` | Remove target body weight goal | `BodyweightGoalRemoved` |
+
+### Stats & Analytics (`views/Stats.jsx`)
+
+| Source Location | Trigger / Action | Flutter BLoC Event / Native API |
+|---|---|---|
+| `views/Stats.jsx:252` | Switch effort distribution window (7d/30d/90d/1y/all) | `StatsEffortWindowChanged` |
+| `views/Stats.jsx:465` | Switch stats charts time range | `StatsRangeChanged` |
+| `views/Stats.jsx:474` | Select exercise for progress analytics | `StatsExerciseSelected` |
+| `views/Stats.jsx:483` | Select exercise metric tab (top/e1rm/effort) | `StatsExerciseMetricChanged` |
+| `views/Stats.jsx:100-232` | Muscle balance, fatigue, and strength map views | `MuscleBalanceBloc` (`MuscleBalanceViewChanged`, `MuscleBalanceWindowChanged`, `MuscleBalanceHardToggled`, `muscle_balance_card.dart`) |
+
+### Check-in Rail & Gym Cards (`views/CheckIn.jsx`)
+
+| Source Location | Trigger / Action | Flutter BLoC Event / Native API |
+|---|---|---|
+| `views/CheckIn.jsx:68` | Settle on card during carousel scroll | `CheckInActiveCardChanged` |
+| `views/CheckIn.jsx:122` | Move card left or right in rail | `CheckInCardMoved` |
+| `views/CheckIn.jsx:117` | Remove gym card after confirmation | `CheckInCardRemoved` |
+| `views/CheckIn.jsx:168` | Rename gym card in CardSheet | `CheckInCardRenamed` |
+
+### Settings & App Configuration (`views/Settings.jsx`, `sheets.jsx`, `App.jsx`)
+
+| Source Location | Trigger / Action | Flutter BLoC Event / Native API |
+|---|---|---|
+| `views/Settings.jsx:44` | Switch weight unit (kg/lb) with conversion choice | `SettingsUnitSwitched` |
+| `views/Settings.jsx:254,261,266` | Change wdec, weekStart, or gym checkIn visibility | `SettingsGeneralChanged` |
+| `views/Settings.jsx:276,286,294,300,306,316,321,329,333,341` | Change weighIn, workoutView, restSec, restPauseSec, keepAwake, gifSize, sound, soundOnSilent, timerFlash, effort | `SettingsWorkoutChanged` |
+| `views/Settings.jsx:462` | Toggle workout controls in WorkoutControlsSheet | `SettingsWorkoutControlsChanged` |
+| `views/Settings.jsx:361` | Switch app theme (dark/light/system) | `ShellThemeChanged` |
+| `views/Settings.jsx:370` | Switch body anatomy preference (male/female) | `SettingsBodyChanged` |
+| `views/Settings.jsx:378` | Select UI accent color swatch | `ShellAccentChanged` |
+| `views/Settings.jsx:647` | Toggle equipment filter on/off | `SettingsEquipFilterToggled` |
+| `views/Settings.jsx:650` | Select active equipment profile | `SettingsActiveEquipChanged` |
+| `sheets.jsx:1084` | Save profile in EquipmentProfileSheet | `SettingsEquipProfileSaved` |
+| `views/Settings.jsx:640` | Delete equipment profile with confirmation | `SettingsEquipProfileDeleted` |
+| `views/Settings.jsx:173` | Confirm reset all data and state | `SettingsResetConfirmed` |
+| `App.jsx:85` | React to wdec changes to configure weight formatters | `BlocListener` in `app.dart` |
+
 ---
 
 ## 4. Deferred Surfaces & Technical Boundaries
@@ -142,15 +217,21 @@ The following UI surfaces and integrations identified during porting are explici
 | Feature / UI Surface | Target Phase | Rationale |
 |---|---|---|
 | Plan Tools (Share / Print / Import) | Phase 8 (`IMP-04`) | Requires platform printing, system sharing, and document picking packages. |
-| Library "By Muscle" & Picker Muscle Toggle | Phase 4 (`VIS-01`) | Depends on `BodyMap` SVG anatomy renderer. |
-| RoutineEdit "What this session hits" | Phase 4 (`VIS-02`) | Interactive anatomy visualization widget. |
-| FinishSummary "What you just trained" | Phase 4 (`VIS-02`) | Post-workout muscle volume breakdown visualizer. |
-| AI Coach CTA in Plan | Phase 7 (`COACH-01`) | LLM prompt orchestration and recommendations. |
+| AI Coach | Phase 7 (`COACH-01`) | LLM prompt orchestration, AI chat, and coach recommendations. |
 | Activity Heartbeat / Presence Ping | Phase 6 / 7 | Live server presence and background sync telemetry. |
 | Rest & Work Timers (beeps, vibrate, audio cues) | Phase 5 (`TMR-01`) | Audio playback and haptics infrastructure (D-02). |
-| Automatic File Backup on Session Finish | Phase 8 (`IMP-04`) | Platform storage file mirroring. |
-| Backfill / Log Past Workout & Day Override | Phase 3.1 (Home) | Home screen retro-logging calendar entrypoints. |
+| Automatic File Backup on Session Finish | Phase 8 (`IMP-04`) | Platform storage file mirroring (`autoBackupNow`). |
+| Backfill / Log Past Workout & Day Override | Phase 3.1 | Done in Phase 3.1 (`WorkoutBackfillStarted`, `PlanDayOverrideSet`). |
 | TopWeight Manual Override | N/A | Unreachable code path in openGym web; omitted. |
+| Check-in Add card + Re-scan / Import photo | Phase 8 (`IMP-03`, `D-03`) | Native camera QR scanner and image decoding. |
+| Settings Language | Phase 8 | Localization selector hidden until multi-language translations ready. |
+| Import backup / Export backup / Auto-backup | Phase 8 (`IMP-04`) | File import picker, share export, and periodic backup. |
+| Import from another app / Hevy | Phase 8 (`IMP-01`) | External workout tracker backup parsers (Hevy, Strong, FitNotes). |
+| Notifications / workout-day reminder | Phase 5 (`TMR-03`) | Platform local notifications on planned workout days. |
+| Keep screen awake + Play sounds on silent rows, rest-timer/sound/flash behaviour | Phase 5 (`TMR-01`) | Wakelock and audio ducking / silent override playback (values already stored). |
+| Account / pairing / passkey rows | Phase 5 / 6 (`AUTH-03`, `AUTH-04`, `SYNC-01`) | User profile, WebAuthn passkey authentication, server sync pairing. |
+| Tip (Add to Home screen) and Updates (APK updater) | N/A | Web PWA install banner and APK downloader not applicable to native store app. |
+| Home 'Hi {name}' greeting | Phase 5 | Requires authenticated user profile state. |
 
 ---
 
@@ -167,7 +248,30 @@ done
 
 ### Check all named BLoC event classes exist in the Dart codebase:
 ```bash
-grep -oE "\`[A-Z][A-Za-z]+(Requested|Changed|Toggled|Added|Removed|Moved|Saved|Deleted|Confirmed|Discarded|Renamed|Focused|Navigated|Paired|Unpaired|Swapped|Picked|Configured|Bumped|Loaded|Assigned|Copied|Reordered|Selected|Linked)\`" .planning/phases/03-bloc-ui-translation/03-UI07-CHECKLIST.md | tr -d '\`' | sort -u | while read e; do
+grep -oE "\`[A-Z][A-Za-z]+(Requested|Changed|Toggled|Added|Removed|Moved|Saved|Deleted|Confirmed|Discarded|Renamed|Focused|Navigated|Paired|Unpaired|Swapped|Picked|Configured|Bumped|Loaded|Assigned|Copied|Reordered|Selected|Linked|Started|Set|Logged|Switched)\`" .planning/phases/03-bloc-ui-translation/03-UI07-CHECKLIST.md | tr -d '\`' | sort -u | while read e; do
   grep -rq "final class $e\b" lib || echo "NO CLASS $e"
 done
 ```
+
+### Check all Phase 3.1 BLoC event classes exist in the Dart codebase:
+```bash
+for e in WorkoutBackfillStarted PlanDayOverrideSet HistoryWorkoutNoteSaved HistoryWorkoutDeleted BodyweightLogged BodyweightEntryDeleted BodyweightGoalSet BodyweightGoalRemoved HomeWeekOffsetChanged StatsRangeChanged StatsExerciseSelected StatsExerciseMetricChanged StatsEffortWindowChanged CheckInCardMoved CheckInCardRenamed CheckInCardRemoved CheckInActiveCardChanged SettingsUnitSwitched SettingsGeneralChanged SettingsWorkoutChanged SettingsWorkoutControlsChanged SettingsBodyChanged SettingsEquipFilterToggled SettingsActiveEquipChanged SettingsEquipProfileSaved SettingsEquipProfileDeleted SettingsResetConfirmed ShellThemeChanged ShellAccentChanged WorkoutStartRequested WorkoutFinishConfirmed; do
+  grep -rq "final class $e\b" lib || echo "MISSING 3.1 EVENT $e"
+done
+```
+
+---
+
+## 6. UI-08 Audit (Phase 3 + 3.1)
+
+Commands and results verifying architecture and list virtualization rules:
+
+| Gate | Command | Result |
+|---|---|---|
+| No unbounded raw lists | `grep -rnE "ListView\(|GridView\(|GridView\.count\(" lib/features lib/core/ui_kit` | PASS (0 occurrences; builders/slivers used, bounded Settings/Plan use Column) |
+| Views do not mutate state directly | `grep -rn "\.mutate(\|\.replaceState(" lib/features/*/view` | PASS (0 occurrences) |
+| Single writer persistence pattern (D-04) | `grep -rn "saveState(\|importState(" lib --include=*.dart \| grep -v "lib/core/data/\|lib/core/state/"` | PASS (0 occurrences outside repository/state layers) |
+| AGPL-3.0 License headers | `grep -rn "SPDX-License-Identifier: AGPL-3.0-or-later" -L lib/features lib/core --include=*.dart \| grep -v "/generated/\|\.g\.dart"` | PASS (All hand-written files contain header) |
+| Clean static analysis | `flutter analyze` | PASS (No issues found!) |
+| JS-04 architecture audit | `bash tool/js04_audit.sh` | PASS (exit 0) |
+| No test files or forbidden deps | `git ls-files --others --cached \| grep -E "(^\|/)(test\|integration_test\|test_driver)/\|_test\.dart$"` & `grep -nE "bloc_test\|mocktail\|sqflite_common_ffi" pubspec.yaml` | PASS (No test artifacts or dependencies) |

@@ -28,6 +28,8 @@ import * as finish from './shims/finish-workout-shim.js';
 import * as backfill from '../../third_party/opengym/lib/backfill.js';
 import * as units from '../../third_party/opengym/lib/units.js';
 import * as viewAgg from './shims/view-aggregates-shim.js';
+import * as recoveryView from '../../third_party/opengym/lib/recovery-view.js';
+import * as muscleView from './shims/muscle-view-shim.js';
 
 const MODULES = {
   onerm,
@@ -49,6 +51,8 @@ const MODULES = {
   backfill,
   units,
   viewAgg,
+  recoveryView,
+  muscleView,
 };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -99,6 +103,7 @@ const MODULE_FILES = [
   { name: 'exercises', file: './fixture-cases/exercises.mjs' },
   { name: 'phase3', file: './fixture-cases/phase3.mjs' },
   { name: 'phase31', file: './fixture-cases/phase31.mjs' },
+  { name: 'phase4', file: './fixture-cases/phase4.mjs' },
 ];
 
 const BANNED = {

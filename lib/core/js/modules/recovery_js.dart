@@ -109,6 +109,16 @@ final class RecoveryJs {
           MapEntry<String, String>(k, jsString(v, 'recovery.FATIGUE_STATES["$k"]')),
     );
   }
+
+  /// Stable consumer-facing label for one numeric fatigue value ('ready', 'recovering', 'fatigued').
+  /// Source: recovery-view.js lines 11-17.
+  String fatigueStateOf(num? value) {
+    final Object? result = _engine.call(
+      'recoveryView.fatigueStateOf',
+      <Object?>[value ?? jsUndefined],
+    );
+    return jsString(result, 'recoveryView.fatigueStateOf');
+  }
 }
 
 extension RecoveryJsAccess on JsEngineService {

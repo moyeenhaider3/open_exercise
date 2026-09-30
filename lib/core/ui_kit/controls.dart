@@ -75,8 +75,16 @@ class AppSegmented<T> extends StatelessWidget {
           .map(
             (SegmentOption<T> o) => ButtonSegment<T>(
               value: o.value,
-              label: Text(o.label),
-              icon: o.icon != null ? AppIcon(o.icon!, size: 16.0) : null,
+              label: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  if (o.icon != null) ...<Widget>[
+                    AppIcon(o.icon!, size: 13.0),
+                    const SizedBox(width: 3.0),
+                  ],
+                  Text(o.label, style: const TextStyle(fontSize: 12.0)),
+                ],
+              ),
             ),
           )
           .toList(),
@@ -100,6 +108,12 @@ class AppSegmented<T> extends StatelessWidget {
           }
           return palette.muted;
         }),
+        visualDensity: VisualDensity.compact,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        minimumSize: WidgetStateProperty.all(Size.zero),
+        padding: WidgetStateProperty.all(
+          const EdgeInsets.symmetric(horizontal: 6.0, vertical: 4.0),
+        ),
         side: WidgetStateProperty.all(BorderSide.none),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),

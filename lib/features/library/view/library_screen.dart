@@ -86,6 +86,13 @@ class _LibraryView extends StatelessWidget {
                         '{0} exercises with animations',
                         <Object?>[state.total],
                       ),
+                      trailing: AppButton(
+                        small: true,
+                        variant: AppButtonVariant.tinted,
+                        icon: 'target',
+                        label: Text(t('By muscle')),
+                        onPressed: () => ctx.go(AppRoutes.muscles),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(14.0, 0.0, 14.0, 10.0),

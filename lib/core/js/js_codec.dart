@@ -227,3 +227,40 @@ Map<String, double> jsDoubleMap(Object? v, String path) {
   }
   return result;
 }
+
+/// Coerces a map with int values strictly.
+Map<String, int> jsIntMap(Object? v, String path) {
+  final Map<String, Object?> rawMap = jsMap(v, path);
+  final Map<String, int> result = <String, int>{};
+  for (final MapEntry<String, Object?> entry in rawMap.entries) {
+    final Object? val = entry.value;
+    if (val is num && val == val.truncateToDouble()) {
+      result[entry.key] = val.toInt();
+    } else {
+      throw JsBridgeException.type(
+        path: '$path["${entry.key}"]',
+        message: 'Expected integral num value in int map, found ${val.runtimeType}: $val',
+      );
+    }
+  }
+  return result;
+}
+
+/// Coerces a map with string values strictly.
+Map<String, String> jsStringMap(Object? v, String path) {
+  final Map<String, Object?> rawMap = jsMap(v, path);
+  final Map<String, String> result = <String, String>{};
+  for (final MapEntry<String, Object?> entry in rawMap.entries) {
+    final Object? val = entry.value;
+    if (val is String) {
+      result[entry.key] = val;
+    } else {
+      throw JsBridgeException.type(
+        path: '$path["${entry.key}"]',
+        message: 'Expected String value in string map, found ${val.runtimeType}: $val',
+      );
+    }
+  }
+  return result;
+}
+

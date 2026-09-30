@@ -177,7 +177,12 @@ class WorkoutSection extends StatelessWidget {
                 title: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text(t('Effort per set')),
+                    Flexible(
+                      child: Text(
+                        t('Effort per set'),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                     const SizedBox(width: 4.0),
                     AppIconButton(
                       'info',

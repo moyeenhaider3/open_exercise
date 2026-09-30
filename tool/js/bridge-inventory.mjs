@@ -164,8 +164,21 @@ export const INVENTORY = {
     keys: [],
   },
   muscles: {
-    functions: ['inMuscleOrder', 'hasExplicitMuscleMetadata', 'normalizeMuscleGroups', 'exerciseMuscleSnapshot'],
-    constants: ['MUSCLES', 'MUSCLE_NAME'],
+    functions: [
+      'inMuscleOrder',
+      'hasExplicitMuscleMetadata',
+      'normalizeMuscleGroups',
+      'exerciseMuscleSnapshot',
+      'musclesOf',
+      'loadOf',
+      'loadOfWorkouts',
+      'loadOfActive',
+      'loadOfRoutine',
+      'levelsOf',
+      'rankOf',
+      'muscleBalanceWindow',
+    ],
+    constants: ['MUSCLES', 'MUSCLE_NAME', 'INERT'],
     keys: [],
   },
   effort: {
@@ -211,6 +224,16 @@ export const INVENTORY = {
   viewAgg: {
     functions: ['heatmapDays', 'statsTiles', 'bodyweightPoints', 'exerciseProgress', 'calendarMonth', 'workoutDetailGroups', 'bwGoal', 'homeView'],
     constants: [],
+    keys: [],
+  },
+  recoveryView: {
+    functions: ['fatigueStateOf'],
+    constants: [],
+    keys: [],
+  },
+  muscleView: {
+    functions: ['muscleBalance', 'fatigueView', 'strengthView', 'muscleIndex'],
+    constants: ['FATIGUE_LEVELS', 'STRENGTH_LEVELS'],
     keys: [],
   },
 };

@@ -11,6 +11,7 @@ export 'js_codec.dart';
 export 'js_engine_service.dart';
 
 export 'models/history_models.dart';
+export 'models/muscle_models.dart';
 export 'models/onerm_models.dart';
 export 'models/phase3_models.dart';
 export 'models/phase31_models.dart';
@@ -24,6 +25,7 @@ export 'modules/exercise_history_js.dart';
 export 'modules/exercises_js.dart';
 export 'modules/finish_workout_js.dart';
 export 'modules/history_js.dart';
+export 'modules/muscle_view_js.dart';
 export 'modules/muscles_js.dart';
 export 'modules/onerm_js.dart';
 export 'modules/progression_copy_js.dart';

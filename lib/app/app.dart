@@ -124,6 +124,7 @@ class _OpenExerciseAppState extends State<OpenExerciseApp> {
                   const ThemeSettings settings = ThemeSettings.defaults();
                   return MaterialApp.router(
                     title: 'openGym',
+                    debugShowCheckedModeBanner: false,
                     theme: buildAppTheme(Brightness.light, settings.accent),
                     darkTheme: buildAppTheme(Brightness.dark, settings.accent),
                     themeMode: settings.themeMode,
@@ -132,6 +133,7 @@ class _OpenExerciseAppState extends State<OpenExerciseApp> {
                 case ShellReady(:final settings):
                   return MaterialApp.router(
                     title: 'openGym',
+                    debugShowCheckedModeBanner: false,
                     theme: buildAppTheme(Brightness.light, settings.accent),
                     darkTheme: buildAppTheme(Brightness.dark, settings.accent),
                     themeMode: settings.themeMode,

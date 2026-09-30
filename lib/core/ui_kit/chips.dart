@@ -11,11 +11,13 @@ class ChipItem<T> {
     required this.value,
     required this.label,
     this.icon,
+    this.trailing,
   });
 
   final T value;
   final String label;
   final String? icon;
+  final String? trailing;
 }
 
 /// Horizontal scrolling strip of selectable chips matching openGym `.chip` / `.chip.on`.
@@ -136,6 +138,18 @@ class _ChipStripState<T> extends State<ChipStrip<T>> {
                           color: fg,
                         ),
                       ),
+                      if (item.trailing != null) ...<Widget>[
+                        const SizedBox(width: 4.0),
+                        Text(
+                          item.trailing!,
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            fontWeight:
+                                isSelected ? FontWeight.w600 : FontWeight.w500,
+                            color: isSelected ? fg : palette.dim,
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),

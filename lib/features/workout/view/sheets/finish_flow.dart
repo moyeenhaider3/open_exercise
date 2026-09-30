@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/body_map/body_map.dart';
 import '../../../../core/catalogue/exercise_catalogue.dart';
 import '../../../../core/format/format.dart';
 import '../../../../core/i18n/t.dart';
 import '../../../../core/js/js_engine_service.dart';
 import '../../../../core/js/models/phase3_models.dart';
 import '../../../../core/js/modules/history_js.dart';
+import '../../../../core/js/modules/muscles_js.dart';
 import '../../../../core/models/gym_state.dart';
 import '../../../../core/models/workout.dart';
 import '../../../../core/router/app_router.dart';
@@ -119,13 +121,14 @@ Future<void> showWorkoutCompleteSheet(BuildContext context) {
 /// Displays the locked workout summary center dialog upon completing a workout.
 ///
 /// Ported from `../openGym/frontend/src/sheets.jsx` lines 2157-2178 FinishSummary.
-/// Note: Body visualization is deferred to Phase 4; audio cues to Phase 5 (D-02).
+/// Note: Audio cues deferred to Phase 5 (D-02).
 Future<void> showFinishSummary(
   BuildContext context,
   FinishResult r,
   String unit,
 ) {
   final HistoryJs history = context.read<JsEngineService>().history;
+  final MusclesJs muscles = context.read<JsEngineService>().muscles;
   final ExerciseCatalogue catalogue = context.read<ExerciseCatalogue>();
   final GymStateCubit cubit = context.read<GymStateCubit>();
 
@@ -137,6 +140,7 @@ Future<void> showFinishSummary(
         result: r,
         unit: unit,
         history: history,
+        muscles: muscles,
         catalogue: catalogue,
         gymState: cubit.state,
       );
@@ -149,6 +153,7 @@ class _FinishSummaryContent extends StatelessWidget {
     required this.result,
     required this.unit,
     required this.history,
+    required this.muscles,
     required this.catalogue,
     required this.gymState,
   });
@@ -156,6 +161,7 @@ class _FinishSummaryContent extends StatelessWidget {
   final FinishResult result;
   final String unit;
   final HistoryJs history;
+  final MusclesJs muscles;
   final ExerciseCatalogue catalogue;
   final GymState gymState;
 
@@ -276,7 +282,21 @@ class _FinishSummaryContent extends StatelessWidget {
             );
           }),
         ],
-        const SizedBox(height: 20.0),
+        const SizedBox(height: 16.0),
+        Text(
+          t('What you just trained'),
+          style: const TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.w600,
+            letterSpacing: -0.015,
+          ),
+        ),
+        const SizedBox(height: 10.0),
+        BodyMap(
+          body: gymState.body,
+          levels: muscles.levelsOf(muscles.loadOfWorkouts(<Workout>[w])),
+        ),
+        const SizedBox(height: 14.0),
         AppButton(
           label: Text(t('Nice!')),
           variant: AppButtonVariant.primary,

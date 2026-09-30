@@ -23,6 +23,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     required this.sep,
     required this.muted,
     required this.dim,
+    required this.label,
   });
 
   final Color acc;
@@ -40,6 +41,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color sep;
   final Color muted;
   final Color dim;
+  final Color label;
 
   static Color _onAccent(Color accent) {
     // Contrast rules from openGym index.css:98-109
@@ -74,6 +76,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
       sep: const Color(0x99545458),
       muted: const Color(0x99EBEBF5),
       dim: const Color(0x52EBEBF5),
+      label: const Color(0xFFFFFFFF),
     );
   }
 
@@ -94,6 +97,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
       sep: const Color(0x4A3C3C43),
       muted: const Color(0x993C3C43),
       dim: const Color(0x4D3C3C43),
+      label: const Color(0xFF000000),
     );
   }
 
@@ -143,6 +147,8 @@ class AppPalette extends ThemeExtension<AppPalette> {
       case '--dim':
       case '--label-3':
         return dim;
+      case '--label':
+        return label;
       default:
         return null;
     }
@@ -165,6 +171,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     Color? sep,
     Color? muted,
     Color? dim,
+    Color? label,
   }) {
     return AppPalette(
       acc: acc ?? this.acc,
@@ -182,6 +189,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
       sep: sep ?? this.sep,
       muted: muted ?? this.muted,
       dim: dim ?? this.dim,
+      label: label ?? this.label,
     );
   }
 
@@ -204,6 +212,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
       sep: Color.lerp(sep, other.sep, t) ?? sep,
       muted: Color.lerp(muted, other.muted, t) ?? muted,
       dim: Color.lerp(dim, other.dim, t) ?? dim,
+      label: Color.lerp(label, other.label, t) ?? label,
     );
   }
 }

@@ -10,6 +10,7 @@ import '../../features/checkin/view/checkin_screen.dart';
 import '../../features/history/view/history_screen.dart';
 import '../../features/home/view/home_screen.dart';
 import '../../features/library/view/library_screen.dart';
+import '../../features/muscles/view/muscles_screen.dart';
 import '../../features/plan/view/plan_screen.dart';
 import '../../features/plan/view/routine_edit_screen.dart';
 import '../../features/settings/view/settings_screen.dart';
@@ -26,6 +27,7 @@ abstract final class AppRoutes {
   static const String workout = '/workout';
   static const String stats = '/stats';
   static const String library = '/library';
+  static const String muscles = '/muscles';
   static const String history = '/history';
   static const String settings = '/settings';
   static const String checkin = '/checkin';
@@ -83,6 +85,11 @@ GoRouter createAppRouter() {
             path: AppRoutes.library,
             name: 'library',
             builder: (BuildContext context, GoRouterState state) => const LibraryScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.muscles,
+            name: 'muscles',
+            builder: (BuildContext context, GoRouterState state) => const MusclesScreen(),
           ),
           GoRoute(
             path: AppRoutes.history,

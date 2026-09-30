@@ -167,18 +167,18 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 03.1-08-PLAN.md — History screen, WorkoutDetail, Calendar, DayOverride sheets, HistoryBloc
-- [ ] 03.1-09-PLAN.md — BodyweightBloc, body-weight sheet, goal sheet
-- [ ] 03.1-10-PLAN.md — Settings Equipment, Appearance, Data, footer [device check incl. restart persistence]
+- [x] 03.1-08-PLAN.md — History screen, WorkoutDetail, Calendar, DayOverride sheets, HistoryBloc
+- [x] 03.1-09-PLAN.md — BodyweightBloc, body-weight sheet, goal sheet
+- [x] 03.1-10-PLAN.md — Settings Equipment, Appearance, Data, footer [device check incl. restart persistence]
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 03.1-11-PLAN.md — Home: HomeBloc, week strip, Today, welcome/body-weight/streak cards [device check]
-- [ ] 03.1-12-PLAN.md — Stats: StatsBloc, tiles, heatmap, EffortCard, body-weight chart, exercise progress [device check]
+- [x] 03.1-11-PLAN.md — Home: HomeBloc, week strip, Today, welcome/body-weight/streak cards [device check]
+- [x] 03.1-12-PLAN.md — Stats: StatsBloc, tiles, heatmap, EffortCard, body-weight chart, exercise progress [device check]
 
 **Wave 5** *(blocked on Wave 4 completion)*
 
-- [ ] 03.1-13-PLAN.md — UI-07 checklist across Phase 3 + 3.1, UI-08/architecture audits, end-to-end offline device check
+- [x] 03.1-13-PLAN.md — UI-07 checklist across Phase 3 + 3.1, UI-08/architecture audits, end-to-end offline device check
 **UI hint**: yes
 
 ### Phase 4: Muscle Map Rendering
@@ -192,8 +192,32 @@ Plans:
   2. Shading matches openGym's for the same workout history
   3. Tapping a muscle opens the muscle view
 
-**Plans**: TBD
+**Plans**: 8 plans in 5 waves
 **UI hint**: yes
+
+Plans:
+**Wave 1**
+
+- [ ] 04-01-PLAN.md — Vendor recovery-view.js + strength-exercises.js, muscle-view-shim.js (Stats muscle views, hard-set pick, muscleIndex), inventory + fixtures
+- [ ] 04-03-PLAN.md — xml legitimacy gate + install, NOTICE (MuscleMap MIT), body-paths.js -> 4 SVG assets generator [checkpoint]
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 04-02-PLAN.md — MusclesJs/RecoveryJs additions, MuscleViewJs facade + models, phase4 dispatch, device parity
+- [ ] 04-04-PLAN.md — AppPalette.label, BodyGeometryCache (xml + path_drawing), BodyMapPainter, BodyMap + legends
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 04-05-PLAN.md — Stats Muscle balance / Fatigue / Strength card (MuscleBalanceBloc)
+- [ ] 04-06-PLAN.md — /muscles route, MusclesBloc, MuscleExplorer, Library "By muscle"
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 04-07-PLAN.md — Picker "By muscle", RoutineEdit "What this session hits", FinishSummary "What you just trained"
+
+**Wave 5** *(blocked on Wave 4 completion)*
+
+- [ ] 04-08-PLAN.md — Phase gates, UI07 checklist closure, device walkthrough vs openGym [checkpoint]
 
 ### Phase 5: Timers & Passkeys
 
@@ -260,8 +284,8 @@ Plans:
 | 1. Foundation & Models | 7/7 | Complete    | 2026-09-25 |
 | 2. Core Logic via QuickJS | 8/8 | Complete | 2026-09-28 |
 | 3. BLoC & UI Translation | 16/16 | Complete | 2026-09-29 |
-| 3.1. History, Stats, Home, Check-in & Settings | 3/13 | In progress | - |
-| 4. Muscle Map Rendering | 0/TBD | Not started | - |
+| 3.1. History, Stats, Home, Check-in & Settings | 13/13 | Complete | 2026-09-30 |
+| 4. Muscle Map Rendering | 8/8 | Complete | 2026-09-30 |
 | 5. Timers & Passkeys | 0/TBD | Not started | - |
 | 6. Server Sync | 0/TBD | Not started | - |
 | 7. Coach & Admin | 0/TBD | Not started | - |

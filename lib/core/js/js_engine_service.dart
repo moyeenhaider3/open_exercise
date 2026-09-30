@@ -78,6 +78,8 @@ final class JsEngineService {
     'backfill',
     'units',
     'viewAgg',
+    'recoveryView',
+    'muscleView',
   };
 
   static final RegExp _pathRegex = RegExp(r'^([A-Za-z]+)\.([A-Za-z_$][A-Za-z0-9_$]*)$');

@@ -14,6 +14,9 @@ import '../../../core/ui_kit/rows.dart';
 import '../../../core/ui_kit/toast.dart';
 import '../bloc/settings_bloc.dart';
 import '../bloc/settings_state.dart';
+import 'sections/appearance_section.dart';
+import 'sections/data_section.dart';
+import 'sections/equipment_section.dart';
 import 'sections/general_section.dart';
 import 'sections/workout_section.dart';
 
@@ -73,11 +76,9 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     GeneralSection(state: state),
                     WorkoutSection(state: state),
-                    // Plan 03.1-10 insertion points:
-                    // - EquipmentSection (filter toggle, profile picker, CRUD)
-                    // - AppearanceSection (theme mode, accent color, body diagram)
-                    // - DataSection (export backup, import backup, reset data)
-                    // - App version and legal footer
+                    EquipmentSection(state: state),
+                    AppearanceSection(state: state),
+                    const DataSection(),
                     const SizedBox(height: 32.0),
                   ],
                 ),
