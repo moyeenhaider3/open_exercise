@@ -121,7 +121,7 @@ Future<void> showWorkoutCompleteSheet(BuildContext context) {
 /// Displays the locked workout summary center dialog upon completing a workout.
 ///
 /// Ported from `../openGym/frontend/src/sheets.jsx` lines 2157-2178 FinishSummary.
-/// Note: Audio cues deferred to Phase 5 (D-02).
+/// Note: Finish audio cues play in WorkoutBloc._onFinishConfirmed (sheets.jsx:2226).
 Future<void> showFinishSummary(
   BuildContext context,
   FinishResult r,

@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,6 +10,7 @@ import '../../../../core/i18n/t.dart';
 import '../../../../core/js/js_engine_service.dart';
 import '../../../../core/js/modules/history_js.dart';
 import '../../../../core/models/gym_state.dart';
+import '../../../../core/theme/app_palette.dart';
 import '../../../../core/ui_kit/buttons.dart';
 import '../../../../core/ui_kit/controls.dart';
 import '../../../../core/ui_kit/rows.dart';
@@ -17,27 +21,20 @@ import '../sheets/workout_controls_sheet.dart';
 
 /// "During a workout" settings section.
 ///
-/// Ports openGym `views/Settings.jsx` During a workout section (lines 287-349).
-/// Note: Screen wake lock and silent mode sound overrides are deferred to
-/// Phase 5 (TMR-01) per openGym's platform-support gating.
+/// Ports openGym `views/Settings.jsx` During a workout section (lines 271-335).
 class WorkoutSection extends StatelessWidget {
   const WorkoutSection({super.key, required this.state});
 
   final GymState state;
 
+  /// openGym Settings.jsx:293-295 rest timer options: Off, 60, 90, 120, 150, 180.
   static const List<SelectOption<num>> _kRestOptions = <SelectOption<num>>[
     SelectOption<num>(value: 0, label: 'Off'),
-    SelectOption<num>(value: 30, label: '30s'),
-    SelectOption<num>(value: 45, label: '45s'),
     SelectOption<num>(value: 60, label: '60s'),
-    SelectOption<num>(value: 75, label: '75s'),
     SelectOption<num>(value: 90, label: '90s'),
-    SelectOption<num>(value: 105, label: '105s'),
     SelectOption<num>(value: 120, label: '120s'),
     SelectOption<num>(value: 150, label: '150s'),
     SelectOption<num>(value: 180, label: '180s'),
-    SelectOption<num>(value: 240, label: '240s'),
-    SelectOption<num>(value: 300, label: '300s'),
   ];
 
   static const List<SelectOption<num>> _kRestPauseOptions = <SelectOption<num>>[
@@ -47,10 +44,30 @@ class WorkoutSection extends StatelessWidget {
     SelectOption<num>(value: 30, label: '30s'),
   ];
 
+  /// Returns the rest options to pass to SelectRow. If the stored value is not
+  /// in _kRestOptions (e.g. a value from older state or an import), shows the stored
+  /// value as its label without adding it to the list and without changing the stored value.
+  List<SelectOption<num>> _effectiveRestOptions(num? restSec) {
+    final num value = restSec ?? 90;
+    final bool inList = _kRestOptions.any((SelectOption<num> o) => o.value == value);
+    if (inList) return _kRestOptions;
+    // Prepend the stored value as a display-only option
+    return <SelectOption<num>>[
+      SelectOption<num>(value: value, label: '${value}s'),
+      ..._kRestOptions,
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
+    final AppPalette palette = AppPalette.of(context);
     final JsEngineService engine = context.read<JsEngineService>();
     final String effort = engine.history.effortOf(state);
+
+    // On mobile, wakelock is always supported (wakeOK in openGym)
+    final bool wakeOK = !kIsWeb;
+    // Play-on-silent only on iOS (openGym playOnSilentSupported: iPhone/iPad only)
+    final bool playOnSilentSupported = !kIsWeb && Platform.isIOS;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -106,7 +123,7 @@ class WorkoutSection extends StatelessWidget {
                 icon: 'stopwatch',
                 title: t('Rest timer'),
                 value: state.restSec ?? 90,
-                options: _kRestOptions,
+                options: _effectiveRestOptions(state.restSec),
                 onChanged: (num v) {
                   context.read<SettingsBloc>().add(
                         SettingsWorkoutChanged(restSec: v),
@@ -126,6 +143,22 @@ class WorkoutSection extends StatelessWidget {
                 },
               ),
               const Divider(height: 1.0),
+              // Keep screen awake — always enabled on mobile (wakeOK)
+              if (wakeOK) ...<Widget>[
+                AppRow(
+                  icon: 'sun',
+                  title: Text(t('Keep screen awake')),
+                  child: AppSwitch(
+                    value: state.keepAwake != false,
+                    onChanged: (bool v) {
+                      context.read<SettingsBloc>().add(
+                            SettingsWorkoutChanged(keepAwake: v),
+                          );
+                    },
+                  ),
+                ),
+                const Divider(height: 1.0),
+              ],
               AppRow(
                 icon: 'film',
                 title: Text(t('Exercise animations')),
@@ -158,6 +191,25 @@ class WorkoutSection extends StatelessWidget {
                   },
                 ),
               ),
+              // Play sounds when on silent — iOS only, when Sounds is on
+              if (state.sound == true && playOnSilentSupported) ...<Widget>[
+                const Divider(height: 1.0),
+                AppRow(
+                  icon: 'bell',
+                  title: Text(t('Play sounds when the phone is on silent')),
+                  subtitle: Text(
+                    t('Music playing on this phone stops during a workout and does not resume by itself.'),
+                  ),
+                  child: AppSwitch(
+                    value: state.soundOnSilent == true,
+                    onChanged: (bool v) {
+                      context.read<SettingsBloc>().add(
+                            SettingsWorkoutChanged(soundOnSilent: v),
+                          );
+                    },
+                  ),
+                ),
+              ],
               const Divider(height: 1.0),
               AppRow(
                 icon: 'flash',
@@ -207,6 +259,14 @@ class WorkoutSection extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ),
+        // Section footer — Settings.jsx During a workout footer (line 271)
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16.0, 6.0, 16.0, 14.0),
+          child: Text(
+            t("The screen stays on while a workout is running, so you don't have to unlock your phone between sets."),
+            style: TextStyle(fontSize: 13.0, color: palette.muted),
           ),
         ),
       ],

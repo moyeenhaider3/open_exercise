@@ -6,6 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/catalogue/exercise_catalogue.dart';
+import '../../../core/catalogue/exercise_def.dart';
 import '../../../core/format/format.dart';
 import '../../../core/format/workout_controls.dart';
 import '../../../core/i18n/t.dart';
@@ -18,6 +19,7 @@ import '../../../core/js/modules/finish_workout_js.dart';
 import '../../../core/js/modules/history_js.dart';
 import '../../../core/js/modules/progression_js.dart';
 import '../../../core/js/modules/session_js.dart';
+import '../../../core/js/modules/superset_flow_js.dart';
 import '../../../core/js/modules/workout_model_js.dart';
 import '../../../core/models/bodyweight_entry.dart';
 import '../../../core/models/gym_state.dart';
@@ -25,6 +27,7 @@ import '../../../core/models/model_extras.dart';
 import '../../../core/models/routine.dart';
 import '../../../core/models/set_entry.dart';
 import '../../../core/models/workout.dart';
+import '../../../core/sound/timer_sound.dart';
 import '../../../core/state/gym_state_cubit.dart';
 import '../data/active_exercise_swap.dart';
 import '../data/active_workout_order.dart';
@@ -32,6 +35,9 @@ import '../data/superset_flow.dart';
 import 'workout_entry_view.dart';
 import 'workout_event.dart';
 import 'workout_state.dart';
+import 'workout_timer_bloc.dart';
+import 'workout_timer_event.dart';
+import 'workout_timer_state.dart';
 
 /// App-scoped BLoC managing workout lifecycle and session-level mutations.
 ///
@@ -39,29 +45,46 @@ import 'workout_state.dart';
 /// Domain math, progression, and workout completion delegate exclusively to
 /// QuickJS/JSC via [JsEngineService] (JS-04).
 ///
-/// Per D-02, work and rest countdown timers are omitted and moved to Phase 5.
+/// Phase 5 (05-07): rest and work countdown timers are driven by [WorkoutTimerBloc];
+/// rest decisions delegate to [SupersetFlowJs]; sound cues use [TimerSound].
 class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
   WorkoutBloc({
     required GymStateCubit gymState,
     required JsEngineService engine,
     required ExerciseCatalogue catalogue,
+    required WorkoutTimerBloc timer,
+    required TimerSound sound,
   })  : _gymState = gymState,
         _engine = engine,
         _catalogue = catalogue,
+        _timer = timer, // ignore: prefer_initializing_formals
+        _sound = sound, // ignore: prefer_initializing_formals
         super(createState(gymState.state, engine, catalogue)) {
     on<WorkoutEvent>(_onEvent, transformer: _sequential<WorkoutEvent>());
     _subscription = _gymState.stream.listen((GymState s) {
       add(WorkoutGymStateChanged(s));
+    });
+    _timerSubscription = _timer.stream.listen((WorkoutTimerState ts) {
+      // WorkoutTimerWorkDone is a one-shot signal detected by seq change.
+      final WorkoutTimerSignal? sig = ts.signal;
+      if (sig is WorkoutTimerWorkDone && ts.seq != _lastTimerSeq) {
+        _lastTimerSeq = ts.seq;
+        add(WorkoutTimedSetLogged(sig.entryIdx, sig.setIdx, sig.elapsedSec));
+      }
     });
   }
 
   final GymStateCubit _gymState;
   final JsEngineService _engine;
   final ExerciseCatalogue _catalogue;
+  final WorkoutTimerBloc _timer;
+  final TimerSound _sound;
   StreamSubscription<GymState>? _subscription;
+  StreamSubscription<WorkoutTimerState>? _timerSubscription;
 
   List<int> _progressHighWater = <int>[];
   int _seq = 0;
+  int _lastTimerSeq = 0;
 
   final Map<String, ({int hash, WorkoutEntryView view})> _entryViewCache =
       <String, ({int hash, WorkoutEntryView view})>{};
@@ -192,6 +215,10 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
 
   Future<void> _onEvent(WorkoutEvent event, Emitter<WorkoutState> emit) async {
     switch (event) {
+      case WorkoutTimedSetStarted():
+        _onTimedSetStarted(event);
+      case WorkoutTimedSetLogged():
+        await _onTimedSetLogged(event, emit);
       case WorkoutGymStateChanged(:final GymState state):
         _onGymStateChanged(state, emit);
       case WorkoutStartRequested():
@@ -275,12 +302,13 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
 
   /// Begins a workout session.
   /// Ported from ../openGym/frontend/src/sheets.jsx:1804-1832 beginWorkout and BwSheet.save (200-216).
-  /// Countdown timers are omitted per D-02.
+  /// Phase 5 (05-07): stops rest timer; work timer is left running until exercise operations stop it.
   Future<void> _onStartRequested(
     WorkoutStartRequested event,
     Emitter<WorkoutState> emit,
   ) async {
     _progressHighWater = <int>[];
+    _stopRest();
     final int now = DateTime.now().millisecondsSinceEpoch;
     final String today = todayIso();
     // BwSheet.save rounds bodyweight to 1 decimal place: Math.round(v * 10) / 10
@@ -333,11 +361,13 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
 
   /// Begins a backfilled workout session for a past day.
   /// Ported from ../openGym/frontend/src/sheets.jsx:1890-1907 beginBackfill.
+  /// Phase 5 (05-07): stops rest timer; work is never started for backfill (_startRest is a no-op).
   Future<void> _onBackfillStarted(
     WorkoutBackfillStarted event,
     Emitter<WorkoutState> emit,
   ) async {
     _progressHighWater = <int>[];
+    _stopRest();
     final int startEpoch = _engine.backfill.backfillStart(event.iso, event.time);
     final List<String> rids =
         event.routineId != null ? <String>[event.routineId!] : const <String>[];
@@ -403,10 +433,16 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
   /// Commits workout completion through openGym's JS bridge.
   /// Ported from ../openGym/frontend/src/sheets.jsx:2200-2228 doFinishWorkout
   /// and lines 2188-2227 (live and backfill finish branches).
-  /// Note: autoBackupNow is deferred to Phase 8 and audio beeps to Phase 5 (D-02).
+  /// Phase 5 (05-07): stops rest timer and plays finish beeps (sheets.jsx:2225-2226).
+  /// Note: autoBackupNow is deferred to Phase 8.
   Future<void> _onFinishConfirmed(Emitter<WorkoutState> emit) async {
     final GymState s = _gymState.state;
     if (s.active == null) return;
+    _stopRest();
+    final bool snd = s.sound == true;
+    _sound.beep(snd, 880, 0.15);        // sheets.jsx:2225
+    _sound.beep(snd, 1100, 0.15, 0.18); // sheets.jsx:2225
+    _sound.beep(snd, 1320, 0.3, 0.36);  // sheets.jsx:2226
     final int now = DateTime.now().millisecondsSinceEpoch;
     final FinishResult result = _engine.finish.completeWorkout(s, now);
     _progressHighWater = <int>[];
@@ -438,8 +474,11 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
 
   /// Discards the active workout without saving to history.
   /// Ported from ../openGym/frontend/src/views/Workout.jsx:982.
+  /// Phase 5 (05-07): stops rest and work timers (Workout.jsx:982).
   Future<void> _onDiscarded() async {
     _progressHighWater = <int>[];
+    _stopRest();
+    _stopWork();
     await _gymState.mutate((GymState s) => s.copyWith(active: null));
   }
 
@@ -587,6 +626,8 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
   /// Moves a superset unit up (-1) or down (+1) in workout order.
   /// Ported from ../openGym/frontend/src/views/Workout.jsx:673 moveUnitAt.
   Future<void> _onUnitMoved(int at, int direction) async {
+    // Workout.jsx:674 — return early when work timer is running.
+    if (_workRunning) return;
     final Workout? active = _gymState.state.active;
     if (active == null || active.entries == null || active.entries!.isEmpty) return;
     final moveResult = moveActiveWorkoutUnit(active, at, direction, _engine.history);
@@ -602,6 +643,9 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
       }
       _progressHighWater = remapped;
     }
+
+    // Workout.jsx:685 — remap rest owner after unit move.
+    _timer.add(WorkoutRestOwnerRemapped(moveResult.indices));
 
     await _gymState.mutate((GymState s) => s.copyWith(active: moveResult.active));
   }
@@ -683,6 +727,9 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
       (GymState st) => st.copyWith(active: active.copyWith(entries: entries, cur: insertAt)),
     );
 
+    // Workout.jsx:1087-1090 — shift rest owner when an exercise is inserted.
+    _timer.add(WorkoutRestOwnerShifted(at: insertAt, delta: 1));
+
     if (event.quick) {
       _emitSignal(WorkoutToastSignal(t('{0} added', <Object?>[event.exId])), emit);
     }
@@ -737,16 +784,23 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
       } else if (event.index < _progressHighWater.length) {
         _progressHighWater[event.index] = 0;
       }
+      // sheets.jsx:1041-1042 — stop work and rest before mutation.
+      _stopWork();
+      _stopRest();
       await _gymState.mutate((GymState st) => st.copyWith(active: swapped));
     }
   }
 
   /// Removes an exercise from the active workout session.
   /// Ported from ../openGym/frontend/src/views/Workout.jsx:496-515 removeActiveExercise.
+  /// Phase 5 (05-07): tells WorkoutTimerBloc to stop work and stop/shift rest (lines 495-510).
   Future<void> _onExerciseRemoved(int idx) async {
     final Workout? active = _gymState.state.active;
     if (active == null || active.entries == null) return;
     if (idx < 0 || idx >= active.entries!.length) return;
+
+    // Workout.jsx:495-510 — notify timer before mutating so indices are still valid.
+    _timer.add(WorkoutRestExerciseRemoved(idx));
 
     final List<WorkoutEntry> entries = List<WorkoutEntry>.from(active.entries!);
     entries.removeAt(idx);
@@ -1402,7 +1456,10 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
       WorkoutEntry updatedEntry = e.copyWith(sets: sets);
 
       if (checked) {
-        // D-02: beep / vibrate dropped to Phase 5
+        // Phase 5 (05-07): beep + vibrate on check (Workout.jsx:880).
+        final bool snd = state.sound == true;
+        _sound.beep(snd, 1040, 0.12);
+        _sound.vibrate(30);
         final List<int> ownUnit = _engine.history.unitOf(units, event.entryIdx);
         final bool unitDone = ownUnit.every((int ui) {
           final WorkoutEntry unitEntry = ui == event.entryIdx ? updatedEntry : entries[ui];
@@ -1447,23 +1504,78 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
 
       final List<List<int>> freshUnits = _engine.history.supersetUnits(fresh.entries!);
       final List<int>? freshUnit = freshUnits.firstWhereOrNull((List<int> u) => u.contains(event.entryIdx));
+      final bool freshUnitDone = freshUnit != null &&
+          freshUnit.every((int ui) {
+            if (ui >= fresh.entries!.length) return false;
+            final WorkoutEntry ue = fresh.entries![ui];
+            return ue.sets != null && ue.sets!.every((SetEntry x) => x.done == true);
+          });
+      final List<int>? nextUnit = freshUnitDone
+          ? nextUnfinishedUnit(fresh.entries!, freshUnits, event.entryIdx)
+          : null;
+      final bool freshWorkoutDone = freshUnitDone && nextUnit == null;
+      // restBeforeWarmup: true when the next unit has any unfinished warm-up set.
+      final bool restBeforeWarmup = nextUnit?.any((int ui) {
+            if (ui >= fresh.entries!.length) return false;
+            final WorkoutEntry ue = fresh.entries![ui];
+            return ue.sets?.any(
+                  (SetEntry s) => _engine.workoutModel.isWarmupRow(s) && s.done != true,
+                ) ??
+                false;
+          }) ??
+          false;
 
-      // D-02: rest timer is Phase 5 TMR-01
+      final WorkoutEntry freshEntry = fresh.entries![event.entryIdx];
+      final int defaultRest = _gymState.state.restSec?.toInt() ?? 90;
+      final int restSec = _engine.supersetFlow.restSecFor(
+        fresh.entries!,
+        freshUnit ?? <int>[event.entryIdx],
+        defaultRest,
+      );
+      final int restAfter = _engine.supersetFlow.warmupRestSecFor(
+        freshEntry,
+        event.setIdx,
+        restSec,
+      );
+
+      // Phase 5 (05-07): openGym toggle rest logic (Workout.jsx:900-945).
       if (!progress.isNew) {
-        // D-02: rest timer is Phase 5 TMR-01 (restOnRecheck omitted)
+        // Recheck: restOnRecheck decides whether to (re)start rest.
+        if (!restBeforeWarmup &&
+            _engine.supersetFlow.restOnRecheck(
+              timerRunning: _restRunning,
+              unitDone: freshUnitDone,
+              lastUnit: freshWorkoutDone,
+            )) {
+          _startRest(restAfter, event.entryIdx);
+        }
         return;
       }
 
-      // D-02: rest timer is Phase 5 TMR-01 (stopRest / restAfterSet omitted)
+      if (freshUnitDone) {
+        // Finished the whole unit — stop rest (superset branch will re-start if needed).
+        _stopRest();
+      }
+
       if (freshUnit == null || freshUnit.length <= 1) {
-        // D-02: rest timer is Phase 5 TMR-01 (startRest omitted)
+        // Singleton exercise.
+        if (!restBeforeWarmup &&
+            _engine.supersetFlow.restAfterSet(
+              unitDone: freshUnitDone,
+              lastUnit: freshWorkoutDone,
+            )) {
+          _startRest(restAfter, event.entryIdx);
+        }
         return;
       }
 
+      // Superset path.
       final SupersetFlowStep? step = supersetFlowStep(fresh.entries!, freshUnit, event.entryIdx);
       if (step == null) return;
       if (step.unitDone) {
-        // D-02: rest timer is Phase 5 TMR-01 (startRest omitted)
+        if (nextUnit != null && nextUnit.isNotEmpty && !restBeforeWarmup) {
+          _startRest(restAfter, event.entryIdx);
+        }
       } else {
         if (step.nextIdx != null) {
           await _gymState.mutate((GymState s) {
@@ -1471,7 +1583,72 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
             return s.copyWith(active: s.active!.copyWith(cur: step.nextIdx));
           });
         }
-        // D-02: rest timer is Phase 5 TMR-01 (startRest omitted)
+        if (step.roundDone) {
+          _startRest(restAfter, event.entryIdx);
+        }
+      }
+    }
+  }
+
+  /// Starts a work/hold timer for a timed set.
+  /// Ported from ../openGym/frontend/src/views/Workout.jsx:848-861 startTimed.
+  void _onTimedSetStarted(WorkoutTimedSetStarted event) {
+    final Workout? active = _gymState.state.active;
+    if (active == null || active.entries == null) return;
+    if (event.entryIdx < 0 || event.entryIdx >= active.entries!.length) return;
+    final WorkoutEntry entry = active.entries![event.entryIdx];
+    if (entry.sets == null || event.setIdx < 0 || event.setIdx >= entry.sets!.length) return;
+    final SetEntry set = entry.sets![event.setIdx];
+    // Workout.jsx:858 `sec || 45`
+    final Object? secVal = set.toJson()['sec'];
+    final num rawSec = secVal is num && secVal > 0 ? secVal : 45;
+    final ExerciseDef def = _catalogue.lookup(_gymState.state, entry.id ?? '');
+    final String label = _catalogue.exerciseNameFor(def);
+    _timer.add(WorkoutWorkStarted(
+      sec: rawSec,
+      label: label,
+      entryIdx: event.entryIdx,
+      setIdx: event.setIdx,
+    ));
+  }
+
+  /// Logs elapsed seconds for a timed set, then runs the normal toggle path.
+  /// Ported from ../openGym/frontend/src/views/Workout.jsx:848-861 startTimed onDone callback.
+  Future<void> _onTimedSetLogged(
+    WorkoutTimedSetLogged event,
+    Emitter<WorkoutState> emit,
+  ) async {
+    final Workout? active = _gymState.state.active;
+    if (active == null || active.entries == null) return;
+    if (event.entryIdx < 0 || event.entryIdx >= active.entries!.length) return;
+    final WorkoutEntry entry = active.entries![event.entryIdx];
+    if (entry.sets == null || event.setIdx < 0 || event.setIdx >= entry.sets!.length) return;
+
+    // Mutate elapsed seconds onto the set row.
+    await _gymState.mutate((GymState s) {
+      final Workout? act = s.active;
+      if (act == null || act.entries == null) return s;
+      if (event.entryIdx >= act.entries!.length) return s;
+      final WorkoutEntry e = act.entries![event.entryIdx];
+      if (e.sets == null || event.setIdx >= e.sets!.length) return s;
+      final List<SetEntry> sets = List<SetEntry>.from(e.sets!);
+      final Map<String, Object?> map = sets[event.setIdx].toJson();
+      map['sec'] = event.elapsedSec;
+      sets[event.setIdx] = SetEntry.fromJson(map);
+      final List<WorkoutEntry> entries = List<WorkoutEntry>.from(act.entries!);
+      entries[event.entryIdx] = e.copyWith(sets: sets);
+      return s.copyWith(active: act.copyWith(entries: entries));
+    });
+
+    // If the set is not yet done, run the normal toggle so rest/superset/finish apply.
+    final Workout? fresh = _gymState.state.active;
+    if (fresh != null && fresh.entries != null &&
+        event.entryIdx < fresh.entries!.length) {
+      final WorkoutEntry freshEntry = fresh.entries![event.entryIdx];
+      if (freshEntry.sets != null &&
+          event.setIdx < freshEntry.sets!.length &&
+          freshEntry.sets![event.setIdx].done != true) {
+        await _onSetToggled(WorkoutSetToggled(event.entryIdx, event.setIdx), emit);
       }
     }
   }
@@ -1600,6 +1777,26 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
   @override
   Future<void> close() async {
     await _subscription?.cancel();
+    await _timerSubscription?.cancel();
     return super.close();
   }
+
+  // ---------------------------------------------------------------------------
+  // Timer helpers — mirror openGym Workout.jsx startRest/stopRest/stopWork
+  // ---------------------------------------------------------------------------
+
+  /// Ports Workout.jsx startRest: no-op during backfill (line 525).
+  void _startRest(int sec, int idx) {
+    final Workout? active = _gymState.state.active;
+    if (active?.extra['backfill'] != null) return;
+    _timer.add(WorkoutRestStarted(sec: sec, forIdx: idx));
+  }
+
+  void _stopRest() => _timer.add(const WorkoutRestStopped());
+
+  void _stopWork() => _timer.add(const WorkoutWorkStopped());
+
+  bool get _restRunning => _timer.state is WorkoutRestRunning;
+
+  bool get _workRunning => _timer.state is WorkoutWorkRunning;
 }

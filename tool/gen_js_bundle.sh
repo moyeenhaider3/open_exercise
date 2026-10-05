@@ -52,6 +52,7 @@ FILES=(
   "session-start.js"
   "starter.js"
   "strength-exercises.js"
+  "supersetFlow.js"
   "units.js"
   "workout-model.js"
 )
@@ -173,6 +174,7 @@ node -e "
     'tool/js/shims/finish-workout-shim.js',
     'tool/js/shims/view-aggregates-shim.js',
     'tool/js/shims/muscle-view-shim.js',
+    'tool/js/shims/reminder-shim.js',
     ...[
       'backfill.js',
       'bar.js', 'effort.js', 'exercise-history.js',
@@ -181,7 +183,7 @@ node -e "
       'exercise-muscle-olympic.json', 'exercises-data.js', 'exercises.js',
       'finish-workout.js', 'format.js', 'history.js', 'i18n-core.js', 'muscles.js', 'onerm.js',
       'progression-copy.js', 'progression.js', 'recovery.js', 'recovery-view.js', 'rep-range.js', 'session-merge.js',
-      'session-start.js', 'starter.js', 'strength-exercises.js', 'units.js', 'workout-model.js'
+      'session-start.js', 'starter.js', 'strength-exercises.js', 'supersetFlow.js', 'units.js', 'workout-model.js'
     ].map(f => 'third_party/opengym/lib/' + f)
   ]);
   const inputs = Object.keys(meta.inputs);

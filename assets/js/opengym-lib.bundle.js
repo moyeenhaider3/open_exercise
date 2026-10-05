@@ -1,9 +1,9 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later
- * Bundled from openGym frontend v1.3.8 (sourceSha256: f92e2a0a32302d9bfe67b9579b26e619dc761c4a28b68af1200f186e0bb7d551)
+ * Bundled from openGym frontend v1.3.8 (sourceSha256: 09017ef7ec481d8ef181dba6893ca0ce71e35b9a1219024661068d353a3927bc)
  * bundled by tool/gen_js_bundle.sh, esbuild 0.28.2
  * See NOTICE.md and third_party/opengym/README.md.
  */
-var __openGymLibMeta = {"openGymVersion":"1.3.8","sourceSha256":"f92e2a0a32302d9bfe67b9579b26e619dc761c4a28b68af1200f186e0bb7d551","esbuild":"0.28.2","target":"es2019"};
+var __openGymLibMeta = {"openGymVersion":"1.3.8","sourceSha256":"09017ef7ec481d8ef181dba6893ca0ce71e35b9a1219024661068d353a3927bc","esbuild":"0.28.2","target":"es2019"};
 if (typeof String.prototype.replaceAll !== 'function') {
   String.prototype.replaceAll = function(searchValue, replaceValue) {
     if (typeof searchValue !== 'string') {
@@ -56,10 +56,12 @@ var OpenGymLib = (() => {
     progressionCopy: () => progression_copy_exports,
     recovery: () => recovery_exports,
     recoveryView: () => recovery_view_exports,
+    reminder: () => reminder_shim_exports,
     repRange: () => rep_range_exports,
     sessionMerge: () => session_merge_exports,
     sessionStart: () => session_start_exports,
     starter: () => starter_exports,
+    supersetFlow: () => supersetFlow_exports,
     units: () => units_exports,
     viewAgg: () => view_aggregates_shim_exports,
     workoutModel: () => workout_model_exports
@@ -5864,6 +5866,130 @@ var OpenGymLib = (() => {
       index[e.id] = musclesOf(e);
     }
     return index;
+  }
+
+  // third_party/opengym/lib/supersetFlow.js
+  var supersetFlow_exports = {};
+  __export(supersetFlow_exports, {
+    insertionIndexAfterCurrentUnit: () => insertionIndexAfterCurrentUnit,
+    nextUnfinishedUnit: () => nextUnfinishedUnit,
+    restAfterSet: () => restAfterSet,
+    restOnRecheck: () => restOnRecheck,
+    restSecFor: () => restSecFor,
+    setProgressHighWater: () => setProgressHighWater,
+    supersetFlowStep: () => supersetFlowStep,
+    warmupRestSecFor: () => warmupRestSecFor
+  });
+  var hasWork = (entries, idx) => {
+    var _a, _b;
+    return !!((_b = (_a = entries[idx]) == null ? void 0 : _a.sets) == null ? void 0 : _b.some((set) => !set.done));
+  };
+  function nextUnfinishedUnit(entries, units, fromIdx) {
+    if (!Array.isArray(entries) || !Array.isArray(units) || units.length === 0) return null;
+    const current = units.findIndex((unit) => unit.includes(fromIdx));
+    const ordered = current < 0 ? units : [...units.slice(current + 1), ...units.slice(0, current)];
+    return ordered.find((unit) => unit.some((idx) => hasWork(entries, idx))) || null;
+  }
+  function insertionIndexAfterCurrentUnit(units, currentIndex, entryCount) {
+    const length = Math.max(0, Number(entryCount) || 0);
+    if (!Array.isArray(units) || units.length === 0) return length;
+    const unit = units.find((candidate) => candidate.includes(currentIndex));
+    if (!(unit == null ? void 0 : unit.length)) return length;
+    return Math.min(length, Math.max(...unit) + 1);
+  }
+  function setProgressHighWater(entry, previous = 0) {
+    var _a;
+    const done = ((_a = entry == null ? void 0 : entry.sets) == null ? void 0 : _a.reduce((count, set) => count + (set.done ? 1 : 0), 0)) || 0;
+    return { isNew: done > previous, highWater: Math.max(previous, done) };
+  }
+  function restAfterSet({ unitDone, lastUnit }) {
+    return !unitDone || !lastUnit;
+  }
+  function restOnRecheck({ timerRunning, unitDone, lastUnit }) {
+    return !timerRunning && restAfterSet({ unitDone, lastUnit });
+  }
+  function restSecFor(entries, unit, defaultRestSec) {
+    const fallback = defaultRestSec > 0 ? defaultRestSec : 0;
+    const idxs = Array.isArray(unit) && unit.length ? unit : [];
+    if (!idxs.length) return fallback;
+    return idxs.reduce((longest, idx) => {
+      var _a, _b;
+      const own = (_b = (_a = entries == null ? void 0 : entries[idx]) == null ? void 0 : _a.target) == null ? void 0 : _b.restSec;
+      return Math.max(longest, own > 0 ? own : fallback);
+    }, 0);
+  }
+  function warmupRestSecFor(entry, setIdx, workRestSec) {
+    var _a;
+    const sets = Array.isArray(entry == null ? void 0 : entry.sets) ? entry.sets : [];
+    const set = sets[setIdx];
+    if (!set || !isWarmupRow(set)) return workRestSec;
+    const next = sets.slice(setIdx + 1).find((s) => !s.done);
+    if (!next || !isWarmupRow(next)) return workRestSec;
+    const own = Number((_a = entry == null ? void 0 : entry.target) == null ? void 0 : _a.warmupRestSec);
+    return own > 0 ? own : workRestSec;
+  }
+  function supersetFlowStep(entries, unit, fromIdx) {
+    var _a;
+    if (!Array.isArray(entries) || !Array.isArray(unit) || unit.length <= 1) return null;
+    const pos = unit.indexOf(fromIdx);
+    if (pos < 0) return null;
+    const unitDone = !unit.some((idx) => hasWork(entries, idx));
+    if (unitDone) return { unitDone: true, roundDone: false, nextIdx: null };
+    const wrapped = [...unit.slice(pos + 1), ...unit.slice(0, pos + 1)];
+    const nextIdx = (_a = wrapped.find((idx) => hasWork(entries, idx))) != null ? _a : null;
+    const roundDone = !unit.slice(pos + 1).some((idx) => hasWork(entries, idx));
+    return { unitDone: false, roundDone, nextIdx };
+  }
+
+  // tool/js/shims/reminder-shim.js
+  var reminder_shim_exports = {};
+  __export(reminder_shim_exports, {
+    LEGACY_REMINDER_IDS: () => LEGACY_REMINDER_IDS,
+    REMINDER_ID_BASE: () => REMINDER_ID_BASE,
+    REMINDER_WINDOW_DAYS: () => REMINDER_WINDOW_DAYS,
+    buildReminderNotifications: () => buildReminderNotifications,
+    reminderDays: () => reminderDays
+  });
+  var REMINDER_WINDOW_DAYS = 60;
+  var REMINDER_ID_BASE = 1e3;
+  var LEGACY_REMINDER_IDS = Array.from({ length: 7 }, (_, d) => 100 + d);
+  function buildReminderNotifications(S, nowMs) {
+    const now = nowMs == null ? /* @__PURE__ */ new Date() : new Date(nowMs);
+    const r = S == null ? void 0 : S.reminder;
+    if (!(r == null ? void 0 : r.on)) return [];
+    const routines = Array.isArray(S.routines) ? S.routines : [];
+    const completed = new Set((S.workouts || []).map((w) => w.d));
+    const state = { ...S, routines, week: S.week || {}, dayPlan: S.dayPlan || {} };
+    const [hour, minute] = (r.time || "08:00").split(":").map(Number);
+    if (!Number.isInteger(hour) || !Number.isInteger(minute)) return [];
+    const date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12);
+    const notifications = [];
+    for (let offset = 0; offset < REMINDER_WINDOW_DAYS; offset++) {
+      const day = new Date(date);
+      day.setDate(date.getDate() + offset);
+      const iso = isoOf(day);
+      if (completed.has(iso)) continue;
+      const dayRoutines = effectiveRoutineIds(state, iso).map((id) => routines.find((x) => x.id === id)).filter(Boolean);
+      if (!dayRoutines.length) continue;
+      const label = dayRoutines.length <= 2 ? dayRoutines.map((r2) => r2.name).join(" + ") : t("{0} routines", dayRoutines.length);
+      const at = new Date(day);
+      at.setHours(hour, minute, 0, 0);
+      if (at <= now) continue;
+      notifications.push({
+        id: REMINDER_ID_BASE + offset,
+        title: t("Workout day"),
+        body: t("{0} is on the plan today — let’s go!", label),
+        schedule: { at, allowWhileIdle: true }
+      });
+    }
+    return notifications;
+  }
+  function reminderDays(S, nowMs) {
+    return buildReminderNotifications(S, nowMs).map((n) => ({
+      id: n.id,
+      title: n.title,
+      body: n.body
+    }));
   }
   return __toCommonJS(entry_exports);
 })();

@@ -2,7 +2,7 @@
   "schema": 1,
   "module": "phase31",
   "openGymVersion": "1.3.8",
-  "sourceSha256": "f92e2a0a32302d9bfe67b9579b26e619dc761c4a28b68af1200f186e0bb7d551",
+  "sourceSha256": "09017ef7ec481d8ef181dba6893ca0ce71e35b9a1219024661068d353a3927bc",
   "generatedBy": "tool/gen_js_fixtures.sh",
   "cases": [
     {

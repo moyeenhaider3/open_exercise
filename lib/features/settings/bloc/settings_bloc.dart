@@ -5,11 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/catalogue/equipment.dart';
 import '../../../core/format/workout_controls.dart';
+import '../../../core/i18n/t.dart';
 import '../../../core/js/js_engine_service.dart';
 import '../../../core/js/modules/units_js.dart';
 import '../../../core/models/default_state.dart';
 import '../../../core/models/gym_state.dart';
 import '../../../core/models/state_parts.dart';
+import '../../../core/notifications/notification_service.dart';
+import '../../../core/notifications/reminder_sync.dart';
 import '../../../core/state/gym_state_cubit.dart';
 import 'settings_event.dart';
 import 'settings_state.dart';
@@ -25,14 +28,20 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc({
     required GymStateCubit gymState,
     required JsEngineService engine,
+    required ReminderSync reminderSync,
+    required NotificationService notifications,
   })  : _gymState = gymState,
         _engine = engine,
+        _reminderSync = reminderSync,
+        _notifications = notifications,
         super(const SettingsState()) {
     on<SettingsEvent>(_onEvent);
   }
 
   final GymStateCubit _gymState;
   final JsEngineService _engine;
+  final ReminderSync _reminderSync;
+  final NotificationService _notifications;
   int _seq = 0;
 
   Future<void> _onEvent(
@@ -60,6 +69,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         await _onEquipProfileDeleted(event);
       case SettingsResetConfirmed():
         await _onResetConfirmed(emit);
+      case SettingsReminderToggled():
+        await _onReminderToggled(emit);
+      case SettingsReminderTimeChanged():
+        await _onReminderTimeChanged(event);
+      case SettingsRestAlertsRequested():
+        await _onRestAlertsRequested(emit);
+      case SettingsNotificationStatusRequested():
+        await _onNotificationStatusRequested(emit);
     }
   }
 
@@ -195,5 +212,92 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     await _gymState.replaceState(defaults);
     _seq++;
     emit(state.copyWith(seq: _seq, signal: const SettingsResetDone()));
+  }
+
+  /// Toggles workout-day reminder on/off.
+  ///
+  /// When turning on: calls reminderSync.sync interactive:true first; if OS refuses,
+  /// emits toast 'Could not change notification settings' and returns without mutating.
+  /// Turning off only mutates; ReminderSync's state listener cancels the ids.
+  /// Mirrors `../openGym/frontend/src/views/Settings.jsx` MobileReminderCard toggle (542-570).
+  Future<void> _onReminderToggled(Emitter<SettingsState> emit) async {
+    final GymState current = _gymState.state;
+    final bool on = current.reminder?.on != true;
+    if (on) {
+      // Build a tentative state with reminder on to pass to sync for permission check
+      final Reminder tentativeReminder = Reminder(
+        on: true,
+        time: current.reminder?.time ?? '08:00',
+        tz: _notifications.localTimezone,
+        extra: current.reminder?.extra ?? const <String, Object?>{},
+      );
+      final GymState tentativeState = current.copyWith(reminder: tentativeReminder);
+      final bool ok = await _reminderSync.sync(tentativeState, interactive: true);
+      if (!ok) {
+        _seq++;
+        emit(state.copyWith(
+          seq: _seq,
+          signal: SettingsToast(t('Could not change notification settings')),
+          notificationsAllowed: false,
+        ));
+        return;
+      }
+    }
+    await _gymState.mutate((GymState s) {
+      final Reminder updated = Reminder(
+        on: on,
+        time: s.reminder?.time ?? '08:00',
+        tz: _notifications.localTimezone,
+        extra: s.reminder?.extra ?? const <String, Object?>{},
+      );
+      return s.copyWith(reminder: updated);
+    });
+    await _refreshStatus(emit);
+  }
+
+  /// Validates and persists a reminder time change.
+  ///
+  /// Accepts only `^([01]\d|2[0-3]):[0-5]\d$` (ASVS V5; mirrors mobile.js Number.isInteger guard).
+  /// Mirrors `../openGym/frontend/src/views/Settings.jsx` MobileReminderCard time input (542-570).
+  Future<void> _onReminderTimeChanged(SettingsReminderTimeChanged event) async {
+    // Validate HH:mm — ASVS V5 / mirrors mobile.js Number.isInteger check
+    if (!RegExp(r'^([01]\d|2[0-3]):[0-5]\d$').hasMatch(event.time)) return;
+    await _gymState.mutate((GymState s) {
+      final Reminder updated = Reminder(
+        on: s.reminder?.on,
+        time: event.time,
+        tz: _notifications.localTimezone,
+        extra: s.reminder?.extra ?? const <String, Object?>{},
+      );
+      return s.copyWith(reminder: updated);
+    });
+  }
+
+  /// Requests notification permission and, on Android, exact alarm permission if needed.
+  ///
+  /// Only this handler and [_onReminderToggled] (interactive:true) ever prompt the OS.
+  /// Mirrors the local rest-alerts row in NotificationsSection (openGym #239).
+  Future<void> _onRestAlertsRequested(Emitter<SettingsState> emit) async {
+    final bool allowed = await _notifications.requestNotifications();
+    if (allowed && !(await _notifications.canScheduleExact())) {
+      await _notifications.requestExactAlarms();
+    }
+    await _refreshStatus(emit);
+  }
+
+  /// Refreshes notification status fields without prompting the OS.
+  Future<void> _onNotificationStatusRequested(Emitter<SettingsState> emit) async {
+    await _refreshStatus(emit);
+  }
+
+  Future<void> _refreshStatus(Emitter<SettingsState> emit) async {
+    final bool allowed = await _notifications.notificationsAllowed();
+    final bool exact = await _notifications.canScheduleExact();
+    _seq++;
+    emit(state.copyWith(
+      seq: _seq,
+      notificationsAllowed: allowed,
+      exactAlarmsAllowed: exact,
+    ));
   }
 }

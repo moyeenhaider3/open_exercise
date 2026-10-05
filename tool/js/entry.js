@@ -22,3 +22,5 @@ export * as units from '../../third_party/opengym/lib/units.js';
 export * as viewAgg from './shims/view-aggregates-shim.js';
 export * as recoveryView from '../../third_party/opengym/lib/recovery-view.js';
 export * as muscleView from './shims/muscle-view-shim.js';
+export * as supersetFlow from '../../third_party/opengym/lib/supersetFlow.js';
+export * as reminder from './shims/reminder-shim.js';

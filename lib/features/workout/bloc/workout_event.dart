@@ -557,6 +557,35 @@ final class WorkoutEffortPicked extends WorkoutEvent {
   List<Object?> get props => <Object?>[entryIdx, setIdx, side, value];
 }
 
+/// Dispatched when the user taps the Start (play) button on a timed set row.
+/// Drives [WorkoutTimerBloc] via `WorkoutWorkStarted`; on completion the bloc
+/// auto-fires [WorkoutTimedSetLogged].
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:848-861 startTimed.
+final class WorkoutTimedSetStarted extends WorkoutEvent {
+  const WorkoutTimedSetStarted(this.entryIdx, this.setIdx);
+
+  final int entryIdx;
+  final int setIdx;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx, setIdx];
+}
+
+/// Internal event fired by [WorkoutBloc] when [WorkoutTimerBloc] emits
+/// [WorkoutTimerWorkDone]; logs the elapsed seconds and then runs the normal
+/// toggle path (rest, superset, finish-check).
+/// Ported from `../openGym/frontend/src/views/Workout.jsx`:848-861 startTimed onDone callback.
+final class WorkoutTimedSetLogged extends WorkoutEvent {
+  const WorkoutTimedSetLogged(this.entryIdx, this.setIdx, this.elapsedSec);
+
+  final int entryIdx;
+  final int setIdx;
+  final int elapsedSec;
+
+  @override
+  List<Object?> get props => <Object?>[entryIdx, setIdx, elapsedSec];
+}
+
 /// Dispatched to reconfigure an exercise's progression settings mid-session and rebuild rows.
 /// Ported from `../openGym/frontend/src/views/Workout.jsx`:771-817 openProgressionSettings.
 final class WorkoutProgressionConfigured extends WorkoutEvent {

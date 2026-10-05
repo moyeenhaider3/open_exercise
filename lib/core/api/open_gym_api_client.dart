@@ -30,6 +30,10 @@ import 'generated/rest_client.dart';
 
 /// Builds [OpenGymApiClient] instances bound to a chosen server.
 ///
+/// v1 is guest-only (AUTH-05, Phase 5 D-01/D-02): nothing may call [create] at runtime, so
+/// no user data leaves the device. The factory and the generated client are kept, inert,
+/// per D-11. tool/guest_audit.sh fails if a call site appears.
+///
 /// Kept separate from [OpenGymApiClient] so tests/call sites can supply a
 /// custom [Dio] or [HttpClientAdapter] (e.g. a recording/mock adapter) without
 /// touching the wrapper's own construction logic.

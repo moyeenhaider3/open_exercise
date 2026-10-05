@@ -236,6 +236,16 @@ export const INVENTORY = {
     constants: ['FATIGUE_LEVELS', 'STRENGTH_LEVELS'],
     keys: [],
   },
+  supersetFlow: {
+    functions: ['restAfterSet', 'restOnRecheck', 'restSecFor', 'warmupRestSecFor'],
+    constants: [],
+    keys: [],
+  },
+  reminder: {
+    functions: ['buildReminderNotifications', 'reminderDays'],
+    constants: ['REMINDER_WINDOW_DAYS', 'REMINDER_ID_BASE', 'LEGACY_REMINDER_IDS'],
+    keys: [],
+  },
 };
 
 export const NOT_BRIDGED = {

@@ -13,6 +13,8 @@ List<BlocProvider> settingsBlocProviders(AppDependencies deps) => <BlocProvider>
         create: (context) => SettingsBloc(
           gymState: context.read<GymStateCubit>(),
           engine: deps.jsEngine,
+          reminderSync: deps.reminderSync,
+          notifications: deps.notificationService,
         ),
       ),
     ];

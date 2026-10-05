@@ -30,6 +30,8 @@ import * as units from '../../third_party/opengym/lib/units.js';
 import * as viewAgg from './shims/view-aggregates-shim.js';
 import * as recoveryView from '../../third_party/opengym/lib/recovery-view.js';
 import * as muscleView from './shims/muscle-view-shim.js';
+import * as supersetFlow from '../../third_party/opengym/lib/supersetFlow.js';
+import * as reminder from './shims/reminder-shim.js';
 
 const MODULES = {
   onerm,
@@ -53,6 +55,8 @@ const MODULES = {
   viewAgg,
   recoveryView,
   muscleView,
+  supersetFlow,
+  reminder,
 };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -104,12 +108,14 @@ const MODULE_FILES = [
   { name: 'phase3', file: './fixture-cases/phase3.mjs' },
   { name: 'phase31', file: './fixture-cases/phase31.mjs' },
   { name: 'phase4', file: './fixture-cases/phase4.mjs' },
+  { name: 'phase5', file: './fixture-cases/phase5.mjs' },
 ];
 
 const BANNED = {
   'history.streakWeeks': 'history.streakWeeks is banned from fixtures (wall-clock dependency)',
   'backfill.backfillStart': 'backfill.backfillStart is banned from fixtures (local wall-clock zone, breaks the TZ diff)',
   'effort.effortWeeks': 'effort.effortWeeks is banned from fixtures (startOfWeek returns a local-midnight epoch; wall-clock TZ breaks the two-TZ diff)',
+  'reminder.buildReminderNotifications': 'reminder.buildReminderNotifications is banned from fixtures (schedule.at is a local wall-clock time, breaks the TZ diff); covered by reminder.reminderDays',
 };
 
 function serializeArgs(args) {

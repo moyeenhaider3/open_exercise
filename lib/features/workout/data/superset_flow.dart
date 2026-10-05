@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-// NOTE: Per D-02, rest timer calculations (restAfterSet, restOnRecheck, restSecFor,
-// warmupRestSecFor) are intentionally omitted from Phase 3 and will be ported in
-// Phase 5 (TMR-01).
+// The rest decisions (restAfterSet, restOnRecheck, restSecFor, warmupRestSecFor)
+// run in openGym's JS via SupersetFlowJs (Phase 5, 05-02); this file keeps only
+// the Phase 3 navigation helpers.
 
 import '../../../core/models/workout.dart';
 

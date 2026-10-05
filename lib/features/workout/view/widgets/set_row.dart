@@ -7,6 +7,7 @@ import '../../../../core/format/format.dart';
 import '../../../../core/i18n/t.dart';
 import '../../../../core/models/set_entry.dart';
 import '../../../../core/theme/app_palette.dart';
+import '../../../../core/ui_kit/buttons.dart';
 import '../../../../core/ui_kit/controls.dart';
 import '../../../../core/ui_kit/icons/app_icon.dart';
 import '../../../../core/ui_kit/modals.dart';
@@ -15,6 +16,8 @@ import '../../bloc/workout_bloc.dart';
 import '../../bloc/workout_entry_view.dart';
 import '../../bloc/workout_event.dart';
 import '../../bloc/workout_state.dart';
+import '../../bloc/workout_timer_bloc.dart';
+import '../../bloc/workout_timer_state.dart';
 import '../sheets/effort_picker_sheet.dart';
 import 'set_sub_rows.dart';
 
@@ -231,8 +234,25 @@ class SetRow extends StatelessWidget {
                         ),
                       ),
                     ],
-                    // D-02: Timed-set 'Start set' (setgo play) button is omitted until Phase 5 TMR-01;
-                    // timed sets are logged by typing or stepping seconds.
+                    if (view.timed) ...<Widget>[
+                      const SizedBox(width: 8.0),
+                      BlocSelector<WorkoutTimerBloc, WorkoutTimerState, bool>(
+                        selector: (WorkoutTimerState s) => s is WorkoutWorkRunning,
+                        builder: (BuildContext context, bool workRunning) {
+                          final bool disabled = isDone || workRunning;
+                          return AppIconButton(
+                            'play',
+                            tooltip: t('Start set'),
+                            small: true,
+                            onPressed: disabled
+                                ? null
+                                : () => context.read<WorkoutBloc>().add(
+                                      WorkoutTimedSetStarted(entryIdx, setIdx),
+                                    ),
+                          );
+                        },
+                      ),
+                    ],
                     const SizedBox(width: 8.0),
                     AppCheck(
                       checked: isDone,

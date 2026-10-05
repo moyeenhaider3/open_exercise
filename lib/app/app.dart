@@ -10,7 +10,9 @@ import '../core/api/open_gym_api_client.dart';
 import '../core/catalogue/exercise_catalogue.dart';
 import '../core/data/gym_state_repository.dart';
 import '../core/js/js_engine_service.dart';
+import '../core/notifications/notification_service.dart';
 import '../core/router/app_router.dart';
+import '../core/sound/timer_sound.dart';
 import '../core/state/gym_state_cubit.dart';
 import '../core/format/format.dart';
 import '../core/models/gym_state.dart';
@@ -19,6 +21,9 @@ import '../features/shell/bloc/shell_bloc.dart';
 import '../features/shell/bloc/shell_event.dart';
 import '../features/shell/bloc/shell_state.dart';
 import '../features/shell/data/theme_settings.dart';
+import '../features/workout/bloc/workout_timer_bloc.dart';
+import '../features/workout/bloc/workout_timer_state.dart';
+import '../features/workout/view/widgets/timer_flash.dart';
 import 'dependencies.dart';
 import 'providers/bodyweight_providers.dart';
 import 'providers/checkin_providers.dart';
@@ -28,6 +33,7 @@ import 'providers/library_providers.dart';
 import 'providers/plan_providers.dart';
 import 'providers/settings_providers.dart';
 import 'providers/stats_providers.dart';
+import 'providers/timer_providers.dart';
 import 'providers/workout_providers.dart';
 
 /// The app's composition root: DI ([AppDependencies] via
@@ -93,6 +99,12 @@ class _OpenExerciseAppState extends State<OpenExerciseApp> {
         RepositoryProvider<ExerciseCatalogue>.value(
           value: widget.dependencies.exerciseCatalogue,
         ),
+        RepositoryProvider<NotificationService>.value(
+          value: widget.dependencies.notificationService,
+        ),
+        RepositoryProvider<TimerSound>.value(
+          value: widget.dependencies.timerSound,
+        ),
       ],
       child: MultiBlocProvider(
         providers: <BlocProvider>[
@@ -102,6 +114,7 @@ class _OpenExerciseAppState extends State<OpenExerciseApp> {
               gymState: context.read<GymStateCubit>(),
             )..add(const ShellStarted()),
           ),
+          ...timerBlocProviders(widget.dependencies),
           ...libraryBlocProviders(widget.dependencies),
           ...workoutBlocProviders(widget.dependencies),
           ...planBlocProviders(widget.dependencies),
@@ -122,22 +135,48 @@ class _OpenExerciseAppState extends State<OpenExerciseApp> {
               switch (state) {
                 case ShellInitial():
                   const ThemeSettings settings = ThemeSettings.defaults();
-                  return MaterialApp.router(
-                    title: 'openGym',
-                    debugShowCheckedModeBanner: false,
-                    theme: buildAppTheme(Brightness.light, settings.accent),
-                    darkTheme: buildAppTheme(Brightness.dark, settings.accent),
-                    themeMode: settings.themeMode,
-                    routerConfig: _router,
+                  return BlocSelector<WorkoutTimerBloc, WorkoutTimerState, int>(
+                    selector: (WorkoutTimerState ts) => ts.flashId,
+                    builder: (BuildContext ctx, int flashId) {
+                      return TimerFlash(
+                        flashId: flashId,
+                        themeMode: settings.themeMode,
+                        builder: (ThemeMode effectiveMode, bool flashing) {
+                          return MaterialApp.router(
+                            title: 'openGym',
+                            debugShowCheckedModeBanner: false,
+                            theme: buildAppTheme(Brightness.light, settings.accent),
+                            darkTheme: buildAppTheme(Brightness.dark, settings.accent),
+                            themeMode: effectiveMode,
+                            themeAnimationDuration:
+                                flashing ? Duration.zero : kThemeAnimationDuration,
+                            routerConfig: _router,
+                          );
+                        },
+                      );
+                    },
                   );
                 case ShellReady(:final settings):
-                  return MaterialApp.router(
-                    title: 'openGym',
-                    debugShowCheckedModeBanner: false,
-                    theme: buildAppTheme(Brightness.light, settings.accent),
-                    darkTheme: buildAppTheme(Brightness.dark, settings.accent),
-                    themeMode: settings.themeMode,
-                    routerConfig: _router,
+                  return BlocSelector<WorkoutTimerBloc, WorkoutTimerState, int>(
+                    selector: (WorkoutTimerState ts) => ts.flashId,
+                    builder: (BuildContext ctx, int flashId) {
+                      return TimerFlash(
+                        flashId: flashId,
+                        themeMode: settings.themeMode,
+                        builder: (ThemeMode effectiveMode, bool flashing) {
+                          return MaterialApp.router(
+                            title: 'openGym',
+                            debugShowCheckedModeBanner: false,
+                            theme: buildAppTheme(Brightness.light, settings.accent),
+                            darkTheme: buildAppTheme(Brightness.dark, settings.accent),
+                            themeMode: effectiveMode,
+                            themeAnimationDuration:
+                                flashing ? Duration.zero : kThemeAnimationDuration,
+                            routerConfig: _router,
+                          );
+                        },
+                      );
+                    },
                   );
               }
             },

@@ -210,6 +210,16 @@ List<String> jsStringList(Object? v, String path) {
   return result;
 }
 
+/// Coerces a list of ints strictly.
+List<int> jsIntList(Object? v, String path) {
+  final List<Object?> rawList = jsList(v, path);
+  final List<int> result = <int>[];
+  for (int i = 0; i < rawList.length; i++) {
+    result.add(jsInt(rawList[i], '$path[$i]'));
+  }
+  return result;
+}
+
 /// Coerces a map with double values strictly.
 Map<String, double> jsDoubleMap(Object? v, String path) {
   final Map<String, Object?> rawMap = jsMap(v, path);

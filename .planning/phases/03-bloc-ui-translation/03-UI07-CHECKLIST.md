@@ -11,21 +11,21 @@ This document satisfies the **UI-07** requirement for Phase 3 ("BLoC & UI Transl
 | `update` | Phase 3 | `GymStateCubit.mutate` | Canonical single-writer state mutation primitive. Replaces inline JS state mutations. Push flag deferred to Phase 6. |
 | `replaceState` | Phase 3 | `GymStateCubit.replaceState` | Full state replacement used for backup restore, reset, and demo seeds. |
 | `autoBackupNow` | Phase 8 | Deferred (`IMP-04`) | Automatic file-mirror export after meaningful changes. |
-| `isGuest` | Phase 5 | Deferred (`AUTH-05`) | Guest mode determination and flags. |
-| `setGuest` | Phase 5 | Deferred (`AUTH-05`) | Toggling guest mode state. |
-| `loadConfig` | Phase 5 / 6 | Deferred | Fetch server-side configuration from `/api/config`. |
-| `refreshConfig` | Phase 5 / 6 | Deferred | Refresh cached server configuration. |
-| `setUser` | Phase 5 | Deferred (`AUTH-04`) | Current signed-in user session management. |
-| `pushState` | Phase 6 | Deferred (`SYNC-01`) | Synchronize local state mutations upstream to server. |
-| `pullState` | Phase 6 | Deferred (`SYNC-01`) | Fetch latest server state mutations downstream. |
-| `adoptProfile` | Phase 6 | Deferred (`SYNC-01`) | Profile merge upon signing in. |
-| `signOut` | Phase 5 | Deferred (`AUTH-04`) | Terminate current user session locally. |
-| `signOutAll` | Phase 5 | Deferred (`AUTH-04`) | Invalidate sessions across all active devices. |
-| `chooseLocalMode` | Phase 5 | Deferred | Onboarding choice to remain local-only. |
-| `connectToServer` | Phase 5 | Deferred (`AUTH-03`) | Pairing-code sign-in flow. |
-| `disconnectServer` | Phase 5 | Deferred | Switch back to offline / local-only operation. |
+| `isGuest` | Phase 5 | N/A (guest-only, Phase 5 D-01) | Always guest; openGym lib/guest.js guestAllowed(null) === true with no server config (D-03). |
+| `setGuest` | Phase 5 | N/A (guest-only, Phase 5 D-01) | Always guest; openGym lib/guest.js guestAllowed(null) === true with no server config (D-03). |
+| `loadConfig` | Phase 5 | N/A (guest-only, Phase 5 D-01) | No server; guest config is null (D-03). |
+| `refreshConfig` | Phase 5 | N/A (guest-only, Phase 5 D-01) | No server; guest config is null (D-03). |
+| `setUser` | Phase 5 | N/A (guest-only, Phase 5 D-01) | No user session; runs as guest only (D-01). |
+| `pushState` | Phase 6 | N/A (online sync out of scope, BAK-01) | Online sync out of scope for v1 (REQUIREMENTS.md, 2026-09-30); Phase 6 is local backup. |
+| `pullState` | Phase 6 | N/A (online sync out of scope, BAK-01) | Online sync out of scope for v1 (REQUIREMENTS.md, 2026-09-30); Phase 6 is local backup. |
+| `adoptProfile` | Phase 6 | N/A (online sync out of scope, BAK-01) | Online sync out of scope for v1 (REQUIREMENTS.md, 2026-09-30); Phase 6 is local backup. |
+| `signOut` | Phase 5 | N/A (guest-only, Phase 5 D-01) | No user session to sign out of (D-01). |
+| `signOutAll` | Phase 5 | N/A (guest-only, Phase 5 D-01) | No user session to sign out of (D-01). |
+| `chooseLocalMode` | Phase 5 | N/A (guest-only, Phase 5 D-01) | The app is always local-only; no mode choice screen needed (D-01). |
+| `connectToServer` | Phase 5 | N/A (guest-only, Phase 5 D-01) | Server pairing/connection UI is out of scope for v1 (D-01). |
+| `disconnectServer` | Phase 5 | N/A (guest-only, Phase 5 D-01) | Server pairing/connection UI is out of scope for v1 (D-01). |
 | `resetDemo` | N/A | Not applicable | Web demo reset helper; no web demo build in Flutter. |
-| `boot` | Phase 1 / 5 | `ShellBloc._onStarted` | Initial database hydration completed in Phase 1; server ping / guest branching deferred to Phase 5. |
+| `boot` | Phase 1 / 5 | `ShellBloc._onStarted` | Initial database hydration completed in Phase 1; server ping / guest branching N/A (guest-only). |
 | `setCoachLocal` | Phase 7 | Deferred | Local AI coach device settings and preferences. |
 
 ---
@@ -38,14 +38,14 @@ This document satisfies the **UI-07** requirement for Phase 3 ("BLoC & UI Transl
 | `closeSheet` | Phase 3 | `Navigator.pop` | Native Flutter navigation stack dismissal. |
 | `closeAll` | Phase 3 | `closeAllSheets` / `Navigator.popUntil` | Closes modal routes back to root route. |
 | `toast` | Phase 3 | `showToast` | Transient toast notification banner (2200ms fixed overlay). |
-| `flashTimer` | Phase 5 | Deferred (`TMR-01`) | Screen-flash visual alert upon timer expiry. |
-| `startRest` | Phase 5 | Deferred (`TMR-01`) | Rest timer countdown initiation between sets (D-02). |
-| `addRest` | Phase 5 | Deferred (`TMR-01`) | Increment active rest timer duration. |
-| `shiftRestOwner` | Phase 5 | Deferred (`TMR-01`) | Transfer rest timer ownership on unit/set change. |
-| `stopRest` | Phase 5 | Deferred (`TMR-01`) | Cancel / dismiss active rest timer. |
-| `startWork` | Phase 5 | Deferred (`TMR-01`) | Timed-set work hold countdown initiation (D-02). |
-| `finishWorkEarly` | Phase 5 | Deferred (`TMR-01`) | Early completion of timed set work countdown. |
-| `stopWork` | Phase 5 | Deferred (`TMR-01`) | Cancel / abort timed set work countdown. |
+| `flashTimer` | Phase 5 | WorkoutTimerBloc flashId (`TimerFlash`) | Screen-flash visual alert upon timer expiry (`WorkoutTimerState.flashId`). |
+| `startRest` | Phase 5 | `WorkoutRestStarted` | Rest timer countdown initiation between sets (D-02). |
+| `addRest` | Phase 5 | `WorkoutRestAdded` | Increment active rest timer duration (+15s / -15s). |
+| `shiftRestOwner` | Phase 5 | `WorkoutRestOwnerShifted` | Transfer rest timer ownership on unit/set change (+ `WorkoutRestOwnerRemapped`, `WorkoutRestExerciseRemoved`). |
+| `stopRest` | Phase 5 | `WorkoutRestStopped` | Cancel / dismiss active rest timer. |
+| `startWork` | Phase 5 | `WorkoutWorkStarted` | Timed-set work hold countdown initiation (via `WorkoutTimedSetStarted`). |
+| `finishWorkEarly` | Phase 5 | `WorkoutWorkFinishedEarly` | Early completion of timed set work countdown. |
+| `stopWork` | Phase 5 | `WorkoutWorkStopped` | Cancel / abort timed set work countdown. |
 
 ---
 
@@ -135,6 +135,8 @@ This document satisfies the **UI-07** requirement for Phase 3 ("BLoC & UI Transl
 | `views/Workout.jsx:780`| Toggle set done checkbox | `WorkoutSetToggled` |
 | `views/Workout.jsx:810`| Pick RPE / RIR effort rating | `WorkoutEffortPicked` |
 | `views/Workout.jsx:840`| Save progression configuration | `WorkoutProgressionConfigured` |
+| `views/Workout.jsx` / lifecycle | App background / foreground timer sync | `WorkoutTimerAppHidden`, `WorkoutTimerAppShown` |
+| `views/Workout.jsx` | Timed set logged from hold timer completion | `WorkoutTimedSetLogged` |
 
 ### History & Workout Detail (`views/History.jsx`, `sheets.jsx`)
 
@@ -205,6 +207,9 @@ This document satisfies the **UI-07** requirement for Phase 3 ("BLoC & UI Transl
 | `views/Settings.jsx:650` | Select active equipment profile | `SettingsActiveEquipChanged` |
 | `sheets.jsx:1084` | Save profile in EquipmentProfileSheet | `SettingsEquipProfileSaved` |
 | `views/Settings.jsx:640` | Delete equipment profile with confirmation | `SettingsEquipProfileDeleted` |
+| `views/Settings.jsx:316,333` | Change keepAwake or soundOnSilent | `SettingsWorkoutChanged` |
+| `components/MobileReminderCard.jsx:1-120` | Toggle workout-day reminder or change time | `SettingsReminderToggled`, `SettingsReminderTimeChanged` |
+| `views/Settings.jsx:345` | Request rest-timer notification permissions or status | `SettingsRestAlertsRequested`, `SettingsNotificationStatusRequested` |
 | `views/Settings.jsx:173` | Confirm reset all data and state | `SettingsResetConfirmed` |
 | `App.jsx:85` | React to wdec changes to configure weight formatters | `BlocListener` in `app.dart` |
 
@@ -219,7 +224,7 @@ The following UI surfaces and integrations identified during porting are explici
 | Plan Tools (Share / Print / Import) | Phase 8 (`IMP-04`) | Requires platform printing, system sharing, and document picking packages. |
 | AI Coach | Phase 7 (`COACH-01`) | LLM prompt orchestration, AI chat, and coach recommendations. |
 | Activity Heartbeat / Presence Ping | Phase 6 / 7 | Live server presence and background sync telemetry. |
-| Rest & Work Timers (beeps, vibrate, audio cues) | Phase 5 (`TMR-01`) | Audio playback and haptics infrastructure (D-02). |
+| Rest & Work Timers (beeps, vibrate, audio cues) | Phase 5 (`TMR-01`) | Done in Phase 5: `WorkoutTimerBloc`, audio tone player, and haptics infrastructure. |
 | Automatic File Backup on Session Finish | Phase 8 (`IMP-04`) | Platform storage file mirroring (`autoBackupNow`). |
 | Backfill / Log Past Workout & Day Override | Phase 3.1 | Done in Phase 3.1 (`WorkoutBackfillStarted`, `PlanDayOverrideSet`). |
 | TopWeight Manual Override | N/A | Unreachable code path in openGym web; omitted. |
@@ -227,11 +232,11 @@ The following UI surfaces and integrations identified during porting are explici
 | Settings Language | Phase 8 | Localization selector hidden until multi-language translations ready. |
 | Import backup / Export backup / Auto-backup | Phase 8 (`IMP-04`) | File import picker, share export, and periodic backup. |
 | Import from another app / Hevy | Phase 8 (`IMP-01`) | External workout tracker backup parsers (Hevy, Strong, FitNotes). |
-| Notifications / workout-day reminder | Phase 5 (`TMR-03`) | Platform local notifications on planned workout days. |
-| Keep screen awake + Play sounds on silent rows, rest-timer/sound/flash behaviour | Phase 5 (`TMR-01`) | Wakelock and audio ducking / silent override playback (values already stored). |
-| Account / pairing / passkey rows | Phase 5 / 6 (`AUTH-03`, `AUTH-04`, `SYNC-01`) | User profile, WebAuthn passkey authentication, server sync pairing. |
+| Notifications / workout-day reminder | Phase 5 (`TMR-03`) | Done in Phase 5: `NotificationService` local notifications on planned workout days. |
+| Keep screen awake + Play sounds on silent rows, rest-timer/sound/flash behaviour | Phase 5 (`TMR-01`) | Done in Phase 5: `WakelockPlus`, audio session category, and screen flash overlay. |
+| Account / pairing / passkey rows | N/A (guest-only, D-01) | User profile, WebAuthn passkey authentication, server sync pairing out of scope for v1. |
 | Tip (Add to Home screen) and Updates (APK updater) | N/A | Web PWA install banner and APK downloader not applicable to native store app. |
-| Home 'Hi {name}' greeting | Phase 5 | Requires authenticated user profile state. |
+| Home 'Hi {name}' greeting | N/A (guest-only, D-01) | In guest mode without an account, user name is not present. |
 
 ---
 
@@ -257,6 +262,13 @@ done
 ```bash
 for e in WorkoutBackfillStarted PlanDayOverrideSet HistoryWorkoutNoteSaved HistoryWorkoutDeleted BodyweightLogged BodyweightEntryDeleted BodyweightGoalSet BodyweightGoalRemoved HomeWeekOffsetChanged StatsRangeChanged StatsExerciseSelected StatsExerciseMetricChanged StatsEffortWindowChanged CheckInCardMoved CheckInCardRenamed CheckInCardRemoved CheckInActiveCardChanged SettingsUnitSwitched SettingsGeneralChanged SettingsWorkoutChanged SettingsWorkoutControlsChanged SettingsBodyChanged SettingsEquipFilterToggled SettingsActiveEquipChanged SettingsEquipProfileSaved SettingsEquipProfileDeleted SettingsResetConfirmed ShellThemeChanged ShellAccentChanged WorkoutStartRequested WorkoutFinishConfirmed; do
   grep -rq "final class $e\b" lib || echo "MISSING 3.1 EVENT $e"
+done
+```
+
+### Check all Phase 5 BLoC event classes exist in the Dart codebase:
+```bash
+for e in WorkoutRestStarted WorkoutRestAdded WorkoutRestOwnerShifted WorkoutRestOwnerRemapped WorkoutRestExerciseRemoved WorkoutRestStopped WorkoutWorkStarted WorkoutWorkFinishedEarly WorkoutWorkStopped WorkoutTimerAppHidden WorkoutTimerAppShown WorkoutTimedSetStarted WorkoutTimedSetLogged SettingsReminderToggled SettingsReminderTimeChanged SettingsRestAlertsRequested SettingsNotificationStatusRequested; do
+  grep -rq "final class $e\b" lib || echo "MISSING 5 EVENT $e"
 done
 ```
 

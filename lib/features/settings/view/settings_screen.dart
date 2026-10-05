@@ -18,6 +18,7 @@ import 'sections/appearance_section.dart';
 import 'sections/data_section.dart';
 import 'sections/equipment_section.dart';
 import 'sections/general_section.dart';
+import 'sections/notifications_section.dart';
 import 'sections/workout_section.dart';
 
 /// Application settings screen.
@@ -37,6 +38,8 @@ class SettingsScreen extends StatelessWidget {
         if (state.signal is SettingsResetDone) {
           context.go(AppRoutes.home);
           showToast(context, t('All data reset'));
+        } else if (state.signal case final SettingsToast toast) {
+          showToast(context, toast.message);
         }
       },
       child: Scaffold(
@@ -76,6 +79,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     GeneralSection(state: state),
                     WorkoutSection(state: state),
+                    NotificationsSection(state: state),
                     EquipmentSection(state: state),
                     AppearanceSection(state: state),
                     const DataSection(),

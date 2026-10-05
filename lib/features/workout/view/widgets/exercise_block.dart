@@ -531,6 +531,7 @@ class ExerciseBlock extends StatelessWidget {
                           ),
                         ),
                       ],
+                      if (view.timed) const SizedBox(width: 32.0),
                       const SizedBox(width: 32.0), // matches 24px check + 8px gap
                     ],
                   ),

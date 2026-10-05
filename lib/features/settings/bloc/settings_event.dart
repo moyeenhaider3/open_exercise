@@ -162,3 +162,32 @@ final class SettingsEquipProfileDeleted extends SettingsEvent {
 final class SettingsResetConfirmed extends SettingsEvent {
   const SettingsResetConfirmed();
 }
+
+/// Dispatched when user toggles the workout-day reminder switch.
+/// Mirrors `../openGym/frontend/src/views/Settings.jsx` MobileReminderCard toggle (542-570).
+final class SettingsReminderToggled extends SettingsEvent {
+  const SettingsReminderToggled();
+}
+
+/// Dispatched when user changes the reminder time.
+/// Mirrors `../openGym/frontend/src/views/Settings.jsx` MobileReminderCard time input (542-570).
+final class SettingsReminderTimeChanged extends SettingsEvent {
+  const SettingsReminderTimeChanged(this.time);
+
+  final String time;
+
+  @override
+  List<Object?> get props => <Object?>[time];
+}
+
+/// Dispatched when user taps the rest-alerts row (tappable permission row in NotificationsSection).
+/// Triggers requestNotifications and, on Android, requestExactAlarms if needed.
+final class SettingsRestAlertsRequested extends SettingsEvent {
+  const SettingsRestAlertsRequested();
+}
+
+/// Dispatched to refresh the notification permission status shown in NotificationsSection.
+/// Sent from initState and AppLifecycleListener.onResume.
+final class SettingsNotificationStatusRequested extends SettingsEvent {
+  const SettingsNotificationStatusRequested();
+}

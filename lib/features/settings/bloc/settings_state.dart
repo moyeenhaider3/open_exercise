@@ -15,26 +15,49 @@ final class SettingsResetDone extends SettingsSignal {
   const SettingsResetDone();
 }
 
+/// Emitted when a notification settings change fails (e.g. OS refused permission).
+/// Mirrors `../openGym/frontend/src/views/Settings.jsx` MobileReminderCard toast.
+final class SettingsToast extends SettingsSignal {
+  const SettingsToast(this.message);
+
+  final String message;
+
+  @override
+  List<Object?> get props => <Object?>[message];
+}
+
 /// State of [SettingsBloc].
 class SettingsState extends Equatable {
   const SettingsState({
     this.seq = 0,
     this.signal,
+    this.notificationsAllowed,
+    this.exactAlarmsAllowed,
   });
 
   final int seq;
   final SettingsSignal? signal;
 
+  /// Whether the OS has granted notification permission (null = not yet checked).
+  final bool? notificationsAllowed;
+
+  /// Whether the OS has granted exact alarm permission (null = not checked / not applicable).
+  final bool? exactAlarmsAllowed;
+
   SettingsState copyWith({
     int? seq,
     SettingsSignal? signal,
+    bool? notificationsAllowed,
+    bool? exactAlarmsAllowed,
   }) {
     return SettingsState(
       seq: seq ?? this.seq,
       signal: signal,
+      notificationsAllowed: notificationsAllowed ?? this.notificationsAllowed,
+      exactAlarmsAllowed: exactAlarmsAllowed ?? this.exactAlarmsAllowed,
     );
   }
 
   @override
-  List<Object?> get props => <Object?>[seq, signal];
+  List<Object?> get props => <Object?>[seq, signal, notificationsAllowed, exactAlarmsAllowed];
 }

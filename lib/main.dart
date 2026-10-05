@@ -12,7 +12,12 @@ import 'core/data/gym_state_repository.dart';
 import 'core/db/app_database.dart';
 import 'core/js/js_engine_service.dart';
 import 'core/js/modules/exercises_js.dart';
+import 'core/js/modules/reminder_js.dart';
+import 'core/notifications/notification_service.dart';
+import 'core/notifications/reminder_sync.dart';
+import 'core/sound/timer_sound.dart';
 import 'core/state/gym_state_cubit.dart';
+import 'core/wakelock/wakelock_sync.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,6 +68,36 @@ Future<void> main() async {
     exercisesJs: jsEngine.exercises,
   );
 
+  NotificationService notificationService;
+  try {
+    notificationService = await NotificationService.init();
+  } catch (e, st) {
+    FlutterError.reportError(
+      FlutterErrorDetails(exception: e, stack: st, library: 'NotificationService.init'),
+    );
+    notificationService = NotificationService.disabled();
+  }
+
+  TimerSound timerSound;
+  try {
+    timerSound = await TimerSound.create();
+  } catch (e, st) {
+    FlutterError.reportError(
+      FlutterErrorDetails(exception: e, stack: st, library: 'TimerSound.create'),
+    );
+    timerSound = TimerSound.silent();
+  }
+
+  timerSound.bind(gymStateCubit);
+  WakelockSync.start(gymStateCubit);
+
+  final ReminderSync reminderSync = ReminderSync(
+    gymState: gymStateCubit,
+    reminderJs: jsEngine.reminder,
+    notifications: notificationService,
+  );
+  reminderSync.start();
+
   runApp(
     OpenExerciseApp(
       dependencies: AppDependencies(
@@ -70,6 +105,9 @@ Future<void> main() async {
         apiClientFactory: const ApiClientFactory(),
         jsEngine: jsEngine,
         exerciseCatalogue: exerciseCatalogue,
+        notificationService: notificationService,
+        reminderSync: reminderSync,
+        timerSound: timerSound,
       ),
       gymStateCubit: gymStateCubit,
     ),

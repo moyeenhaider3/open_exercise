@@ -30,9 +30,11 @@ Vendored openGym files (for example the `openapi.yaml` snapshot added in Plan 01
 ## This project's own dependencies
 
 The Flutter/Dart packages this project depends on (see `pubspec.yaml`) are used under their
-respective published licenses (MIT/BSD-style for the dependency set: flutter_bloc,
-equatable, sqflite, dio, go_router, path_provider, path, collection, and `xml` with its transitive
-`petitparser`, both MIT, renggli/dart-xml). No modifications have been made to their source;
+respective published licenses (MIT/BSD/Apache-2.0-style for the dependency set: flutter_bloc,
+equatable, sqflite, dio, go_router, path_provider, path, collection, `xml` with its transitive
+`petitparser`, both MIT, renggli/dart-xml; and Phase 5 dependencies: flutter_local_notifications (BSD-3-Clause),
+timezone (BSD-3-Clause), flutter_timezone (Apache-2.0), wakelock_plus (BSD-3-Clause),
+audioplayers (MIT), and vibration (BSD-2-Clause)). No modifications have been made to their source;
 they are consumed as-is from pub.dev.
 
 ## Body-map geometry
