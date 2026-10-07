@@ -337,6 +337,6 @@ Plans:
 | 3.1. History, Stats, Home, Check-in & Settings | 13/13 | Complete | 2026-09-30 |
 | 4. Muscle Map Rendering | 8/8 | Complete | 2026-09-30 |
 | 5. Timers & Guest Mode | 8/8 | Complete | 2026-09-30 |
-| 6. Local Backup & Restore | 0/8 | Not started | - |
+| 6. Local Backup & Restore | 8/8 | Complete | 2026-10-07 |
 | 7. Coach & Admin | 0/TBD | Not started | - |
 | 8. Import, Share & i18n | 0/TBD | Not started | - |
