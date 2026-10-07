@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/backup/auto_backup_sync.dart';
 import '../../../core/body_map/body_map.dart';
 import '../../../core/catalogue/exercise_catalogue.dart';
 import '../../../core/catalogue/exercise_def.dart';
@@ -86,6 +87,10 @@ class _RoutineEditViewState extends State<RoutineEditView> {
   @override
   void dispose() {
     _nameController.dispose();
+    // D-06(b): auto-backup on leaving routine editor (openGym RoutineEdit.jsx:317)
+    try {
+      context.read<AutoBackupSync>().autoBackupNow();
+    } catch (_) {}
     super.dispose();
   }
 

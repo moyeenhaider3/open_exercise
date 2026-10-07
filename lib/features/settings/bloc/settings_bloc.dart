@@ -3,6 +3,9 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/backup/backup_import_service.dart';
+import '../../../core/backup/backup_repository.dart';
+import '../../../core/backup/backup_settings.dart';
 import '../../../core/catalogue/equipment.dart';
 import '../../../core/format/workout_controls.dart';
 import '../../../core/i18n/t.dart';
@@ -30,18 +33,26 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required JsEngineService engine,
     required ReminderSync reminderSync,
     required NotificationService notifications,
+    required BackupRepository backupRepository,
+    required BackupImportService backupImportService,
   })  : _gymState = gymState,
         _engine = engine,
         _reminderSync = reminderSync,
         _notifications = notifications,
+        _backupRepository = backupRepository,
+        _backupImportService = backupImportService,
         super(const SettingsState()) {
     on<SettingsEvent>(_onEvent);
+    add(const SettingsBackupSettingsLoaded());
   }
 
   final GymStateCubit _gymState;
   final JsEngineService _engine;
   final ReminderSync _reminderSync;
   final NotificationService _notifications;
+  final BackupRepository _backupRepository;
+  // ignore: unused_field
+  final BackupImportService _backupImportService;
   int _seq = 0;
 
   Future<void> _onEvent(
@@ -77,6 +88,18 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         await _onRestAlertsRequested(emit);
       case SettingsNotificationStatusRequested():
         await _onNotificationStatusRequested(emit);
+      case SettingsBackupSettingsLoaded():
+        await _onBackupSettingsLoaded(emit);
+      case SettingsImportBackupConfirmed():
+        await _onImportBackupConfirmed(event, emit);
+      case SettingsExportBackupRequested():
+        await _onExportBackupRequested(event, emit);
+      case SettingsBackupNowRequested():
+        await _onBackupNowRequested(emit);
+      case SettingsBackupFolderRequested():
+        await _onBackupFolderRequested(emit);
+      case SettingsAutoBackupToggled():
+        await _onAutoBackupToggled(event, emit);
     }
   }
 
@@ -298,6 +321,105 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       seq: _seq,
       notificationsAllowed: allowed,
       exactAlarmsAllowed: exact,
+    ));
+  }
+
+  Future<void> _onBackupSettingsLoaded(Emitter<SettingsState> emit) async {
+    final BackupSettings settings = await _backupRepository.getSettings();
+    final bool accessible = settings.hasFolderConfigured
+        ? await _backupRepository.folderService.isFolderAccessible()
+        : true;
+    emit(state.copyWith(
+      backupSettings: settings,
+      isFolderAccessible: accessible,
+    ));
+  }
+
+  Future<void> _onImportBackupConfirmed(
+    SettingsImportBackupConfirmed event,
+    Emitter<SettingsState> emit,
+  ) async {
+    _gymState.replaceState(event.state);
+    await _gymState.flush();
+    _seq++;
+    emit(state.copyWith(
+      seq: _seq,
+      signal: const SettingsToast('Backup imported'),
+    ));
+  }
+
+  Future<void> _onExportBackupRequested(
+    SettingsExportBackupRequested event,
+    Emitter<SettingsState> emit,
+  ) async {
+    final BackupResult result =
+        await _backupRepository.exportToShareSheet(event.shareOrigin);
+    _seq++;
+    if (result is BackupSuccess) {
+      emit(state.copyWith(
+        seq: _seq,
+        signal: const SettingsToast('Backup exported'),
+      ));
+    } else if (result is BackupFailure) {
+      emit(state.copyWith(
+        seq: _seq,
+        signal: SettingsToast('Export failed: ${result.reason}'),
+      ));
+    }
+  }
+
+  Future<void> _onBackupNowRequested(Emitter<SettingsState> emit) async {
+    final BackupSettings currentSettings =
+        await _backupRepository.getSettings();
+    if (!currentSettings.hasFolderConfigured) {
+      final String? folder = await _backupRepository.pickFolder();
+      if (folder == null) return;
+    }
+
+    final BackupResult result = await _backupRepository.backupNow();
+    final BackupSettings settings = await _backupRepository.getSettings();
+    _seq++;
+    if (result is BackupSuccess) {
+      emit(state.copyWith(
+        seq: _seq,
+        backupSettings: settings,
+        lastBackupResult: result,
+        signal: const SettingsToast('Backup saved'),
+      ));
+    } else if (result is BackupFailure) {
+      emit(state.copyWith(
+        seq: _seq,
+        backupSettings: settings,
+        lastBackupResult: result,
+        signal: SettingsToast('Backup failed: ${result.reason}'),
+      ));
+    }
+  }
+
+  Future<void> _onBackupFolderRequested(Emitter<SettingsState> emit) async {
+    final String? folder = await _backupRepository.pickFolder();
+    if (folder != null) {
+      _gymState.mutate((GymState s) => s.copyWith(autoBackup: true));
+      final BackupSettings settings = await _backupRepository.getSettings();
+      _seq++;
+      emit(state.copyWith(
+        seq: _seq,
+        backupSettings: settings,
+      ));
+    }
+  }
+
+  Future<void> _onAutoBackupToggled(
+    SettingsAutoBackupToggled event,
+    Emitter<SettingsState> emit,
+  ) async {
+    await _backupRepository.setAutoBackupEnabled(event.enabled);
+    _gymState.mutate((GymState s) => s.copyWith(autoBackup: event.enabled));
+    final BackupSettings settings = await _backupRepository.getSettings();
+    _seq++;
+    emit(state.copyWith(
+      seq: _seq,
+      backupSettings: settings,
     ));
   }
 }

@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import '../core/api/open_gym_api_client.dart';
+import '../core/backup/auto_backup_sync.dart';
+import '../core/backup/backup_repository.dart';
 import '../core/catalogue/exercise_catalogue.dart';
 import '../core/data/gym_state_repository.dart';
 import '../core/js/js_engine_service.dart';
@@ -23,6 +25,8 @@ final class AppDependencies {
     required this.notificationService,
     required this.reminderSync,
     required this.timerSound,
+    required this.backupRepository,
+    required this.autoBackupSync,
   });
 
   final GymStateRepository gymStateRepository;
@@ -38,4 +42,10 @@ final class AppDependencies {
 
   /// Audio and vibration feedback for timer ticks and completion.
   final TimerSound timerSound;
+
+  /// Local backup and restore service (Phase 6).
+  final BackupRepository backupRepository;
+
+  /// Auto-backup synchronization engine (Phase 6).
+  final AutoBackupSync autoBackupSync;
 }

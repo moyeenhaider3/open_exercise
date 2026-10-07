@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/backup/fresh_install_check.dart';
 import '../../../core/js/models/phase3_models.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/state/gym_state_cubit.dart';
@@ -38,9 +39,17 @@ class WorkoutScreen extends StatelessWidget {
             showToast(context, message);
           case WorkoutFinishCheckSignal(:final int done, :final int total):
             runFinishFlow(context, done: done, total: total);
-          case WorkoutFinishedSignal(:final FinishResult result):
-            final String unit = context.read<GymStateCubit>().state.unit ?? 'kg';
-            showFinishSummary(context, result, unit);
+          case WorkoutFinishedSignal(
+              :final FinishResult result,
+              :final bool isFirstWorkout
+            ):
+            final String unit =
+                context.read<GymStateCubit>().state.unit ?? 'kg';
+            showFinishSummary(context, result, unit).then((_) {
+              if (isFirstWorkout && context.mounted) {
+                showFirstWorkoutBackupPrompt(context);
+              }
+            });
         }
       },
       child: BlocBuilder<WorkoutBloc, WorkoutState>(

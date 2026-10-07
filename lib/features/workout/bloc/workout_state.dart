@@ -52,12 +52,13 @@ final class WorkoutFinishCheckSignal extends WorkoutSignal {
 
 /// Signal emitted after workout completion is successfully committed to history.
 final class WorkoutFinishedSignal extends WorkoutSignal {
-  const WorkoutFinishedSignal(this.result);
+  const WorkoutFinishedSignal(this.result, {this.isFirstWorkout = false});
 
   final FinishResult result;
+  final bool isFirstWorkout;
 
   @override
-  List<Object?> get props => <Object?>[result];
+  List<Object?> get props => <Object?>[result, isFirstWorkout];
 }
 
 /// Base sealed state for [WorkoutBloc].

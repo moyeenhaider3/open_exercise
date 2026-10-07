@@ -2,6 +2,7 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/backup/backup_import_service.dart';
 import '../../core/state/gym_state_cubit.dart';
 import '../../features/settings/bloc/settings_bloc.dart';
 import '../dependencies.dart';
@@ -15,6 +16,8 @@ List<BlocProvider> settingsBlocProviders(AppDependencies deps) => <BlocProvider>
           engine: deps.jsEngine,
           reminderSync: deps.reminderSync,
           notifications: deps.notificationService,
+          backupRepository: deps.backupRepository,
+          backupImportService: const BackupImportService(),
         ),
       ),
     ];

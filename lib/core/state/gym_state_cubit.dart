@@ -43,6 +43,9 @@ final class GymStateCubit extends Cubit<GymState> {
   /// false to prevent overwriting an unreadable profile (T-1-12, T-03-02).
   bool get canPersist => _canPersist;
 
+  /// The active user ID for this state session.
+  String get uid => _uid;
+
   /// Loads the persisted state from [repository] for [uid].
   ///
   /// If [loadState] returns null, initializes with [GymState.defaults()].

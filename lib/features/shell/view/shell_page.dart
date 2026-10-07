@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../../../core/backup/fresh_install_check.dart';
 import '../../workout/view/widgets/rest_timer_bar.dart';
 import '../../workout/view/widgets/workout_timer_host.dart';
 import 'app_tab_bar.dart';
@@ -13,7 +14,7 @@ import 'app_tab_bar.dart';
 /// [WorkoutTimerBloc] and surface the rest-over toast.
 ///
 /// Ports openGym's main layout container from `../openGym/frontend/src/App.jsx`.
-class ShellPage extends StatelessWidget {
+class ShellPage extends StatefulWidget {
   const ShellPage({
     super.key,
     required this.location,
@@ -24,21 +25,36 @@ class ShellPage extends StatelessWidget {
   final Widget child;
 
   @override
+  State<ShellPage> createState() => _ShellPageState();
+}
+
+class _ShellPageState extends State<ShellPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      checkFreshInstall(context);
+      checkBackupFolderAccessible(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: const Key('shell-scaffold'),
       body: SafeArea(
         bottom: false,
-        child: WorkoutTimerHost(child: child),
+        child: WorkoutTimerHost(child: widget.child),
       ),
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 0.0),
-            child: const RestTimerBar(),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 0.0),
+            child: RestTimerBar(),
           ),
-          AppTabBar(location: location),
+          AppTabBar(location: widget.location),
         ],
       ),
     );

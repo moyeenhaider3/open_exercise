@@ -17,6 +17,7 @@ List<BlocProvider> workoutBlocProviders(AppDependencies deps) => <BlocProvider>[
           catalogue: deps.exerciseCatalogue,
           timer: context.read<WorkoutTimerBloc>(),
           sound: deps.timerSound,
+          autoBackupSync: deps.autoBackupSync,
         ),
         lazy: false,
       ),

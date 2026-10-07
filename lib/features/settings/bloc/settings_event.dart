@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+import 'dart:ui';
+
 import 'package:equatable/equatable.dart';
+
+import '../../../core/models/gym_state.dart';
 
 /// Sealed base class for all SettingsBloc events.
 sealed class SettingsEvent extends Equatable {
@@ -191,3 +195,49 @@ final class SettingsRestAlertsRequested extends SettingsEvent {
 final class SettingsNotificationStatusRequested extends SettingsEvent {
   const SettingsNotificationStatusRequested();
 }
+
+/// Dispatched to load/refresh backup settings.
+final class SettingsBackupSettingsLoaded extends SettingsEvent {
+  const SettingsBackupSettingsLoaded();
+}
+
+/// Dispatched when user confirms importing a prepared GymState.
+final class SettingsImportBackupConfirmed extends SettingsEvent {
+  const SettingsImportBackupConfirmed(this.state);
+
+  final GymState state;
+
+  @override
+  List<Object?> get props => <Object?>[state];
+}
+
+/// Dispatched when user requests export via OS share sheet.
+final class SettingsExportBackupRequested extends SettingsEvent {
+  const SettingsExportBackupRequested({this.shareOrigin});
+
+  final Rect? shareOrigin;
+
+  @override
+  List<Object?> get props => <Object?>[shareOrigin];
+}
+
+/// Dispatched when user taps "Back up now".
+final class SettingsBackupNowRequested extends SettingsEvent {
+  const SettingsBackupNowRequested();
+}
+
+/// Dispatched when user taps "Backup folder" to pick/change folder.
+final class SettingsBackupFolderRequested extends SettingsEvent {
+  const SettingsBackupFolderRequested();
+}
+
+/// Dispatched when user toggles the auto-backup switch.
+final class SettingsAutoBackupToggled extends SettingsEvent {
+  const SettingsAutoBackupToggled(this.enabled);
+
+  final bool enabled;
+
+  @override
+  List<Object?> get props => <Object?>[enabled];
+}
+

@@ -271,7 +271,31 @@ Plans:
   3. The user can make a backup at any time from Settings
   4. Importing a backup file on a fresh install restores all user data exactly (round-trip equivalent)
 
-**Plans**: TBD
+**Plans**: 8 plans in 5 waves
+
+Plans:
+**Wave 1**
+
+- [x] 06-01-PLAN.md — Legitimacy gate + install file_picker, share_plus (wave 1)
+- [x] 06-02-PLAN.md — BackupSettings model, sqflite DAO, iOS security-scoped bookmark Method Channel (wave 1)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [x] 06-03-PLAN.md — BackupFolderService (SAF + iOS bookmarks), BackupRepository (backup write + share export)
+- [x] 06-04-PLAN.md — BackupImportService (file picker, JSON validation, GymState preparation)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [x] 06-05-PLAN.md — Settings Data section UI (D-12 row order), SettingsBloc backup events/handlers
+- [x] 06-06-PLAN.md — Fresh-install restore offer (D-14), first-workout folder prompt (D-02), folder-unavailable snackbar (D-04)
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [x] 06-07-PLAN.md — Auto-backup triggers: workout finish (D-06a), routine editor exit (D-06b), app background (D-06c)
+
+**Wave 5** *(blocked on Wave 4 completion)*
+
+- [x] 06-08-PLAN.md — Phase gates, round-trip verification, device walkthrough Android + iOS [checkpoint]
 **UI hint**: yes
 
 ### Phase 7: Coach & Admin
@@ -312,7 +336,7 @@ Plans:
 | 3. BLoC & UI Translation | 16/16 | Complete | 2026-09-29 |
 | 3.1. History, Stats, Home, Check-in & Settings | 13/13 | Complete | 2026-09-30 |
 | 4. Muscle Map Rendering | 8/8 | Complete | 2026-09-30 |
-| 5. Timers & Guest Mode | 0/TBD | Not started | - |
-| 6. Local Backup & Restore | 0/TBD | Not started | - |
+| 5. Timers & Guest Mode | 8/8 | Complete | 2026-09-30 |
+| 6. Local Backup & Restore | 0/8 | Not started | - |
 | 7. Coach & Admin | 0/TBD | Not started | - |
 | 8. Import, Share & i18n | 0/TBD | Not started | - |

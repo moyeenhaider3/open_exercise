@@ -2,6 +2,9 @@
 
 import 'package:equatable/equatable.dart';
 
+import '../../../core/backup/backup_repository.dart';
+import '../../../core/backup/backup_settings.dart';
+
 /// Sealed base class for one-shot signals emitted by [SettingsBloc].
 sealed class SettingsSignal extends Equatable {
   const SettingsSignal();
@@ -33,6 +36,9 @@ class SettingsState extends Equatable {
     this.signal,
     this.notificationsAllowed,
     this.exactAlarmsAllowed,
+    this.backupSettings,
+    this.lastBackupResult,
+    this.isFolderAccessible = true,
   });
 
   final int seq;
@@ -44,20 +50,44 @@ class SettingsState extends Equatable {
   /// Whether the OS has granted exact alarm permission (null = not checked / not applicable).
   final bool? exactAlarmsAllowed;
 
+  /// Device-local backup settings.
+  final BackupSettings? backupSettings;
+
+  /// Result of the last backup operation.
+  final BackupResult? lastBackupResult;
+
+  /// Whether the configured backup folder is accessible.
+  final bool isFolderAccessible;
+
   SettingsState copyWith({
     int? seq,
     SettingsSignal? signal,
     bool? notificationsAllowed,
     bool? exactAlarmsAllowed,
+    BackupSettings? backupSettings,
+    BackupResult? lastBackupResult,
+    bool? isFolderAccessible,
   }) {
     return SettingsState(
       seq: seq ?? this.seq,
       signal: signal,
       notificationsAllowed: notificationsAllowed ?? this.notificationsAllowed,
       exactAlarmsAllowed: exactAlarmsAllowed ?? this.exactAlarmsAllowed,
+      backupSettings: backupSettings ?? this.backupSettings,
+      lastBackupResult: lastBackupResult ?? this.lastBackupResult,
+      isFolderAccessible: isFolderAccessible ?? this.isFolderAccessible,
     );
   }
 
   @override
-  List<Object?> get props => <Object?>[seq, signal, notificationsAllowed, exactAlarmsAllowed];
+  List<Object?> get props => <Object?>[
+        seq,
+        signal,
+        notificationsAllowed,
+        exactAlarmsAllowed,
+        backupSettings,
+        lastBackupResult,
+        isFolderAccessible,
+      ];
 }
+

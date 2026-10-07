@@ -30,14 +30,15 @@ class AppDatabase {
         version: kSchemaVersion,
         onCreate: (Database db, int version) async {
           final Batch batch = db.batch();
-          for (final String statement in kCreateStatementsV1) {
+          for (final String statement in kCreateStatementsV2) {
             batch.execute(statement);
           }
           await batch.commit(noResult: true);
         },
         onUpgrade: (Database db, int oldVersion, int newVersion) async {
-          // Schema v1 -> vN migrations append here, guarded by `oldVersion`/`newVersion`, as the
-          // schema evolves. No migration exists yet -- v1 is the only version so far.
+          if (oldVersion < 2) {
+            await db.execute(kCreateBackupSettingsTable);
+          }
         },
       ),
     );

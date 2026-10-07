@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/backup/auto_backup_sync.dart';
 import '../../../core/catalogue/exercise_catalogue.dart';
 import '../../../core/catalogue/exercise_def.dart';
 import '../../../core/format/format.dart';
@@ -54,11 +55,13 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
     required ExerciseCatalogue catalogue,
     required WorkoutTimerBloc timer,
     required TimerSound sound,
+    required AutoBackupSync autoBackupSync,
   })  : _gymState = gymState,
         _engine = engine,
         _catalogue = catalogue,
         _timer = timer, // ignore: prefer_initializing_formals
         _sound = sound, // ignore: prefer_initializing_formals
+        _autoBackupSync = autoBackupSync, // ignore: prefer_initializing_formals
         super(createState(gymState.state, engine, catalogue)) {
     on<WorkoutEvent>(_onEvent, transformer: _sequential<WorkoutEvent>());
     _subscription = _gymState.stream.listen((GymState s) {
@@ -79,6 +82,7 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
   final ExerciseCatalogue _catalogue;
   final WorkoutTimerBloc _timer;
   final TimerSound _sound;
+  final AutoBackupSync _autoBackupSync;
   StreamSubscription<GymState>? _subscription;
   StreamSubscription<WorkoutTimerState>? _timerSubscription;
 
@@ -447,6 +451,7 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
     final FinishResult result = _engine.finish.completeWorkout(s, now);
     _progressHighWater = <int>[];
 
+    final bool isFirstWorkout = s.workouts == null || s.workouts!.isEmpty;
     await _gymState.mutate((GymState st) {
       if (result.past) {
         final List<Workout> nextWorkouts = _engine.backfill.completeBackfill(
@@ -469,7 +474,10 @@ class WorkoutBloc extends Bloc<WorkoutEvent, WorkoutState> {
       }
     });
 
-    _emitSignal(WorkoutFinishedSignal(result), emit);
+    _emitSignal(WorkoutFinishedSignal(result, isFirstWorkout: isFirstWorkout), emit);
+
+    // D-06(a): auto-backup after finishing a workout (openGym sheets.jsx:2224)
+    unawaited(_autoBackupSync.autoBackupNow());
   }
 
   /// Discards the active workout without saving to history.

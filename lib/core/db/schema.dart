@@ -22,6 +22,7 @@ abstract final class Tables {
   static const String workouts = 'workouts';
   static const String routines = 'routines';
   static const String bodyweight = 'bodyweight';
+  static const String backupSettings = 'backup_settings';
 
   // Shared by every table.
   static const String colUid = 'uid';
@@ -55,6 +56,13 @@ abstract final class Tables {
   static const String colW = 'w';
   static const String colT = 't';
 
+  // backup_settings-only columns.
+  static const String colFolderUri = 'folder_uri';
+  static const String colFolderBookmark = 'folder_bookmark';
+  static const String colFolderName = 'folder_name';
+  static const String colLastBackupAt = 'last_backup_at';
+  static const String colAutoBackupEnabled = 'auto_backup_enabled';
+
   static const String idxWorkoutsUidD = 'idx_workouts_uid_d';
   static const String idxWorkoutsUidId = 'idx_workouts_uid_id';
   static const String idxBodyweightUidD = 'idx_bodyweight_uid_d';
@@ -62,7 +70,7 @@ abstract final class Tables {
 
 /// Current schema version. Bump alongside a new entry appended to a version-specific create/
 /// migration list; [AppDatabase.open]'s `onUpgrade` hook is where future migrations run.
-const int kSchemaVersion = 1;
+const int kSchemaVersion = 2;
 
 /// Every table/index creation statement for schema v1, run once (in a batch) by
 /// [AppDatabase.open]'s `onCreate` callback.
@@ -117,3 +125,24 @@ CREATE TABLE bodyweight (
 ''',
   'CREATE INDEX idx_bodyweight_uid_d ON bodyweight(uid, d)',
 ];
+
+/// Table creation statement for backup_settings in schema v2.
+const String kCreateBackupSettingsTable = '''
+CREATE TABLE IF NOT EXISTS backup_settings (
+  id INTEGER PRIMARY KEY DEFAULT 1,
+  folder_uri TEXT,
+  folder_bookmark TEXT,
+  folder_name TEXT,
+  last_backup_at INTEGER,
+  auto_backup_enabled INTEGER NOT NULL DEFAULT 1,
+  CHECK (id = 1)
+)
+''';
+
+/// Every table/index creation statement for schema v2, run once by
+/// [AppDatabase.open]'s `onCreate` callback for fresh installs.
+const List<String> kCreateStatementsV2 = <String>[
+  ...kCreateStatementsV1,
+  kCreateBackupSettingsTable,
+];
+

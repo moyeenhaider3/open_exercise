@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/api/open_gym_api_client.dart';
+import '../core/backup/auto_backup_sync.dart';
+import '../core/backup/backup_repository.dart';
 import '../core/catalogue/exercise_catalogue.dart';
 import '../core/data/gym_state_repository.dart';
 import '../core/js/js_engine_service.dart';
@@ -104,6 +106,12 @@ class _OpenExerciseAppState extends State<OpenExerciseApp> {
         ),
         RepositoryProvider<TimerSound>.value(
           value: widget.dependencies.timerSound,
+        ),
+        RepositoryProvider<BackupRepository>.value(
+          value: widget.dependencies.backupRepository,
+        ),
+        RepositoryProvider<AutoBackupSync>.value(
+          value: widget.dependencies.autoBackupSync,
         ),
       ],
       child: MultiBlocProvider(

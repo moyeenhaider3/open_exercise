@@ -7,6 +7,11 @@ import 'package:sqflite/sqflite.dart';
 import 'app/app.dart';
 import 'app/dependencies.dart';
 import 'core/api/open_gym_api_client.dart';
+import 'core/backup/auto_backup_sync.dart';
+import 'core/backup/backup_bookmark_channel.dart';
+import 'core/backup/backup_folder_service.dart';
+import 'core/backup/backup_repository.dart';
+import 'core/backup/backup_settings_dao.dart';
 import 'core/catalogue/exercise_catalogue.dart';
 import 'core/data/gym_state_repository.dart';
 import 'core/db/app_database.dart';
@@ -98,6 +103,26 @@ Future<void> main() async {
   );
   reminderSync.start();
 
+  final BackupSettingsDao backupSettingsDao = BackupSettingsDao(database);
+  const BackupBookmarkChannel backupBookmarkChannel = BackupBookmarkChannel();
+  final BackupFolderService backupFolderService = BackupFolderService(
+    settingsDao: backupSettingsDao,
+    bookmarkChannel: backupBookmarkChannel,
+  );
+  final BackupRepository backupRepository = BackupRepository(
+    gymStateRepository: gymStateRepository,
+    folderService: backupFolderService,
+    settingsDao: backupSettingsDao,
+    uid: gymStateCubit.uid,
+  );
+
+  final AutoBackupSync autoBackupSync = AutoBackupSync(
+    backupRepository: backupRepository,
+    gymState: gymStateCubit,
+    settingsDao: backupSettingsDao,
+  );
+  autoBackupSync.init();
+
   runApp(
     OpenExerciseApp(
       dependencies: AppDependencies(
@@ -108,6 +133,8 @@ Future<void> main() async {
         notificationService: notificationService,
         reminderSync: reminderSync,
         timerSound: timerSound,
+        backupRepository: backupRepository,
+        autoBackupSync: autoBackupSync,
       ),
       gymStateCubit: gymStateCubit,
     ),
