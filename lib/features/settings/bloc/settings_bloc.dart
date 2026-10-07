@@ -378,11 +378,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
     final BackupResult result = await _backupRepository.backupNow();
     final BackupSettings settings = await _backupRepository.getSettings();
+    final bool accessible =
+        await _backupRepository.folderService.isFolderAccessible();
     _seq++;
     if (result is BackupSuccess) {
       emit(state.copyWith(
         seq: _seq,
         backupSettings: settings,
+        isFolderAccessible: accessible,
         lastBackupResult: result,
         signal: const SettingsToast('Backup saved'),
       ));
@@ -390,6 +393,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       emit(state.copyWith(
         seq: _seq,
         backupSettings: settings,
+        isFolderAccessible: accessible,
         lastBackupResult: result,
         signal: SettingsToast('Backup failed: ${result.reason}'),
       ));
@@ -401,10 +405,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     if (folder != null) {
       _gymState.mutate((GymState s) => s.copyWith(autoBackup: true));
       final BackupSettings settings = await _backupRepository.getSettings();
+      final bool accessible =
+          await _backupRepository.folderService.isFolderAccessible();
       _seq++;
       emit(state.copyWith(
         seq: _seq,
         backupSettings: settings,
+        isFolderAccessible: accessible,
       ));
     }
   }

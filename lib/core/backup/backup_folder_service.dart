@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as p;
 
 import 'backup_bookmark_channel.dart';
+import 'backup_saf_channel.dart';
 import 'backup_settings.dart';
 import 'backup_settings_dao.dart';
 
@@ -13,16 +14,35 @@ final class BackupFolderService {
   BackupFolderService({
     required this.settingsDao,
     required this.bookmarkChannel,
+    this.safChannel = const BackupSafChannel(),
   });
 
   final BackupSettingsDao settingsDao;
   final BackupBookmarkChannel bookmarkChannel;
+  final BackupSafChannel safChannel;
 
   /// Opens the system folder picker.
-  /// Android: SAF tree picker -> persisted URI/path.
+  /// Android: SAF tree picker via native BackupSafChannel (persistent read/write URI).
   /// iOS: folder doc picker -> security-scoped bookmark via BackupBookmarkChannel.
+  /// Other: standard FilePicker directory path.
   /// Returns the display folder name, or null if cancelled.
   Future<String?> pickFolder() async {
+    if (Platform.isAndroid) {
+      final SafPickResult? picked = await safChannel.pickFolder();
+      if (picked == null) {
+        return null;
+      }
+      final String displayName =
+          picked.name.trim().isEmpty ? 'Backups' : picked.name.trim();
+      final BackupSettings current = await settingsDao.load();
+      await settingsDao.save(current.copyWith(
+        folderUri: picked.uri,
+        folderName: displayName,
+        autoBackupEnabled: true,
+      ));
+      return displayName;
+    }
+
     final String? selectedDirectory =
         await FilePickerPlatform.instance.getDirectoryPath();
     if (selectedDirectory == null) {
@@ -60,8 +80,8 @@ final class BackupFolderService {
   }
 
   /// Writes [content] as [fileName] into the previously chosen folder.
-  /// Android: write to folder path.
-  /// iOS: resolve bookmark, write, stop accessing.
+  /// Android: writes via SAF MethodChannel (DocumentsContract / DocumentFile).
+  /// iOS: resolves bookmark, writes, stops accessing.
   /// Returns true on success.
   Future<bool> writeFile(String fileName, String content) async {
     final BackupSettings settings = await settingsDao.load();
@@ -85,6 +105,14 @@ final class BackupFolderService {
       } finally {
         await bookmarkChannel.stopAccessing();
       }
+    } else if (Platform.isAndroid &&
+        settings.folderUri != null &&
+        settings.folderUri!.startsWith('content://')) {
+      return safChannel.writeFile(
+        uri: settings.folderUri!,
+        fileName: fileName,
+        content: content,
+      );
     } else if (settings.folderUri != null) {
       try {
         final String targetPath = p.join(settings.folderUri!, fileName);
@@ -120,6 +148,10 @@ final class BackupFolderService {
       } finally {
         await bookmarkChannel.stopAccessing();
       }
+    } else if (Platform.isAndroid &&
+        settings.folderUri != null &&
+        settings.folderUri!.startsWith('content://')) {
+      return safChannel.isFolderAccessible(settings.folderUri!);
     } else if (settings.folderUri != null) {
       try {
         return await Directory(settings.folderUri!).exists();
