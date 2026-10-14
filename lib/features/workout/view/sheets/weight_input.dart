@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/i18n/t.dart';
+import '../../../../core/theme/app_palette.dart';
 import '../../../../core/ui_kit/controls.dart';
-import '../../../../core/ui_kit/icons/app_icon.dart';
+import '../../../../core/ui_kit/number_field.dart';
 
 // Fixed weight range. Matches openGym WeightInput W_LO and wHi(unit).
 // See `../openGym/frontend/src/sheets.jsx` lines 170-171.
@@ -35,42 +35,53 @@ class WeightInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppPalette palette = AppPalette.of(context);
     final double hi = _kWHi(unit);
     final double sv = value.toDouble().clamp(_kWLo, hi);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        // +/- 0.1 step row + numeric field
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            IconButton(
-              icon: const AppIcon('minus', size: 18.0),
-              tooltip: t('−0.1 {0}', <Object?>[unit]),
-              onPressed: () => _onSlide(value - 0.1),
-            ),
-            SizedBox(
-              width: 120.0,
-              child: AppStepper(
+        // Centered numeric input field with unit (no cramped +/- buttons)
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+          decoration: BoxDecoration(
+            color: palette.surface2,
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: <Widget>[
+              NumberField(
                 value: value,
-                step: 0.1,
                 decimal: true,
-                unit: unit,
+                fit: true,
+                style: const TextStyle(
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.02,
+                ),
                 onChanged: (num? v) {
-                  if (v != null) onChanged(v);
+                  if (v != null) onChanged(_clamp(v));
                 },
               ),
-            ),
-            IconButton(
-              icon: const AppIcon('plus', size: 18.0),
-              tooltip: t('+0.1 {0}', <Object?>[unit]),
-              onPressed: () => _onSlide(value + 0.1),
-            ),
-          ],
+              const SizedBox(width: 6.0),
+              Text(
+                unit,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                  color: palette.muted,
+                ),
+              ),
+            ],
+          ),
         ),
+        const SizedBox(height: 12.0),
         // Quick-step chips: ±0.5 and ±1
-        const SizedBox(height: 4.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -83,7 +94,7 @@ class WeightInput extends StatelessWidget {
             _ChipBtn(label: '+1', onTap: () => _onSlide(value + 1)),
           ],
         ),
-        const SizedBox(height: 8.0),
+        const SizedBox(height: 12.0),
         // Slider
         AppSlider(
           value: sv,
@@ -104,15 +115,19 @@ class _ChipBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppPalette palette = AppPalette.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+          color: palette.surface3,
           borderRadius: BorderRadius.circular(8.0),
         ),
-        child: Text(label, style: const TextStyle(fontSize: 13.0)),
+        child: Text(
+          label,
+          style: const TextStyle(fontSize: 13.0, fontWeight: FontWeight.w500),
+        ),
       ),
     );
   }

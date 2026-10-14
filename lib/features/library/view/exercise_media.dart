@@ -39,6 +39,15 @@ class _ExerciseMediaState extends State<ExerciseMedia> {
   bool _playing = true;
   String? _failed; // null | 'gif' | 'all'
 
+  @override
+  void didUpdateWidget(covariant ExerciseMedia oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.ex.id != widget.ex.id) {
+      _failed = null;
+      _playing = true;
+    }
+  }
+
   void _handleTap() {
     setState(() {
       if (_failed != null) {
