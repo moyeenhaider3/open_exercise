@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/backup/fresh_install_check.dart';
+import '../../../core/updater/app_update_service.dart';
 import '../../workout/view/widgets/rest_timer_bar.dart';
 import '../../workout/view/widgets/workout_timer_host.dart';
 import 'app_tab_bar.dart';
@@ -36,6 +37,7 @@ class _ShellPageState extends State<ShellPage> {
       if (!mounted) return;
       checkFreshInstall(context);
       checkBackupFolderAccessible(context);
+      AppUpdateService.checkUpdate(context);
     });
   }
 

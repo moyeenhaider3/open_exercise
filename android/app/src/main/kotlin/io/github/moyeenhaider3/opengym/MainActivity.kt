@@ -1,4 +1,4 @@
-package com.example.open_exercise
+package io.github.moyeenhaider3.opengym
 
 import android.app.Activity
 import android.content.Intent

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - OpenGym</title>
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: #141721;
+      --accent: #30D158;
+      --text: #F2F2F7;
+      --text-muted: #8E8E93;
+      --border: #242938;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 740px;
+      margin: 0 auto;
+    }
+    header {
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .meta {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    h2 {
+      font-size: 20px;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: var(--accent);
+    }
+    p, ul {
+      color: #D1D1D6;
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+    ul {
+      padding-left: 24px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    .highlight-box {
+      background: var(--card-bg);
+      border-left: 4px solid var(--accent);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .back {
+      display: inline-block;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back">← Back to OpenGym</a>
+    <header>
+      <h1>Privacy Policy</h1>
+      <div class="meta">Effective Date: October 14, 2026 · App: OpenGym (io.github.moyeenhaider3.opengym)</div>
+    </header>
+
+    <div class="highlight-box">
+      <strong>Summary:</strong> OpenGym is an offline-first fitness tracker. We do not collect, transmit, sell, or analyze your personal data, workout routines, body measurements, or health records. Everything is stored locally on your device.
+    </div>
+
+    <h2>1. Information Collection and Storage</h2>
+    <p>OpenGym operates without accounts, logins, or remote database synchronizations. All workout logs, routines, personal records (PRs), bodyweight measurements, and settings are stored locally in an isolated SQLite database on your device.</p>
+    <p>We do NOT:</p>
+    <ul>
+      <li>Require account creation or personal identification (no name, email, phone number, or password).</li>
+      <li>Collect, log, or track your physical activity, workout weights, or biometric data on any external servers.</li>
+      <li>Integrate any third-party analytics SDKs (e.g., Firebase Analytics, Google Analytics, Mixpanel, Segment).</li>
+      <li>Integrate any advertising networks (e.g., Google AdMob, Unity Ads, AppLovin).</li>
+    </ul>
+
+    <h2>2. Device Permissions Used</h2>
+    <p>OpenGym requests only the minimal permissions required to provide workout utility features:</p>
+    <ul>
+      <li><strong>Notifications (POST_NOTIFICATIONS):</strong> Used solely to alert you when your active rest timer expires while the app is in the background.</li>
+      <li><strong>Exact Alarms (SCHEDULE_EXACT_ALARM):</strong> Used to guarantee that workout rest timer alerts trigger precisely at the scheduled second.</li>
+      <li><strong>Vibration (VIBRATE):</strong> Used for tactile haptic feedback when a rest interval finishes.</li>
+      <li><strong>Storage / Storage Access Framework (SAF):</strong> Used exclusively when you choose to manually export or import your workout database backup JSON files to a folder of your choice.</li>
+    </ul>
+
+    <h2>3. Data Deletion and Portability</h2>
+    <p>Because all data remains on your physical device, you retain total ownership of your data at all times:</p>
+    <ul>
+      <li><strong>Exporting Data:</strong> You can export your entire workout history as human-readable JSON files via the in-app backup feature at any time.</li>
+      <li><strong>Deleting Data:</strong> You can wipe all app data immediately using the "Reset everything" button in Settings, or by clearing app storage in Android Settings, or by uninstalling the application.</li>
+    </ul>
+
+    <h2>4. Third-Party Services and Network Connections</h2>
+    <p>OpenGym does not communicate with external analytics or marketing APIs. The app performs only optional network requests for:</p>
+    <ul>
+      <li><strong>App Update Verification:</strong> Periodically checks the public GitHub version manifest (<code>version.json</code>) to notify you if a critical app update or bug fix is published.</li>
+      <li><strong>Self-Hosted Sync (Optional):</strong> If you explicitly configure a self-hosted openGym server instance in settings, the app connects only to your specified personal server URL.</li>
+    </ul>
+
+    <h2>5. Children's Privacy</h2>
+    <p>OpenGym is not directed to children under 13. We do not knowingly collect any personal identifiable information from children or any other users.</p>
+
+    <h2>6. Changes to This Policy</h2>
+    <p>Any updates to this Privacy Policy will be published directly at this URL. Continued use of OpenGym following any policy updates constitutes your acceptance of the revised policy.</p>
+
+    <h2>7. Contact</h2>
+    <p>If you have questions regarding this Privacy Policy or OpenGym, open an issue on our GitHub repository:</p>
+    <p><a href="https://github.com/moyeenhaider3/open_exercise">github.com/moyeenhaider3/open_exercise</a></p>
+  </div>
+</body>
+</html>

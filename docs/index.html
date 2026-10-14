@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenGym - Self-Hosted & Local Gym Workout Tracker</title>
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: #141721;
+      --accent: #30D158;
+      --text: #F2F2F7;
+      --text-muted: #8E8E93;
+      --border: #242938;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 680px;
+      width: 100%;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(48, 209, 88, 0.15);
+      color: var(--accent);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      border: 1px solid rgba(48, 209, 88, 0.3);
+    }
+    h1 {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+    p.lead {
+      color: var(--text-muted);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .card h2 {
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+    .card p {
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    .links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    a.btn {
+      display: inline-block;
+      background: var(--border);
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    a.btn:hover {
+      background: #32384d;
+    }
+    a.btn-primary {
+      background: var(--accent);
+      color: #000;
+      font-weight: 600;
+    }
+    a.btn-primary:hover {
+      background: #28b84d;
+    }
+    footer {
+      text-align: center;
+      margin-top: auto;
+      padding-top: 40px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">Open Source & Offline-First</div>
+      <h1>OpenGym</h1>
+      <p class="lead">Free, private, and offline gym and bodyweight workout tracker. No accounts, no subscriptions, all data stays on your phone.</p>
+    </header>
+
+    <div class="card">
+      <h2>Legal & Transparency</h2>
+      <p>OpenGym respects your privacy completely. Review our privacy declarations and terms of service below:</p>
+      <div class="links">
+        <a href="privacy.html" class="btn">Privacy Policy</a>
+        <a href="terms.html" class="btn">Terms & Disclaimers</a>
+        <a href="https://github.com/moyeenhaider3/open_exercise" class="btn">Source Code (GitHub)</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>App Updates</h2>
+      <p>Real-time application upgrade status and version manifest:</p>
+      <div class="links">
+        <a href="version.json" class="btn">version.json</a>
+      </div>
+    </div>
+
+    <footer>
+      <p>OpenGym · Licensed under AGPL-3.0-or-later</p>
+    </footer>
+  </div>
+</body>
+</html>

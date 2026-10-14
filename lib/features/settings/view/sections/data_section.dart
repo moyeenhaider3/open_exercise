@@ -14,6 +14,7 @@ import '../../../plan/view/sheets/starter_plan_sheet.dart';
 import '../../bloc/settings_bloc.dart';
 import '../../bloc/settings_event.dart';
 import '../../bloc/settings_state.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Data management settings section and application legal footer.
 ///
@@ -235,48 +236,29 @@ class DataSection extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Text(
-                    'open_exercise v1.0.0 · free & open source (AGPL v3)',
+                    'OpenGym v1.0.0 · AGPL-3.0',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 12.0,
                       color: palette.dim,
-                      height: 1.6,
                     ),
                   ),
-                  Text(
-                    'Native Flutter port of openGym (gitlab.com/DuarteSantos8/opengym)',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: palette.dim,
-                      height: 1.6,
+                  const SizedBox(height: 4.0),
+                  GestureDetector(
+                    onTap: () => launchUrl(
+                      Uri.parse(
+                        'https://moyeenhaider3.github.io/open_exercise/terms.html',
+                      ),
+                      mode: LaunchMode.externalApplication,
                     ),
-                  ),
-                  Text(
-                    'exercise data: hasaneyldrm/exercises-dataset (MIT)',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: palette.dim,
-                      height: 1.6,
-                    ),
-                  ),
-                  Text(
-                    'exercise images and animations © Gym visual',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: palette.dim,
-                      height: 1.6,
-                    ),
-                  ),
-                  const SizedBox(height: 8.0),
-                  Text(
-                    'GNU Affero General Public License v3.0 or later',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 11.0,
-                      color: palette.dim,
+                    child: Text(
+                      'Legal Notices & Attribution',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 11.0,
+                        color: palette.acc,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
                 ],
